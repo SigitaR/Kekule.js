@@ -191,7 +191,8 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 						var objs = connector.getConnectedObjs();
 						for (var j = 0, k = objs.length; j < k; ++j)
 						{
-							if (objs[j] !== this)
+							var currObj = objs[j];
+							if (currObj !== this && !(this.hasChildObj && this.hasChildObj(currObj)))
 								Kekule.ArrayUtils.pushUnique(result, objs[j]);
 						}
 					}
@@ -712,7 +713,7 @@ Kekule.StereoParity = {
  * @param {Hash} coord3D The 3D coordinates of node, {x, y, z}, can be null.
  *
  * @property {Float} charge Charge of atom. As there may be partial charge on atom, so a float value is used.
- * @property {Int} radical Radical state of node, value should from {@link Kekule.RadicalType}.
+ * @property {Int} radical Radical state of node, value should from {@link Kekule.RadicalOrder}.
  * @property {Int} parity Stereo parity of node if the node is a chiral one, following the MDL convention.
  * @property {Array} linkedChemNodes Neighbor nodes linked to this node through proper connectors.
  * @property {Bool} isAnchor Whether this node is among anchors in parent structure.
@@ -917,13 +918,16 @@ Kekule.ChemStructureNode = Class.create(Kekule.BaseStructureNode,
 	}
 });
 
-
+/*
 Kekule.RadicalType = {
 	NONE: 0,
 	SINGLET: 1,
 	DOUBLET: 2,
 	TRIPLET: 3
 };
+*/
+/** @deprected */
+Kekule.RadicalType = Kekule.RadicalOrder;   /* A duplicate definition, for backward compatity. */
 
 /**
  * Represent an abstract atom, parent for dummy atom, concrete atom or variable atom.
@@ -2653,6 +2657,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 				node.setParent(this.getParent());
 		}
 		this.notifyNodesChanged();
+		return index;
 	},
 	/**
 	 * Change index of node.
@@ -3286,9 +3291,9 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 	 * Remove child obj directly from connection table.
 	 * @param {Variant} childObj A child node or connector.
 	 */
-	removeChild: function(obj)
+	removeChild: function($super, obj)
 	{
-		return this.removeChildObj(obj);
+		return this.removeChildObj(obj) || $super(obj);
 	},
 
 	/**
@@ -3351,6 +3356,8 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 			var refIndex = this.indexOfConnector(refChild);
 			return this.insertConnectorAt(obj, refIndex);
 		}
+		else
+			return -1;
 	},
 
 	/**
@@ -4825,11 +4832,17 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 	 * @param {Variant} refChild Ref node or connector
 	 * @return {Int} Index of obj after inserting.
 	 */
-	insertBefore: function(obj, refChild)
+	insertBefore: function($super, obj, refChild)
 	{
-		if (this.hasCtab())
-			return this.getCtab().insertBefore(obj, refChild);
+		var result = -1;
+		if (this.hasCtab()
+				&& (obj instanceof Kekule.ChemStructureObject) && (!refChild || refChild instanceof Kekule.ChemStructureObject))
+			result = this.getCtab().insertBefore(obj, refChild);
+		if (result < 0)
+			result = $super(obj, refChild);
+		return result;
 	},
+
 
 	/**
 	 * Returns nodes or connectors that should be removed cascadely with childObj.
@@ -4860,9 +4873,9 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 	 * Remove child obj directly from connection table.
 	 * @param {Variant} childObj A child node or connector.
 	 */
-	removeChild: function(obj)
+	removeChild: function($super, obj)
 	{
-		return this.removeChildObj(obj);
+		return this.removeChildObj(obj) || $super(obj);
 	},
 
 	/**
@@ -6909,7 +6922,7 @@ Kekule.ChemStructureObjectGroup = Class.create(Kekule.ChemStructureObject,
 		if (obj instanceof Kekule.ChemObject)
 			return this.insertObj(obj, index);
 		else  // item
-			return this.insertItem(obj);
+			return this.insertItem(obj, index);
 	},
 	/**
 	 * Insert attrib-object pair item before refChild in group.
@@ -6922,7 +6935,7 @@ Kekule.ChemStructureObjectGroup = Class.create(Kekule.ChemStructureObject,
 		var refIndex = this.indexOfItem(refChild);
 		if (refIndex < 0)
 			refIndex = this.indexOfObj(refChild);
-		return this.insertChild(item, refChild);
+		return this.insertChild(item, refIndex);
 	},
 	/**
 	 * Remove a child at index.
@@ -6937,13 +6950,15 @@ Kekule.ChemStructureObjectGroup = Class.create(Kekule.ChemStructureObject,
 	 * Remove an object or attrib-object pair item from group.
 	 * @param {Variant} obj
 	 */
-	removeChild: function(obj)
+	removeChild: function($super, obj)
 	{
+		var result;
 		var index = this.indexOfItem(obj);
 		if (index <= 0)
 			index = this.indexOfObj(obj);
 		if (index >= 0)
-			this.removeItemAt(index);
+			result = this.removeItemAt(index);
+		return result || $super(obj);
 	}
 });
 
@@ -7153,9 +7168,10 @@ Kekule.CompositeMolecule = Class.create(Kekule.Molecule,
 	 * @param {Object} obj
 	 * @returns {Int} Index of obj after appending.
 	 */
-	appendChild: function(obj)
+	appendChild: function($super, obj)
 	{
-		return this.getSubMolecules().appendChild(obj);
+		return $super(obj);
+		//return this.getSubMolecules().appendChild(obj);
 	},
 	/**
 	 * Insert obj to index of children list of root. If obj already inside, its position will be changed.
@@ -7173,9 +7189,12 @@ Kekule.CompositeMolecule = Class.create(Kekule.Molecule,
 	 * @param {Object} refChild
 	 * @return {Int} Index of obj after inserting.
 	 */
-	insertBefore: function(obj, refChild)
+	insertBefore: function($super, obj, refChild)
 	{
-		return this.getSubMolecules().insertBefore(obj, refChild);
+		if (obj instanceof Kekule.StructureFragment)
+			return this.getSubMolecules().insertBefore(obj, refChild);
+		else
+			return $super(obj, refChild);
 	},
 	/**
 	 * Remove a child at index.
@@ -7191,9 +7210,9 @@ Kekule.CompositeMolecule = Class.create(Kekule.Molecule,
 	 * @param {Variant} obj
 	 * @returns {Variant} Child object removed.
 	 */
-	removeChild: function(obj)
+	removeChild: function($super, obj)
 	{
-		return this.getSubMolecules().removeChild(obj);
+		return this.getSubMolecules().removeChild(obj) || $super(obj);
 	}
 });
 

@@ -43,6 +43,7 @@
     {
       var elem = document.getElementById('chemEditorUi');
       chemEditor = new Kekule.Editor.ChemSpaceEditor(document, null, Kekule.Render.RendererType.R2D);
+      //chemEditor = null;
       //chemEditor.setEnableOperContext(false);
       chemEditorUi = new Kekule.Editor.Composer(elem, chemEditor);
       var toolButtons = chemEditorUi.getDefaultCommonToolBarButtons();
@@ -82,6 +83,8 @@
       var chemObj = chemEditor.getSavingTargetObj();
       if (chemObj)
       {
+        console.log(chemObj.getClassName());
+        console.log(Kekule.Render.ObjUtils.getContainerBox(chemObj, Kekule.CoordMode.COORD2D, true));
         var viewer = Kekule.Widget.getWidgetById('chemViewer');
         viewer.setAutoSize(true).setChemObj(chemObj);
       }

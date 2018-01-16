@@ -62,6 +62,7 @@
 		 *   chargeMarkFontSize: Float.
 		 *   chargeMarkMargin: Float.
 		 *   chargeMarkCircleWidth: Float.
+		 *   distinguishSingletAndTripletRadical: bool,
 		 *   fontSize, fontFamily, supFontSizeRatio, subFontSizeRatio,
 		 *	 superscriptOverhang, subscriptOversink, textBoxXAlignment, textBoxYAlignment:
 		 *	   Those values can adjust the outlook of node labels.
@@ -553,6 +554,7 @@
 			//this.setRenderOption('expanded', value);
 			// do nothing with normal atoms or connectors
 		},
+
 		/**
 		 * Similiar to getLinkedObjs, but only with exposed ones.
 		 * @returns {Array}
@@ -745,7 +747,7 @@
 	});
 
 	ClassEx.defineProps(Kekule.ChemObject, [
-		{'name': 'defAutoScaleRefLength', 'dataType': DataType.NUMBER}
+		{'name': 'defAutoScaleRefLength', 'dataType': DataType.NUMBER, 'scope': Class.PropertyScope.PUBLIC}
 	]);
 
 	ClassEx.extend(Kekule.BaseStructureConnector,
@@ -936,7 +938,7 @@
 		 * @param {Bool} showCharge Whether display charge of node.
 		 * @param {Kekule.Render.DisplayLabelConfigs} displayLabelConfigs
 		 */
-		getDisplayRichText: function(hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength)
+		getDisplayRichText: function(hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical)
 		{
 			var R = Kekule.Render;
 			if (Kekule.ObjUtils.isUnset(showCharge))
@@ -958,7 +960,7 @@
 				//var coreAnchorItem = coreItem.anchorItem;  // preserve previous core anchor
 				if (showCharge)
 				{
-					coreItem = this.appendElectronStateDisplayText(coreItem, partialChargeDecimalsLength);
+					coreItem = this.appendElectronStateDisplayText(coreItem, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical);
 				}
 				if (coreItem)
 				{
@@ -997,12 +999,12 @@
 			return null;
 		},
 
-		appendElectronStateDisplayText: function(coreItem, partialChargeDecimalsLength)
+		appendElectronStateDisplayText: function(coreItem, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical)
 		{
 			var R = Kekule.Render;
 			var charge = this.getCharge();
 			var radical = this.getRadical();
-			var section = R.ChemDisplayTextUtils.createElectronStateDisplayTextSection(charge, radical, partialChargeDecimalsLength);
+			var section = R.ChemDisplayTextUtils.createElectronStateDisplayTextSection(charge, radical, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical);
 			if (section)
 			{
 				//richText = R.RichTextUtils.append(richText, section);
@@ -1026,7 +1028,7 @@
 		 * @param {Int} hydrogenDisplayLevel Value from {@link Kekule.Render.HydrogenDisplayLevel}.
 		 * @param {Bool} showCharge Whether display charge of node.
 		 */
-		getDisplayRichText: function($super, hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength)
+		getDisplayRichText: function($super, hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical)
 		{
 			var R = Kekule.Render;
 			if (!hydrogenDisplayLevel)
@@ -1041,7 +1043,7 @@
 				result.anchorItem = coreGroup.anchorItem || coreGroup;
 			}
 			*/
-			var result = $super(hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength);
+			var result = $super(hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical);
 
 			var hcount = 0;
 			switch (hydrogenDisplayLevel)
@@ -1386,6 +1388,17 @@
 		}
 	});
 
+	ClassEx.extend(Kekule.ChemMarker.ChemPropertyMarker, {
+		/** @ignore */
+		getDefCoordPos: function($super, coordMode)
+		{
+			if (coordMode !== CM.COORD3D)
+				return Kekule.Render.CoordPos.CENTER;
+			else
+				return $super(coordMode);
+		}
+	});
+
 	ClassEx.extend(Kekule.StructureFragment,
 	/** @lends Kekule.StructureFragment# */
 	{
@@ -1672,12 +1685,12 @@
 	ClassEx.extend(Kekule.MolecularFormula,
 	/** @lends Kekule.MolecularFormula# */
 	{
-		getDisplayRichText: function(showCharge, displayLabelConfigs, partialChargeDecimalsLength)
+		getDisplayRichText: function(showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical)
 		{
 			var R = Kekule.Render;
 			if (Kekule.ObjUtils.isUnset(showCharge))
 				showCharge = true;
-			return R.ChemDisplayTextUtils.formulaToRichText(this, showCharge, null, partialChargeDecimalsLength, displayLabelConfigs);
+			return R.ChemDisplayTextUtils.formulaToRichText(this, showCharge, null, partialChargeDecimalsLength, displayLabelConfigs, chargeMarkType, distinguishSingletAndTripletRadical);
 		},
 		/**
 		 * Return plain text to represent formula.

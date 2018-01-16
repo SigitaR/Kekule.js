@@ -1632,7 +1632,7 @@ var ClassEx = {
 	{
 		if (!classObj)
 			return false;
-		return (classObj.superclass && classObj.subclasses);
+		return !!(classObj.superclass || classObj.subclasses);
 	},
 	/**
 	 * Return class object from class name. If this class is not found, null will be returned.
@@ -1664,7 +1664,10 @@ var ClassEx = {
 	 */
 	getClassName: function(aClass)
 	{
-		return aClass.prototype.CLASS_NAME;
+    if (aClass)
+		  return aClass.prototype.CLASS_NAME;
+    else
+      return null;
 	},
   /**
    * Get last part of class name of this class.
@@ -2443,7 +2446,7 @@ ObjectEx = Class.create(
 		//this.getPrototype()[getterName] = actualGetter;
 		this.getPrototype()[getterName] = function()
 		{
-			var args = Array.prototype.slice.call(arguments);
+			var args =arguments; // Array.prototype.slice.call(arguments);
 			return this[doGetterName].apply(this, args);
 		};
 
@@ -3099,9 +3102,12 @@ ObjectEx = Class.create(
 			var modifiedProps = this._modifiedProps || [];
 			this._modifiedProps = [];
       if (this._childChangeEventSuppressed)
+      {
         modifiedProps.push('[children]');  // TODO: special propName, indicating children has been changed
+        this._childChangeEventSuppressed = false;
+      }
       this.doEndUpdate(modifiedProps);
-      this._childChangeEventSuppressed = false;
+      //this._childChangeEventSuppressed = false;
 		}
 	},
 	/**
@@ -3121,6 +3127,7 @@ ObjectEx = Class.create(
 				}
 			}
 			/*this.invokeEvent('change after update', modifiedPropNames);*/
+      //console.log('class end update', this.getClassName(), modifiedPropNames);
 			this.objectChange(modifiedPropNames);
 		}
 	},

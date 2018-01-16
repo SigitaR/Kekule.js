@@ -770,7 +770,7 @@ Kekule.ArrayUtils = {
 		{
 			// sort lengths to find the median one
 			a.sort(function(a, b) { return a - b;} );
-			return (l % 2)? a[(l + 1) >> 1]: (a[l >> 1] + a[(l >> 1) + 1]) / 2;
+			return (l % 2)? a[(l + 1) >> 1]: (a[l >> 1] + a[(l >> 1) - 1]) / 2;
 		}
 	},
 
@@ -951,7 +951,8 @@ Kekule.StrUtils = {
 		else  // assume is string
 		{
 			var reg = separator? new RegExp(separator, 'g'): /\s+/g;
-			return str.replace(reg, ' ').split(' ');
+			//return str.replace(reg, ' ').split(' ');
+			return str.split(reg);
 		}
 	},
 	/**
@@ -1697,7 +1698,7 @@ Kekule.CoordUtils = {
 	standardize: function(coord)
 	{
 		var len = Math.sqrt(Math.sqr(coord.x || 0) + Math.sqr(coord.y || 0) + Math.sqr(coord.z || 0));
-		return Kekule.CoordUtils.divide(coord, len);
+		return Kekule.CoordUtils.divide(coord, len || 1);  // if len is 0, returns {0, 0, 0}
 	},
 	/**
 	 * Convert coord to a 2D or 3D array of values

@@ -287,6 +287,7 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 	/* @ignore */
 	objectChanged: function($super, obj, changedPropNames)
 	{
+		/*
 		if (this.getCoordMode() === Kekule.CoordMode.COORD2D)  // only works in 2D mode
 		{
 			if (obj instanceof Kekule.TextBlock)  // size need to be recalculated
@@ -297,6 +298,7 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 				obj.__$needRecalcSize__ = true;  // special flag, indicating to recalculate size
 			}
 		}
+		*/
 		return $super(obj, changedPropNames);
 	},
 	/** @private */
@@ -309,12 +311,15 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 		if (Kekule.ObjUtils.notUnset(oldSize.x) || Kekule.ObjUtils.notUnset(oldSize.y))  // size already set, by pass
 			return;
     */
-		if (!textBlock.__$needRecalcSize__)
+		//if (!textBlock.__$needRecalcSize__)
+		if (!textBlock.getNeedRecalcSize())
 			return;
 
 		var stype = boundInfo.shapeType;
 		if (stype === Kekule.Render.BoundShapeType.RECT)
 		{
+			/*
+			console.log('boundddddd', boundInfo);
 			var coords = boundInfo.coords;  // context coords
 			var objCoord1 = this.contextCoordToObj(coords[0]);
 			var objCoord2 = this.contextCoordToObj(coords[1]);
@@ -322,7 +327,9 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 			// must not use setSize2D, otherwise a new object change event will be triggered and a new update process will be launched
 			textBlock.setPropStoreFieldValue('size2D', {'x': Math.abs(delta.x), 'y': Math.abs(delta.y)});
 			//textBlock.setSize2D({'x': Math.abs(delta.x), 'y': Math.abs(delta.y)});
-			delete textBlock.__$needRecalcSize__;
+			//delete textBlock.__$needRecalcSize__;
+			textBlock.setNeedRecalcSize(false);
+			*/
 		}
 	},
 
@@ -976,10 +983,13 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 			var selection = this.getEditor().getSelection();
 			if (selection && (selection.indexOf(obj) < 0))
 			{
+				/*
 				if (obj instanceof Kekule.ChemStructureNode)
 				{
 					return (obj.getLinkedObjs().length === 1);
 				}
+				*/
+				return obj.getConstraintManipulationBaseObj && obj.getConstraintManipulationBaseObj();
 			}
 		}
 		return false;
@@ -1012,18 +1022,24 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 		var isConstrained = this.isConstrainedMove();
 		if (isConstrained)  // constrained move, store connector length into info
 		{
+			/*
 			var connector = obj.getLinkedConnectors()[0];
 			var connectedNode = obj.getLinkedObjs()[0];
-			if (connector && connectedNode)
+			*/
+			var stubObj = obj.getConstraintManipulationBaseObj();
+			//if (connector && connectedNode)
+			if (stubObj)
 			{
 				info.isConstrained = true;
 				if (!info.hasNoCoord)
 				{
 					info.originScreenCoord = editor.getObjectScreenCoord(obj);
-					info.refScreenCoord = editor.getObjectScreenCoord(connectedNode);
+					//info.refScreenCoord = editor.getObjectScreenCoord(connectedNode);
+					info.refScreenCoord = editor.getObjectScreenCoord(stubObj);
 
 					info.connectorScreenLength = Kekule.CoordUtils.getDistance(info.screenCoord, info.refScreenCoord);
-					info.connectorObjLength = connector.getLength(this.getEditor().getCoordMode(), this.getEditor().getAllowCoordBorrow());
+					//info.connectorObjLength = connector.getLength(this.getEditor().getCoordMode(), this.getEditor().getAllowCoordBorrow());
+					info.connectorObjLength = Kekule.CoordUtils.getDistance(editor.getObjCoord(obj), editor.getObjCoord(stubObj));
 					var delta = Kekule.CoordUtils.substract(info.originScreenCoord, info.refScreenCoord);
 					info.originBondDirectionAngle = Math.atan2(delta.y, delta.x);
 					//console.log('create Info', info.screenCoord, info.refScreenCoord, info.connectorScreenLength);
@@ -4222,5 +4238,116 @@ Kekule.Editor.ImageBlockIaController = Class.create(Kekule.Editor.ContentBlockIa
 });
 // register
 Kekule.Editor.IaControllerManager.register(Kekule.Editor.ImageBlockIaController, Kekule.Editor.ChemSpaceEditor);
+
+/**
+ * Controller to explicitly create attached markers to a existing object.
+ * @class
+ * @augments Kekule.Editor.BaseEditorIaController
+ *
+ * @property {Class} markerClass Class of marker that should be created.
+ * @property {Class} targetClass Class of the legal parent object of newly create marker.
+ * @property {Hash} initialPropValues Property values set to newly created marker.
+ */
+Kekule.Editor.AttachedMarkerIaController = Class.create(Kekule.Editor.BaseEditorIaController,
+/** @lends Kekule.Editor.AttachedMarkerIaController# */
+{
+	/** @private */
+	CLASS_NAME: 'Kekule.Editor.AttachedMarkerIaController',
+	/** @construct */
+	initialize: function($super, editor)
+	{
+		$super(editor);
+	},
+	/** @private */
+	initProperties: function()
+	{
+		this.defineProp('markerClass', {'dataType': DataType.CLASS, 'serializable': false});
+		this.defineProp('targetClass', {'dataType': DataType.CLASS, 'serializable': false});
+		this.defineProp('markerClassName', {'dataType': DataType.STRING,
+			'getter': function() { return ClassEx.getClassName(this.getMarkerClass()); },
+			'setter': function(value) { this.setMarkerClass(ClassEx.findClass(value)); }
+		});
+		this.defineProp('targetClassName', {'dataType': DataType.STRING,
+			'getter': function() { return ClassEx.getClassName(this.getTargetClass()); },
+			'setter': function(value) { this.setTargetClass(ClassEx.findClass(value)); }
+		});
+		this.defineProp('initialPropValues', {'dataType': DataType.HASH});
+	},
+
+	/** @ignore */
+	canInteractWithObj: function($super, obj)
+	{
+		return this.isValidTarget(obj);
+	},
+
+	/**
+	 * Check if obj is a valid object to add marker.
+	 * @param {Kekule.ChemObject} obj
+	 * @returns {Bool}
+	 * @private
+	 */
+	isValidTarget: function(obj)
+	{
+		var targetClass = this.getTargetClass();
+		return (obj instanceof targetClass) || !targetClass;
+	},
+
+	/** @private */
+	createMarker: function()
+	{
+		var result;
+		var markerClass = this.getMarkerClass();
+		if (markerClass)
+		{
+			result = new markerClass();
+		}
+		return result;
+	},
+
+	/**
+	 * Execute on the target object, add a new marker.
+	 * @param {Kekule.ChemObject} targetObj
+	 * @private
+	 */
+	apply: function(targetObj)
+	{
+		var marker = this.createMarker();
+		if (marker)  // add to target object
+		{
+			var oper = new Kekule.ChemObjOperation.Add(marker, targetObj);
+			oper.execute();
+			var editor = this.getEditor();
+			if (editor && editor.getEnableOperHistory())
+			{
+				editor.pushOperation(oper);
+			}
+		}
+	},
+
+	/** @private */
+	react_mouseup: function(e)
+	{
+		if (e.getButton() === Kekule.X.Event.MouseButton.LEFT)
+		{
+			//this.getEditor().setSelection(null);
+			var coord = this._getEventMouseCoord(e);
+			{
+				var boundItem = this.getEditor().getTopmostBoundInfoAtCoord(coord);
+				if (boundItem)
+				{
+					var obj = boundItem.obj;
+					if (this.isValidTarget(obj))  // can add marker to this object
+					{
+						this.apply(obj);
+						e.preventDefault();
+						e.stopPropagation();
+					}
+					return true;  // important
+				}
+			}
+		}
+	}
+});
+Kekule.Editor.IaControllerManager.register(Kekule.Editor.AttachedMarkerIaController, Kekule.Editor.ChemSpaceEditor);
 
 })();
