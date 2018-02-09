@@ -2,7 +2,7 @@
   "name": "kekule",
   "version": "0.7.6",
   "description": "Open source JavaScript toolkit for chemoinformatics",
-  "main": "dist/kekule.js",
+  "main": "src/kekule.js",
   "author": {
     "name": "Chen Jiang",
     "email": "partridge@cpu.edu.cn"
@@ -34,5 +34,14 @@
     "node": ">=0.10"
   },
   "directories": {},
-  "keywords": ["chemistry", "cheminformatics", "chemoinformatics", "molecule"]
+  "keywords": [
+    "chemistry",
+    "cheminformatics",
+    "chemoinformatics",
+    "molecule"
+  ],
+  "dependencies": {
+    "json2": "^0.4.0",
+    "sizzle": "^2.3.3"
+  }
 }
