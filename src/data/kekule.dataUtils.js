@@ -4,6 +4,11 @@
  * @author Partridge Jiang
  */
 
+ var Kekule = Kekule || {}
+ Kekule.chemicalElementsData = Kekule.chemicalElementsData || require("./kekule.chemicalElementsData");
+ Kekule.isotopesData = Kekule.isotopesData || require("./kekule.isotopesData");
+ Kekule.structGenAtomTypesData = Kekule.structGenAtomTypesData || require('./kekule.structGenAtomTypesData')
+
 /**
  *  A class with static methods to get information from kekule.chemicalElements.js JSON data.
  *  @class Kekule.ChemicalElementsDataUtil
@@ -414,3 +419,5 @@ Kekule.AtomTypeDataUtil = {
 		return null;
 	}
 };
+
+module.exports = Kekule
