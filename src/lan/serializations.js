@@ -10,6 +10,9 @@
  * requires /lan/xmlJsons.js
  */
 
+ const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
+ const {JsonUtility, XmlUtility} = require('./xmlJsons')
+
 var
 /**
  * @class

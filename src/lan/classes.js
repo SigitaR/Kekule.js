@@ -3175,12 +3175,19 @@ ObjectEx = Class.create(
 ObjectEx._PROPINFO_HASHKEY_PREFIX = '__$propInfo__';
 ObjectEx._PROP_STOREFIELD_PREFIX = '__$';
 
+DataType.StringUtils = StringUtils;
+
 // Export to root name space
 $jsRoot.Class = Class;
 $jsRoot.ClassEx = ClassEx;
 $jsRoot.ObjectEx = ObjectEx;
 $jsRoot.DataType = DataType;
-DataType.StringUtils = StringUtils;
+
+module.exports = {
+	Class,
+	ClassEx,
+	ObjectEx,
+	DataType
+}
 
 })(this);
-
