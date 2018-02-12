@@ -9,6 +9,14 @@
  * requires /core/kekule.common.js
  * requires /kekule.structures.js
  */
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../utils/kekule.utils'),
+	require('./kekule.common'),
+	require('./kekule.structures')
+)
 
 (function () {
 
@@ -980,3 +988,5 @@ ClassEx.defineProp(Kekule.MolecularFormula, 'text', {
 });
 
 })();
+
+module.exports = Kekule

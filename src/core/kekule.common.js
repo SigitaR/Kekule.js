@@ -12,6 +12,15 @@
 
 "use strict";
 
+const defaultsDeep = require('lodash/defaultsDeep')
+const Kekule = Kekule || {}
+const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
+
+ defaultsDeep(Kekule,
+	require('../utils/kekule.utils'),
+	require('../localization/kekule.localizations'),
+)
+
 (function(){
 
 //var OT = Kekule.OBJDEF_TEXTS;
@@ -3430,3 +3439,4 @@ Kekule.ChemDocument = Class.create(Kekule.ChemSpace,
 
 })();
 
+module.exports = Kekule

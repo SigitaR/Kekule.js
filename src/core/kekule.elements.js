@@ -10,6 +10,15 @@
  * requires /data/kekule.dataUtils.js
  * requires /localization/
  */
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('./kekule.common'),
+	require('../data/kekule.dataUtils'),
+	require('../localization/kekule.localizations'),
+)
 
 /**
  * Enumeration of series of element.
@@ -522,3 +531,5 @@ Kekule.AtomType = {
 		 */
 		UNSET_ATOMTYPE: undefined
 };
+
+module.exports = Kekule

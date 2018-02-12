@@ -131,3 +131,5 @@ if (Kekule.$jsRoot && Kekule.$jsRoot.addEventListener && Kekule.$jsRoot.postMess
 		}
 	}, false);
 }
+
+module.exports = Kekule

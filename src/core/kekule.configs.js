@@ -11,6 +11,15 @@
  * requires /utils/kekule.utils.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../lan/serializations'),
+	require('./kekule.common'),
+	require('../utils/kekule.utils'),
+)
 /**
  * Represent an abstract configuration class to store a set of config items.
  * Configurations are stored in properties of class.

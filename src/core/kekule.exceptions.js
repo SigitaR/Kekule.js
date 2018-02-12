@@ -8,7 +8,11 @@
  * requires /lan/classes.js
  * requires /core/kekule.common.js
  */
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
 
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule, require('./kekule.common'))
 
 /**
  * @description Class for exception handler.
@@ -167,3 +171,5 @@ if (typeof(console) == 'undefined')
 	};
 
 }
+
+module.exports = Kekule

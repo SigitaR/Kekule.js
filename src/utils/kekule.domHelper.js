@@ -12,7 +12,7 @@
  * requires /core/kekule.common.js
  * requires /localization/
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 const Kekule = Kekule || {}
 
 const defaultsDeep = require('lodash/defaultsDeep')

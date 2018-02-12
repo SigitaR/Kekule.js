@@ -12,7 +12,10 @@
  const defaultsDeep = require("lodash/defaultsDeep");
  const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons");
  const Kekule = Kekule || {};
- defaultsDeep(Kekule, require("../../utils/kekule.utils"), require("../kekule.dataUtils"));
+ defaultsDeep(Kekule, 
+	require("../../utils/kekule.utils"), 
+	require("../kekule.dataUtils")
+)
 
 /**
  *  An class with static methods to load content of isotopes.xml from CDK

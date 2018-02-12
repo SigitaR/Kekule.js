@@ -10,6 +10,15 @@
  * requires /utils/kekule.utils.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('./kekule.common'),
+	require('../utils/kekule.utils'),
+)
+
 /**
  * Represent an abstract electron set (bond, lone pair, etc.).
  * @class
@@ -296,3 +305,5 @@ Kekule.HybridizationType = {
 	/** Explicitly no hybridization. */
 	NONE: 0
 };
+
+module.exports = Kekule

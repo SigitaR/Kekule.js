@@ -3,6 +3,7 @@
  * This file helps to determine the valence of a neutral, anion(-) or cation(+) atom. 
  * @author Partridge Jiang
  */
+const Kekule = Kekule || {}
 
 /**
  * A class to help to determinate the valence of atom, especially with charge.
@@ -439,3 +440,5 @@ Kekule.ValenceUtils = {
 
 // defaultly the valence determination method is MDL.
 Kekule.ValenceUtils.getImplicitValence = Kekule.ValenceUtils.getImplicitMdlValence;
+
+module.exports = Kekule
