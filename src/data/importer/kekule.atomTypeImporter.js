@@ -7,8 +7,17 @@
 /*
  *  requires /lan/xmlJsons.js
  *  requires /utils/kekule.utils.js
- *  requires /data/kekule/dataUtils.js
+ *  requires /data/kekule.dataUtils.js
  */
+
+ const defaultsDeep = require('lodash/defaultsDeep')
+ const { JsonUtility, XmlUtility } = require('../../lan/xmlJsons')
+ const Kekule = Kekule || {}
+ defaultsDeep(Kekule,
+	require('../../utils/kekule.utils'),
+	require('../kekule.dataUtils')
+)
+
 
 if (!window.Kekule)
 	Kekule = {};
@@ -105,3 +114,5 @@ Kekule.AtomTypeImporter = {
 		return Kekule.AtomTypeImporter.saveObjToStr(obj);
 	}
 }
+
+module.exports = Kekule

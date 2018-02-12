@@ -8,13 +8,12 @@
  * requires core/kekule.common.js
  * requires /localizations/
  */
-
-/*
-if (!this.Kekule)
-{
-	Kekule = {};
-}
-*/
+var defaultsDeep = require('lodash/defaultsDeep')
+var Kekule = Kekule || {}
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../localization/kekule.localizations')
+)
 
 /**
  * Return value of the first setted params.
@@ -3121,3 +3120,5 @@ Kekule.ZoomUtils = {
 			return currRatio;  // bigger than all, return original value
 	}
 };
+
+module.exports = Kekule

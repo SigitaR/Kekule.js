@@ -9,9 +9,10 @@
  *  requires /utils/kekule.utils.js
  *  requires /data/kekule/dataUtils.js
  */
-
-if (!window.Kekule)
-	Kekule = {};
+ const defaultsDeep = require("lodash/defaultsDeep");
+ const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons");
+ const Kekule = Kekule || {};
+ defaultsDeep(Kekule, require("../../utils/kekule.utils"), require("../kekule.dataUtils"));
 
 /**
  *  An class with static methods to load content of isotopes.xml from CDK
@@ -117,3 +118,5 @@ Kekule.IsotopesImporter = {
 		return Kekule.IsotopesImporter.saveObjToStr(obj);
 	}
 };
+
+module.exports = Kekule

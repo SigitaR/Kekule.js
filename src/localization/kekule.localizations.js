@@ -8,6 +8,8 @@
  * requires /localization
  */
 
+const Kekule = {}
+
 (function($root){
 "use strict";
 
@@ -191,4 +193,12 @@
 			addLocalizationResources(languageName, resourceName, resources, root);
 		}
 	}
+
+	require("./en/kekule.localize.extras.openbabel.en");
+	require("./en/kekule.localize.extras.general.en");
+	require("./en/kekule.localize.extras.objDefines.en");
+	require('./en/kekule.localize.extras.widget.en');
+
 })(this);
+
+module.exports = Kekule;

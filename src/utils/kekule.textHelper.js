@@ -12,6 +12,15 @@
  * requires /core/kekule.common.js
  * requires /localization
  */
+const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
+const {JsonUtility, XmlUtility} = require('../lan/xmlJsons')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../localization/kekule.localizations'),
+)
 
 /**
  * A helper class to read / write text data organized in lines.
