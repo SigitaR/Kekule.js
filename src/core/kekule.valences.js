@@ -3,7 +3,7 @@
  * This file helps to determine the valence of a neutral, anion(-) or cation(+) atom. 
  * @author Partridge Jiang
  */
-const Kekule = Kekule || {}
+const Kekule = {}
 
 /**
  * A class to help to determinate the valence of atom, especially with charge.

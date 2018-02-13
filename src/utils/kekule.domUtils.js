@@ -3,7 +3,7 @@
  * Utility functions about DOM, Script and so on.
  * @author Partridge Jiang
  */
-const Kekule = Kekule || {}
+const Kekule = {}
 
 (function(){
 

@@ -9,7 +9,7 @@
  * requires /core/kekule.common.js
  * requires /kekule.structures.js
  */
-const Kekule = Kekule || {}
+const Kekule = {}
 
 const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,

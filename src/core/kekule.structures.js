@@ -15,7 +15,7 @@
  * requires /localizations/
  */
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = Kekule || {}
+const Kekule = {}
 
 const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,

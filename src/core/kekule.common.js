@@ -13,7 +13,7 @@
 "use strict";
 
 const defaultsDeep = require('lodash/defaultsDeep')
-const Kekule = Kekule || {}
+const Kekule = {}
 const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
 
  defaultsDeep(Kekule,
