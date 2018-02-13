@@ -22,6 +22,19 @@
  * requires /algorithm/kekule.structures.comparers.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../core/kekule.chemUtils'),
+	require('../utils/kekule.utils'),
+	require('./kekule.graph'),
+	require('./kekule.structures.comparers'),
+)
+
 (function()
 {
 
@@ -1251,3 +1264,5 @@ Kekule.canonicalizer.registerExecutor('morgan', [Kekule.CanonicalizationMorganIn
 
 
 })();
+
+module.exports = Kekule

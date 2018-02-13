@@ -10,6 +10,15 @@
  * requires /xbrowsers/kekule.x.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.root'),
+	require('../xbrowsers/kekule.x'),
+)
+
 (function(){
 "use strict";
 
@@ -17,9 +26,7 @@
  * Namespace for all structure calculators.
  * @namespace
  */
-Kekule.Calculator = {
-
-};
+Kekule.Calculator = {};
 
 /**
  * Returns default path to store calculator web worker scripts.
@@ -444,3 +451,5 @@ Kekule.Calculator.generate3D = function(sourceMol, options, callback, errCallbac
 }
 
 })();
+
+module.exports = Kekule

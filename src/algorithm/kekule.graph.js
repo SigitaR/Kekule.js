@@ -12,6 +12,17 @@
  * requires /utils/kekule.utils.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../core/kekule.chemUtils'),
+	require('../utils/kekule.utils'),
+)
+
 (function(){
 "use strict";
 
@@ -2169,3 +2180,5 @@ Kekule.RingVectorUtils = {
 };
 
 })();
+
+module.exports = Kekule

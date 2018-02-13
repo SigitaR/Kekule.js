@@ -12,6 +12,17 @@
  * requires /algorithm/kekule.graph.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../utils/kekule.utils'),
+	require('./kekule.graph'),
+)
+
 (function(){
 "use strict";
 
@@ -538,3 +549,5 @@ ClassEx.extend(Kekule.ChemObject,
 });
 
 })();
+
+module.exports = Kekule

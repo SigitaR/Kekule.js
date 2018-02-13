@@ -14,6 +14,20 @@
  * requires /algorithm/kekule.structure.ringSearches.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../utils/kekule.utils'),
+	require('./kekule.structures.comparers'),
+	require('./kekule.structures.canonicalizers'),
+	require('./kekule.structures.ringSearches'),
+)
+
+
 (function(){
 "use strict";
 
@@ -1295,3 +1309,5 @@ ClassEx.extend(Kekule.StructureFragment,
 });
 
 })();
+
+module.exports = Kekule

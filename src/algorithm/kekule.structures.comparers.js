@@ -7,12 +7,25 @@
 
 
 /*
+ * requires /lan/kekule.classes.js
  * requires /core/kekule.common.js
  * requires /core/kekule.utils.js
  * requires /data/kekule.structures.js
  * requires /core/kekule.chemUtils.js
  * requires /algorithm/kekule.graph.js
  */
+
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../core/kekule.chemUtils'),
+	require('../utils/kekule.utils'),
+	require('./kekule.graph'),
+)
 
 (function(){
 "use strict";
@@ -430,3 +443,5 @@ Kekule.UnivChemStructObjComparer = {
 
 
 })();
+
+module.exports = Kekule

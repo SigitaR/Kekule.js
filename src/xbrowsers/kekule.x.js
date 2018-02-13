@@ -10,6 +10,15 @@
  * require /utils/kekule.utils.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.root'),
+	require('../utils/kekule.utils'),
+)
+
 (function ()
 {
 
@@ -1276,3 +1285,5 @@ var DOM = Kekule.X.DomReady
 Kekule.X.domReady = DOM.domReady;
 
 })();
+
+module.exports = Kekule

@@ -13,6 +13,18 @@
  * requires /localizations/
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../core/kekule.structures'),
+	require('../data/kekule.dataUtils'),
+	require('../utils/kekule.utils'),
+	require('../localization/kekule.localizations'),
+)
+
 (function(){
 
 "use strict";
@@ -90,3 +102,5 @@ Kekule.ChemStructObjContainer = Class.create(ObjectEx,
 });
 
 })();
+
+module.exports = Kekule
