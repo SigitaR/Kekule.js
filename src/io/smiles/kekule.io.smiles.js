@@ -17,23 +17,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../../core/kekule.common'),
-	require('../../core/kekule.elements'),
-	require('../../core/kekule.electrons'),
-	require('../../core/kekule.structures'),
-	require('../../algorithm/kekule.graph'),
-	require('../../algorithm/kekule.aromatics'),
-	require('../kekule.io'),
-	require('../../localization/kekule.localizations')
-)
-
-
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 
@@ -559,6 +544,6 @@ var suitableClasses = [Kekule.StructureFragment, Kekule.ChemObjList, Kekule.Chem
 Kekule.IO.ChemDataWriterManager.register('SMILES', Kekule.IO.SmilesMolWriter,
 	suitableClasses,
 	[Kekule.IO.DataFormat.SMILES]);
-})();
 
-module.exports = Kekule
+	return Kekule
+}

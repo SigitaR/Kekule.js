@@ -3,9 +3,8 @@
  * Utility functions about DOM, Script and so on.
  * @author Partridge Jiang
  */
-const Kekule = {}
 
-(function(){
+module.exports = function(Kekule){
 
 /**
  *  An class with static methods handle HTML or XML DOM.
@@ -1258,7 +1257,5 @@ Kekule.ScriptFileUtils = {
 	}
 };
 
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

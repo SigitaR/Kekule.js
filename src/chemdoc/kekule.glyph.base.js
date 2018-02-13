@@ -9,8 +9,7 @@
  * requires /core/kekule.common.js
  */
 
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 /**
  * Name space for glyph classes.
@@ -193,5 +192,5 @@ Kekule.Glyph.Base = Class.create(Kekule.ChemObject,
 Kekule.ClassDefineUtils.addStandardCoordSupport(Kekule.Glyph.Base);
 //Kekule.ClassDefineUtils.addStandardSizeSupport(Kekule.Glyph);
 
-
-})();
+return Kekule
+}

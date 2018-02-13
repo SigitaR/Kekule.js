@@ -23,4 +23,6 @@
 			FAIL_TO_GENERATE_3D_STRUCTURE: 'Fail to generate 3D structure coordinates'
 		}
 	});
+
+	return Kekule
  }

@@ -10,16 +10,11 @@
  *  requires /data/kekule.dataUtils.js
  */
 
- const defaultsDeep = require("lodash/defaultsDeep");
- const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons");
- const Kekule = {};
- defaultsDeep(Kekule,
-	require("../../utils/kekule.utils"),
- 	require("../kekule.dataUtils")
-)
+ const defaultsDeep = require("lodash/defaultsDeep")
+ const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons")
 
-
-
+ module.exoprts = function (Kekule) {
+	 
 /**
  *  An class with static methods to load content of chemicalElements.xml from CDK 
  *  and save data into a JSON text.
@@ -144,4 +139,5 @@ Kekule.ChemElemImporter = {
 	}
 }
 
-module.exports = Kekule
+return Kekule
+}

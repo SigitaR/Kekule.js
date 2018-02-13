@@ -4,7 +4,8 @@
  * @author Partridge Jiang
  */
 
- var Kekule = Kekule || {}
+module.exports = function (Kekule) {
+	
  Kekule.chemicalElementsData = require("./kekule.chemicalElementsData");
  Kekule.isotopesData = require("./kekule.isotopesData");
  Kekule.structGenAtomTypesData = require('./kekule.structGenAtomTypesData')
@@ -419,5 +420,5 @@ Kekule.AtomTypeDataUtil = {
 		return null;
 	}
 };
-
-module.exports = Kekule
+	return Kekule
+}

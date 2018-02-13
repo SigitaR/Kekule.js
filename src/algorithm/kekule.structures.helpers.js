@@ -14,20 +14,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../data/kekule.dataUtils'),
-	require('../utils/kekule.utils'),
-	require('../localization/kekule.localizations')
-)
-
-(function(){
-
-"use strict";
+module.exports = function(Kekule){
 
 /**
  * A container class contains nodes and/or connectors as a "partial structure fragment".
@@ -100,7 +88,5 @@ Kekule.ChemStructObjContainer = Class.create(ObjectEx,
 		return this;
 	}
 });
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

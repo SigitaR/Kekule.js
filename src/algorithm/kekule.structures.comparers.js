@@ -19,16 +19,8 @@ const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 const Kekule = {}
 
 const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../core/kekule.chemUtils'),
-	require('../utils/kekule.utils'),
-	require('./kekule.graph')
-)
 
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 var K = Kekule;
 var AU = Kekule.ArrayUtils;
@@ -441,7 +433,5 @@ Kekule.UnivChemStructObjComparer = {
 	}
 };
 
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

@@ -15,21 +15,7 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../utils/kekule.utils'),
-	require('./kekule.structures.comparers'),
-	require('./kekule.structures.canonicalizers'),
-	require('./kekule.structures.ringSearches')
-)
-
-
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 var CU = Kekule.CoordUtils;
@@ -1307,7 +1293,5 @@ ClassEx.extend(Kekule.StructureFragment,
 		return Kekule.MolStereoUtils.perceiveStereos(this, coordMode, ignoreCanonicalization, options);
 	}
 });
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

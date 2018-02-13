@@ -147,4 +147,6 @@ module.exports = function (Kekule) {
 		CALC_TERMINATED_BY_USER: 'Calculation terminated by user',
 		CALC_SERVICE_UNAVAILABLE: 'Calculation service "{0}" is unavailable'
 	});
+
+	return Kekule
 }

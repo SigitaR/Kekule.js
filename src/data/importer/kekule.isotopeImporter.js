@@ -11,12 +11,8 @@
  */
  const defaultsDeep = require("lodash/defaultsDeep");
  const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons");
- const Kekule = {};
- defaultsDeep(Kekule, 
-	require("../../utils/kekule.utils"), 
-	require("../kekule.dataUtils")
-)
-
+module.exports = function (Kekule) {
+	
 /**
  *  An class with static methods to load content of isotopes.xml from CDK
  *  and save data into a JSON text.
@@ -122,4 +118,5 @@ Kekule.IsotopesImporter = {
 	}
 };
 
-module.exports = Kekule
+return Kekule
+}

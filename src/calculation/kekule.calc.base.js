@@ -11,16 +11,7 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.root'),
-	require('../xbrowsers/kekule.x')
-)
-
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 /**
  * Namespace for all structure calculators.
@@ -449,7 +440,5 @@ Kekule.Calculator.generate3D = function(sourceMol, options, callback, errCallbac
 		return null;
 	}
 }
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

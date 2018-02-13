@@ -17,21 +17,7 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../core/kekule.chemUtils'),
-	require('../utils/kekule.utils'),
-	require('./kekule.structures.canonicalizers'),
-	require('./kekule.structures.aromatics'),
-	require('./kekule.structures.stereos')
-)
-
-(function(){
-"use strict";
+module.exports = function(){
 
 /**
  * Default options to do structure standardize.
@@ -190,7 +176,5 @@ ClassEx.extendMethod(Kekule.StructureFragment, 'compare', function($origin, targ
 	else
 		return $origin(targetObj, options);
 });
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

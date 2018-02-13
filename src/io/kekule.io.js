@@ -12,16 +12,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../utils/kekule.utils'),
-	require('../xbrowsers/kekule.x')
-)
-
-(function(){
+module.exports = function(Kekule){
 
 /*
  * Root object of I/O default options
@@ -1458,7 +1450,5 @@ Kekule.IO.saveTypedData = function(chemObj, mimeType, urlOrFileExt, options)
 	}
 	*/
 };
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

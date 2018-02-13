@@ -13,18 +13,7 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../utils/kekule.utils'),
-	require('./kekule.structures.canonicalizers')
-)
-
-(function(){
-"use strict";
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 //var SC = Kekule.UnivChemStructObjComparer;
@@ -459,7 +448,5 @@ ClassEx.extend(Kekule.StructureFragment,
 		return SM.findSubStructure(subStructure, this, options);
 	}
 });
-
-})();
-
-module.exports = Kekule
+	return Kekule
+}

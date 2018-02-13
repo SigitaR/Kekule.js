@@ -23,20 +23,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.common'),
-	require('../core/kekule.structures'),
-	require('../core/kekule.chemUtils'),
-	require('../utils/kekule.utils'),
-	require('./kekule.graph'),
-	require('./kekule.structures.comparers')
-)
-
-(function()
-{
+module.exports = function(Kekule) {
 
 var K = Kekule;
 var AU = Kekule.ArrayUtils;
@@ -1261,8 +1249,7 @@ ClassEx.defineProp(Kekule.ChemStructureObject, 'canonicalizationIndex', {'dataTy
 // register morgan as default
 Kekule.canonicalizer.registerExecutor('morgan', [Kekule.CanonicalizationMorganIndexer, Kekule.CanonicalizationMorganNodeSorter], true);
 
+	return Kekule
 
+}
 
-})();
-
-module.exports = Kekule

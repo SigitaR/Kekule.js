@@ -18,21 +18,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../../core/kekule.common'),
-	require('../../core/kekule.elements'),
-	require('../../core/kekule.electrons'),
-	require('../../core/kekule.structures'),
-	require('../../core/kekule.reactions'),
-	require('../../utils/kekule.textHelper'),
-	require('../kekule.io'),
-	require('./kekule.io.mdlBase'),
-	require('../../localization/kekule.localizations')
-)
-
+module.exports = function (Kekule) {
+	
 /**
  * Util methods for MDL 2000 format.
  * @class
@@ -1173,4 +1160,6 @@ Kekule.IO.Mdl2kCTabWriter = Class.create(Kekule.IO.MdlBlockWriter,
 	}
 });
 
-module.exports = Kekule
+return Kekule
+}
+

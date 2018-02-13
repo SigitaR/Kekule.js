@@ -10,15 +10,9 @@
  * requires /core/kekule.structures.js
  */
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('./kekule.common'),
-	require('./kekule.structures')
-)
-
-/**
+module.exports = function (Kekule) {
+	/**
  * Enumeration of type of molecules or conditions in reaction.
  * @class
  */
@@ -928,5 +922,5 @@ Kekule.ReactionList = Class.create(Kekule.ChemObjList,
 		$super(id, Kekule.Reaction);
 	}
 });
-
-module.exports = Kekule
+	return Kekule
+}

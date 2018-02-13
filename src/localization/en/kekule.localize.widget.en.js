@@ -416,5 +416,6 @@ module.exports = function (Kekule) {
 
 		//WIDGET_UNAVAILABLE_FOR_PLACEHOLDER: 'Widget of this placeholder is unavailable'
 	});
-	
+
+	return Kekule
 }

@@ -335,4 +335,6 @@ module.exports = function(Kekule) {
 			}
 		}
 	});
+
+	return Kekule
 }

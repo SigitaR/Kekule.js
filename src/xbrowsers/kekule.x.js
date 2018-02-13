@@ -11,21 +11,15 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
 
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../core/kekule.root'),
-	require('../utils/kekule.utils')
-)
 
-(function ()
+module.exports = function (Kekule)
 {
 
 var $root = window;
 
 if (!$root.Kekule)
-	Kekule = {};
+	$root.Kekule = Kekule;
 
 /**
  * Browser Check.
@@ -1283,7 +1277,6 @@ var DOM = Kekule.X.DomReady
  * @function
  */
 Kekule.X.domReady = DOM.domReady;
+	return Kekule
+}
 
-})();
-
-module.exports = Kekule

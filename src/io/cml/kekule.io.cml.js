@@ -20,20 +20,8 @@
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
 const {XmlUtility, JsonUtility} = require('../../lan/xmlJsons')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-defaultsDeep(Kekule,
-	require('../../core/kekule.common'),
-	require('../../core/kekule.elements'),
-	require('../../core/kekule.electrons'),
-	require('../../core/kekule.structures'),
-	require('../../core/kekule.reactions'),
-	require('../../utils/kekule.domHelper'),
-	require('../kekule.io'),
-	require('../../localization/kekule.localizations')
-)
-
+module.exports = function (Kekule) {
+	
 /*
  * Default options to read/write CML format data.
  * @object
@@ -3826,5 +3814,5 @@ Kekule.IO.CmlWriter = Class.create(Kekule.IO.ChemDataWriter,
 			Kekule.ChemObjList, Kekule.ChemSpace],
 		[cmdFmtId]);
 })();
-
-module.exports = Kekule
+	return Kekule
+}
