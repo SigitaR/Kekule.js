@@ -17,7 +17,7 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-module.exports = function(){
+module.exports = function(Kekule){
 
 /**
  * Default options to do structure standardize.
