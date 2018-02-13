@@ -14,7 +14,7 @@
 
 const defaultsDeep = require('lodash/defaultsDeep')
 const Kekule = {}
-const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 
  defaultsDeep(Kekule,
 	require('../utils/kekule.utils'),
