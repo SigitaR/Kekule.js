@@ -42,7 +42,6 @@
   ],
   "dependencies": {
     "json2": "^0.4.0",
-    "lodash": "^4.17.5",
     "sizzle": "^2.3.3"
   }
 }
