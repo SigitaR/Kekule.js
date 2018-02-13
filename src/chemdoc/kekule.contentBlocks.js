@@ -9,8 +9,8 @@
  * requires /core/kekule.common.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var CM = Kekule.CoordMode;
 var CU = Kekule.CoordUtils;
@@ -311,5 +311,5 @@ Kekule.ImageBlock = Class.create(Kekule.ContentBlock,
 		}
 	}
 });
-
-})();
+	return Kekule
+}

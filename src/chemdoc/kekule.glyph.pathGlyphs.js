@@ -11,8 +11,8 @@
  * requires /chemdoc/kekule.glyph.base.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Represent an node in glyph path.
@@ -761,5 +761,5 @@ Kekule.Glyph.PathGlyph = Class.create(Kekule.Glyph.Base,
 			return -1;
 	}
 });
-
-})();
+	return Kekule
+}

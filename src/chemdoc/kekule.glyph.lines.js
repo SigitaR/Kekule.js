@@ -12,8 +12,8 @@
  * requires /chemdoc/kekule.glyph.pathGlyphs.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var NT = Kekule.Glyph.NodeType;
 var PT = Kekule.Glyph.PathType;
@@ -126,5 +126,5 @@ Kekule.Glyph.Polygon = Class.create(Kekule.Glyph.PathGlyph,
 	}
 });
 
-
-})();
+	return Kekule
+}

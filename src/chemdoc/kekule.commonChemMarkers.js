@@ -11,10 +11,8 @@
  * requires /chemdoc/kekule.attachedMarkers.js
  * requires /chemdoc/kekule.contentBlocks.js
  */
-
-(function(){
-
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Base class of chem marker representing chemical concepts (e.g. charge, lone pair...) of parent chem object.
@@ -291,5 +289,5 @@ ClassEx.extendMethod(Kekule.AbstractAtom, 'doCompare', function($origin, targetO
 		}
 		return result;
 	});
-
-})();
+	return Kekule
+}

@@ -13,8 +13,8 @@
  * requires /chemdoc/kekule.glyph.lines.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var NT = Kekule.Glyph.NodeType;
 var PT = Kekule.Glyph.PathType;
@@ -115,5 +115,5 @@ Kekule.Glyph.AddSymbol = Class.create(Kekule.Glyph.PathGlyph,
 		connector.setPathParams(initialParams);
 	}
 });
-
-})();
+	return Kekule
+}

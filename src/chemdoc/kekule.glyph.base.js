@@ -9,6 +9,7 @@
  * requires /core/kekule.common.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 module.exports = function(Kekule){
 
 /**

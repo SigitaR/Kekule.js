@@ -11,8 +11,8 @@
  * requires /core/kekule.chemUtils.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 
@@ -409,5 +409,5 @@ ClassEx.defineProp(Kekule.ChemObject, 'autoSetAttachedMarkerPos',
 });
 */
 
-
-})();
+return Kekule
+}
