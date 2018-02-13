@@ -20,7 +20,7 @@ defaultsDeep(Kekule,
 	require('../core/kekule.common'),
 	require('../core/kekule.structures'),
 	require('../core/kekule.chemUtils'),
-	require('../utils/kekule.utils'),
+	require('../utils/kekule.utils')
 )
 
 (function(){

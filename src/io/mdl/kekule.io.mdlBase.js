@@ -24,7 +24,7 @@ defaultsDeep(Kekule,
 	require('../../core/kekule.reactions'),
 	require('../../utils/kekule.utils'),
 	require('../../data/kekule.dataUtils'),
-	require('../../localization/kekule.localizations'),
+	require('../../localization/kekule.localizations')
 )
 
 /**

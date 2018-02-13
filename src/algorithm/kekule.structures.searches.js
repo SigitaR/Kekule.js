@@ -20,7 +20,7 @@ defaultsDeep(Kekule,
 	require('../core/kekule.common'),
 	require('../core/kekule.structures'),
 	require('../utils/kekule.utils'),
-	require('./kekule.structures.canonicalizers'),
+	require('./kekule.structures.canonicalizers')
 )
 
 (function(){

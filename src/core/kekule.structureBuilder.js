@@ -21,7 +21,7 @@ defaultsDeep(Kekule,
 	require('../data/kekule.dataUtils'),
 	require('./kekule.elements'),
 	require('./kekule.electrons'),
-	require('./kekule.structures'),
+	require('./kekule.structures')
 )
 
 /**

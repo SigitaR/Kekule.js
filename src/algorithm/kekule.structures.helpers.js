@@ -22,7 +22,7 @@ defaultsDeep(Kekule,
 	require('../core/kekule.structures'),
 	require('../data/kekule.dataUtils'),
 	require('../utils/kekule.utils'),
-	require('../localization/kekule.localizations'),
+	require('../localization/kekule.localizations')
 )
 
 (function(){

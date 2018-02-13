@@ -27,7 +27,7 @@ defaultsDeep(Kekule,
 	require('../utils/kekule.utils'),
 	require('./kekule.structures.canonicalizers'),
 	require('./kekule.structures.aromatics'),
-	require('./kekule.structures.stereos'),
+	require('./kekule.structures.stereos')
 )
 
 (function(){

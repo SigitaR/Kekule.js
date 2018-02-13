@@ -34,7 +34,7 @@ defaultsDeep(Kekule,
 	require('./kekule.io.mdlBase'),
 	require('./kekule.io.mdl2000'),
 	require('./kekule.io.mdl3000'),
-	require('../../localization/kekule.localizations'),
+	require('../../localization/kekule.localizations')
 )
 
 /*

@@ -16,7 +16,7 @@ const Kekule = Kekule || {}
 const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,
 	require('../core/kekule.root'),
-	require('../xbrowsers/kekule.x'),
+	require('../xbrowsers/kekule.x')
 )
 
 (function(){

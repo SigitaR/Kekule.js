@@ -30,7 +30,7 @@ defaultsDeep(Kekule,
 	require('../../utils/kekule.textHelper'),
 	require('../kekule.io'),
 	require('./kekule.io.mdlBase'),
-	require('../../localization/kekule.localizations'),
+	require('../../localization/kekule.localizations')
 )
 
 /**

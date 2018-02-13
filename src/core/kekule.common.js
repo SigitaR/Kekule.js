@@ -18,7 +18,7 @@ const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
 
  defaultsDeep(Kekule,
 	require('../utils/kekule.utils'),
-	require('../localization/kekule.localizations'),
+	require('../localization/kekule.localizations')
 )
 
 (function(){

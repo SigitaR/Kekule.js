@@ -19,7 +19,7 @@ const Kekule = Kekule || {}
 const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,
 	require('../core/kekule.common'),
-	require('../localization/kekule.localizations'),
+	require('../localization/kekule.localizations')
 )
 
 /**

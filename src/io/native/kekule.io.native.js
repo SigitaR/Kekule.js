@@ -18,7 +18,7 @@ const Kekule = Kekule || {}
 const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,
 	require('../../lan/serializations'),
-	require('../../core/kekule.common'),
+	require('../../core/kekule.common')
 )
 
 

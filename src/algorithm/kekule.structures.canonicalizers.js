@@ -32,7 +32,7 @@ defaultsDeep(Kekule,
 	require('../core/kekule.chemUtils'),
 	require('../utils/kekule.utils'),
 	require('./kekule.graph'),
-	require('./kekule.structures.comparers'),
+	require('./kekule.structures.comparers')
 )
 
 (function()

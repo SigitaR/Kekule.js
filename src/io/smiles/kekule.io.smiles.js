@@ -28,7 +28,7 @@ defaultsDeep(Kekule,
 	require('../../algorithm/kekule.graph'),
 	require('../../algorithm/kekule.aromatics'),
 	require('../kekule.io'),
-	require('../../localization/kekule.localizations'),
+	require('../../localization/kekule.localizations')
 )
 
 

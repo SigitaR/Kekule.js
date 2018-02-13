@@ -18,7 +18,7 @@ const defaultsDeep = require('lodash/defaultsDeep')
 defaultsDeep(Kekule,
 	require('../lan/serializations'),
 	require('./kekule.common'),
-	require('../utils/kekule.utils'),
+	require('../utils/kekule.utils')
 )
 /**
  * Represent an abstract configuration class to store a set of config items.

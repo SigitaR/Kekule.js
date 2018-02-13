@@ -24,7 +24,7 @@ defaultsDeep(Kekule,
 	require('../utils/kekule.utils'),
 	require('./kekule.structures.comparers'),
 	require('./kekule.structures.canonicalizers'),
-	require('./kekule.structures.ringSearches'),
+	require('./kekule.structures.ringSearches')
 )
 
 
