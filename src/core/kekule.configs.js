@@ -265,3 +265,5 @@ Kekule.ConfigPresetMap = Class.create(ObjectEx,
 		this.map.clear();
 	}
 });
+
+module.exports = Kekule
