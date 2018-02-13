@@ -11,6 +11,16 @@
  * requires /xbrowsers/kekule.x.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../core/kekule.common'),
+	require('../utils/kekule.utils'),
+	require('../xbrowsers/kekule.x'),
+)
+
 (function(){
 
 /*
@@ -1450,3 +1460,5 @@ Kekule.IO.saveTypedData = function(chemObj, mimeType, urlOrFileExt, options)
 };
 
 })();
+
+module.exports = Kekule

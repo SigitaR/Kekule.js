@@ -12,6 +12,16 @@
  * requires /core/kekule.common.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../../lan/serializations'),
+	require('../../core/kekule.common'),
+)
+
+
 /*
  * Default options to read/write KCJ/KCX/JSON/XML format data.
  * @object
@@ -295,3 +305,5 @@ Kekule.IO.KcxWriter = Class.create(Kekule.IO.ChemDataWriter,
 		}
 	);
 })();
+
+module.exports = Kekule

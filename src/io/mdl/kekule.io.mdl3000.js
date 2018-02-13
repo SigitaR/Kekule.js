@@ -17,6 +17,22 @@
  * requires /localization
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../../core/kekule.common'),
+	require('../../core/kekule.elements'),
+	require('../../core/kekule.electrons'),
+	require('../../core/kekule.structures'),
+	require('../../core/kekule.reactions'),
+	require('../../utils/kekule.textHelper'),
+	require('../kekule.io'),
+	require('./kekule.io.mdlBase'),
+	require('../../localization/kekule.localizations'),
+)
+
 /**
  * Utility for MDL 3k format.
  * @class
@@ -1395,3 +1411,5 @@ Kekule.IO.Mdl3kCTabWriter = Class.create(Kekule.IO.Mdl3kBlockWriter,
 		return Kekule.IO.Mdl3kValueUtils.mergeValues(values);
 	}
 });
+
+module.exports = Kekule

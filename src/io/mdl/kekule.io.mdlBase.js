@@ -14,6 +14,19 @@
  * requires /localization
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const Kekule = Kekule || {}
+
+const defaultsDeep = require('lodash/defaultsDeep')
+defaultsDeep(Kekule,
+	require('../../core/kekule.common'),
+	require('../../core/kekule.structures'),
+	require('../../core/kekule.reactions'),
+	require('../../utils/kekule.utils'),
+	require('../../data/kekule.dataUtils'),
+	require('../../localization/kekule.localizations'),
+)
+
 /**
  * Enumeration of MDL MOL/RXN file versions.
  * @enum
@@ -737,3 +750,5 @@ Kekule.IO.MdlBlockWriter = Class.create(Kekule.IO.MdlBlockHandler,
 		// do nothing here.
 	}
 });
+
+module.exports = Kekule
