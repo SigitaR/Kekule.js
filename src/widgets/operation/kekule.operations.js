@@ -9,7 +9,8 @@
  * requires /utils/kekule.utils.js
  * requires /localization/
  */
-
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule) {
 /**
  * Base class for a command in command pattern.
  * @class
@@ -476,3 +477,6 @@ Kekule.OperationHistory = Class.create(ObjectEx,
 		return this.canUnpop();
 	}
 });
+
+return Kekule
+}

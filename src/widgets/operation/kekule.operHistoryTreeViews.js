@@ -12,8 +12,8 @@
  * requires /widgets/chem/kekule.chemWidget.base.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var CCNS = Kekule.Widget.HtmlClassNames;
 
@@ -187,5 +187,5 @@ Kekule.Widget.OperHistoryTreeView = Class.create(Kekule.Widget.TreeView,
 		return result;
 	}
 });
-
-})();
+	return Kekule
+}

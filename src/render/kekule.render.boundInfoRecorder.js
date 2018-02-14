@@ -13,6 +13,8 @@
  * requires /render/kekule.render.base.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule) {
 /**
  * A helper class to record all bound info during the renderering of a renderer or painter.
  *
@@ -380,3 +382,6 @@ Kekule.Render.BoundInfoRecorder = Class.create(ObjectEx,
 		return result;
 	}
 });
+
+	return Kekule
+ }

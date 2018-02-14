@@ -11,9 +11,9 @@
  * requires /widgets/advCtrls/objInspector/kekule.widget.objectInspector.propEditors.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var PEA = Kekule.PropertyEditor.EditorAttributes;
 
@@ -428,5 +428,5 @@ Kekule.PropertyEditor.GlyphPathParamsEditor = Class.create(Kekule.PropertyEditor
 	]
 });
 Kekule.PropertyEditor.register(Kekule.PropertyEditor.GlyphPathParamsEditor, null, Kekule.Glyph.PathGlyphConnector, 'pathParams');
-
-})();
+return Kekule
+}

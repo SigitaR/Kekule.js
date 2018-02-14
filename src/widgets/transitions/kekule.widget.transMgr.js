@@ -15,7 +15,8 @@
  */
 
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 SU = Kekule.StyleUtils;
@@ -317,5 +318,5 @@ Kekule.Widget.showHideManager.setTransitionSelector(defSelector);
 // debug
 	//Kekule.Widget.showHideManager = null;
 
-
-})();
+return Kekule
+}

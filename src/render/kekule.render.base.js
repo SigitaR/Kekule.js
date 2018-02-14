@@ -10,8 +10,9 @@
  * requires /render/kekule.render.utils.js
  */
 
-"use strict";
-
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule) {
+	
 /**
  * Namespace for renderer system.
  * @namespace
@@ -2200,3 +2201,7 @@ Kekule.Render.DrawBridge2DMananger = new Kekule.Render.DrawBridgeManager();
  * @object
  */
 Kekule.Render.DrawBridge3DMananger = new Kekule.Render.DrawBridgeManager();
+
+return Kekule
+
+}

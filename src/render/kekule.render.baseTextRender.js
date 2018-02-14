@@ -12,8 +12,8 @@
  * requires /render/kekule.render.configs.js
  */
 
-(function ()
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule) {
 
 var RT = Kekule.Render.RichText;
 var RTU = Kekule.Render.RichTextUtils;
@@ -957,5 +957,5 @@ Kekule.Render.BaseRichTextDrawer = Class.create(ObjectEx,
 		bridge.addToGroup(textElem, drawGroup);
 	}
 });
-
-})();
+	return Kekule
+}

@@ -14,7 +14,8 @@
  * requires /widgets/commonCtrls/kekule.widget.buttons.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var DU = Kekule.DomUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -1476,5 +1477,5 @@ Kekule.Widget.ComboBox = Class.create(Kekule.Widget.FormWidget,
 		$super(text);  // set value of core element(text box)
 	}
 });
-
-})();
+return Kekule
+}

@@ -11,91 +11,90 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-
-
-module.exports = function (Kekule)
-{
-
-var $root = window;
-
-if (!$root.Kekule)
-	$root.Kekule = Kekule;
+module.exports = function (Kekule) {
 
 /**
  * Browser Check.
  * @class
  */
-Kekule.Browser = {
-	IE:     !!(window.attachEvent && !window.opera),
-  Opera:  !!window.opera,
-  WebKit: navigator.userAgent.indexOf('AppleWebKit/') > -1,
-  Gecko:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('like Gecko') < 0 && navigator.userAgent.indexOf('KHTML') == -1,
-  MobileSafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
-	language: navigator.language || navigator.browserLanguage  // language of broweser
-};
+Kekule.Browser = {}
+if (Kekule.$jsRoot.window) {
+	Kekule.Browser = {
+		IE:     !!(window.attachEvent && !window.opera),
+		Opera:  !!window.opera,
+		WebKit: navigator.userAgent.indexOf('AppleWebKit/') > -1,
+		Gecko:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('like Gecko') < 0 && navigator.userAgent.indexOf('KHTML') == -1,
+		MobileSafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
+		language: navigator.language || navigator.browserLanguage  // language of broweser
+	};
+}
+
 
 /**
  * Browser HTML5 feature check.
  * Code copy from https://github.com/mrdoob/three.js/blob/master/examples/js/Detector.js
  * @class
  */
-Kekule.BrowserFeature = {
-	typedArray: (typeof(ArrayBuffer) !== 'undefined'),
-	svg: !!window.SVGSVGElement,
-	canvas: !! window.CanvasRenderingContext2D,
-	webgl: (function()
-	{
-		//if (Kekule.BrowserFeature.webgl === undefined)
+Kekule.BrowserFeature = {}
+if (Kekule.$jsRoot.window) {
+	Kekule.BrowserFeature = {
+		typedArray: (typeof(ArrayBuffer) !== 'undefined'),
+		svg: !!window.SVGSVGElement,
+		canvas: !! window.CanvasRenderingContext2D,
+		webgl: (function()
 		{
-			var result =
-				(function()
-				{
-					try
-					{
-						var canvas = document.createElement('canvas');
-						return !!window.WebGLRenderingContext && ( canvas.getContext('webgl') || canvas.getContext('experimental-webgl') );
-					}
-					catch (e)
-					{
-						return false;
-					}
-				})();
-			//Kekule.BrowserFeature.webgl = result;
-		}
-		//return Kekule.BrowserFeature.webgl;
-		return !!result;
-	})(),
-	downloadHref: (function(doc){ return 'download' in doc.createElement('a')})(document),
-	blob: !!window.Blob,
-	workers: !! window.Worker,
-	fileapi: !!(window.File && window.FileReader && window.FileList && window.Blob),
-	sessionStorage: (function() { try { return !!window.sessionStorage} catch(e) { return false} })(),  // directly call session storage locally on Firefox now will cause exception
-	localStorage: (function() { try { return !!window.localStorage} catch(e) { return false} })(),  // !!window.localStorage,
-	cssTransition: (function(s) {
-		return 'transition' in s || 'WebkitTransition' in s || 'MozTransition' in s || 'msTransition' in s || 'OTransition' in s;
-	})(document.createElement('div').style),
-	cssTranform: (function(s) {
-		return 'transform' in s || 'WebkitTransform' in s || 'MozTransform' in s || 'msTransform' in s || 'OTransform' in s;
-	})(document.createElement('div').style),
-	html5Form: {
-		placeholder: (function(elem){ return 'placeholder' in elem; })(document.createElement('input')),
-		supportType: function(typeName)
+			//if (Kekule.BrowserFeature.webgl === undefined)
 			{
-				var elem = document.createElement('input');
-				elem.setAttribute('type', typeName);
-				var result = elem.type === typeName;
-				var textTypes = ['text', 'url', 'search'];
-				if (result && (textTypes.indexOf(typeName.toLowerCase()) < 0))
-				{
-					var testValue = ':)';
-					elem.value = testValue;
-					result = elem.value !== testValue;
-				}
-				return result;
+				var result =
+					(function()
+					{
+						try
+						{
+							var canvas = document.createElement('canvas');
+							return !!window.WebGLRenderingContext && ( canvas.getContext('webgl') || canvas.getContext('experimental-webgl') );
+						}
+						catch (e)
+						{
+							return false;
+						}
+					})();
+				//Kekule.BrowserFeature.webgl = result;
 			}
-	},
-	mutationObserver: window.MutationObserver || window.MozMutationObserver || window.WebkitMutationObserver
-};
+			//return Kekule.BrowserFeature.webgl;
+			return !!result;
+		})(),
+		downloadHref: (function(doc){ return 'download' in doc.createElement('a')})(document),
+		blob: !!window.Blob,
+		workers: !! window.Worker,
+		fileapi: !!(window.File && window.FileReader && window.FileList && window.Blob),
+		sessionStorage: (function() { try { return !!window.sessionStorage} catch(e) { return false} })(),  // directly call session storage locally on Firefox now will cause exception
+		localStorage: (function() { try { return !!window.localStorage} catch(e) { return false} })(),  // !!window.localStorage,
+		cssTransition: (function(s) {
+			return 'transition' in s || 'WebkitTransition' in s || 'MozTransition' in s || 'msTransition' in s || 'OTransition' in s;
+		})(document.createElement('div').style),
+		cssTranform: (function(s) {
+			return 'transform' in s || 'WebkitTransform' in s || 'MozTransform' in s || 'msTransform' in s || 'OTransform' in s;
+		})(document.createElement('div').style),
+		html5Form: {
+			placeholder: (function(elem){ return 'placeholder' in elem; })(document.createElement('input')),
+			supportType: function(typeName)
+				{
+					var elem = document.createElement('input');
+					elem.setAttribute('type', typeName);
+					var result = elem.type === typeName;
+					var textTypes = ['text', 'url', 'search'];
+					if (result && (textTypes.indexOf(typeName.toLowerCase()) < 0))
+					{
+						var testValue = ':)';
+						elem.value = testValue;
+						result = elem.value !== testValue;
+					}
+					return result;
+				}
+		},
+		mutationObserver: window.MutationObserver || window.MozMutationObserver || window.WebkitMutationObserver
+	};	
+}
 
 /**
  * Namespace for XBrowser lib.
@@ -135,7 +134,9 @@ var isElemPositioned = function(element)
 /////////////////////////////////////////////////////////////
 //   DOM mutation observer
 /////////////////////////////////////////////////////////////
-X.MutationObserver = window.MutationObserver || window.MozMutationObserver || window.WebkitMutationObserver;
+if (Kekule.$jsRoot.window) {
+	X.MutationObserver = window.MutationObserver || window.MozMutationObserver || window.WebkitMutationObserver;
+}
 
 /////////////////////////////////////////////////////////////
 //   Cross browser event handling supporting
@@ -974,7 +975,7 @@ X.Event._IEMethods = {
 	}
 }
 
-if (document.addEventListener)  // W3C browser
+if (this.document && document.addEventListener)  // W3C browser
 {
 	X.Event = Object.extend(X.Event, X.Event._W3C);
 	X.Event.Methods = Object.extend(X.Event.Methods, X.Event._W3CMethods);
@@ -983,7 +984,7 @@ if (document.addEventListener)  // W3C browser
 		X.Event = Object.extend(X.Event, X.Event._Gecko);
 	}
 }
-else if (document.attachEvent)  // IE 8
+else if (this.document && document.attachEvent)  // IE 8
 {
 	X.Event = Object.extend(X.Event, X.Event._IE);
 	X.Event.Methods = Object.extend(X.Event.Methods, X.Event._IEMethods);
@@ -998,11 +999,11 @@ else if (document.attachEvent)  // IE 8
 Object.extend(X.Event, X.Event.Methods);
 // insert new methods to Event class
 var eproto = null;
-if (window.Event)
+if (Kekule.$jsRoot.window && Kekule.$jsRoot.window.Event)
 	eproto = window.Event.prototype;
 if (!eproto)
 {
-	if (document.createEvent)
+	if (this.document && document.createEvent)
 		eproto = document.createEvent('HTMLEvents').__proto__;
 }
 var hasEventPrototype = !!eproto;
@@ -1183,7 +1184,7 @@ Kekule.X.DomReady = {
 		DOM.initReady();//如果没有建成DOM树，则走第二步，存储起来一起杀
 		if (!DOM.isReady)
 		{
-			var readyState = document && document.readyState;
+			var readyState = Kekule.$jsRoot.document && Kekule.$jsRoot.document && Kekule.$jsRoot.document.readyState;
 			if (readyState === 'complete' || readyState === 'loaded'    // document already loaded, call fn directly
 				|| (readyState === 'interactive' && !Kekule.Browser.IE))
 			{
@@ -1247,7 +1248,7 @@ Kekule.X.DomReady = {
 	},
   initReady: function()
   {
-    if (document.addEventListener) {
+    if (Kekule.$jsRoot.document && Kekule.$jsRoot.document.addEventListener) {
       document.addEventListener( "DOMContentLoaded", function(){
         document.removeEventListener( "DOMContentLoaded", arguments.callee, false );//清除加载函数
         DOM.fireReady();
@@ -1255,7 +1256,7 @@ Kekule.X.DomReady = {
     }
     else
     {
-      if (document.getElementById) {
+      if (Kekule.$jsRoot.document && Kekule.$jsRoot.document.getElementById) {
         document.write('<script id="ie-domReady" defer="defer" src="\//:"><\/script>');
         document.getElementById("ie-domReady").onreadystatechange = function() {
           if (this.readyState === "complete") {

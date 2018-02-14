@@ -11,8 +11,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * The class to call native services (e.g., open file picker dialog).
@@ -322,9 +322,10 @@ Kekule.HtmlNativeServiceImpl = {
 // register
 if (Kekule.BrowserFeature.fileapi)
 	KNS.doShowFilePickerDialog = Kekule.HtmlNativeServiceImpl.doShowFilePickerDialog;
-if (Kekule.Browser.IE || window.navigator.msSaveOrOpenBlob)
+if (Kekule.Browser.IE || this.window && window.navigator.msSaveOrOpenBlob)
 	KNS.doSaveFileData = Kekule.HtmlNativeServiceImpl.doSaveFileDataIe;
 else if (Kekule.BrowserFeature.downloadHref)
 	KNS.doSaveFileData = Kekule.HtmlNativeServiceImpl.doSaveFileData;
 
-})();
+	return Kekule
+}

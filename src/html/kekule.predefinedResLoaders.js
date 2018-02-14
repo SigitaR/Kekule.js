@@ -35,7 +35,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function (Kekule) {
 /**
  * A resource item predefined with an element.
  * Resource can be defined directly inside element, e.g.:
@@ -411,3 +412,6 @@ Kekule._registerAfterLoadProc(function(){
 		}
 	}
 });
+
+return Kekule
+}

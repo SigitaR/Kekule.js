@@ -8,6 +8,7 @@
  * requires /widgets/kekule.widget.base.js
  */
 
+ module.exports = function (Kekule) {
 /**
  * Namespace for chem widgets.
  * @type {namespace}
@@ -83,3 +84,6 @@ Kekule.ChemWidget.HtmlClassNames = {
 	PREFIX: 'K-Chem-',
 	INNER_TOOLBAR: 'K-Chem-InnerToolbar'
 };
+
+return Kekule
+}

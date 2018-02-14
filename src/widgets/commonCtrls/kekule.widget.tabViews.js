@@ -4,8 +4,8 @@
  * @author Partridge Jiang
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 var CNS = Kekule.Widget.HtmlClassNames;
@@ -481,5 +481,5 @@ Kekule.Widget.TabView = Class.create(Kekule.Widget.Container,
 	}
 });
 
-
-})();
+return Kekule
+}

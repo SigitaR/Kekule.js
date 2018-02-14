@@ -11,9 +11,8 @@
  * requires /widget/kekule.widget.base.js
  */
 
-(function(){
-"use strict";
-
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * A  binding item between objects.
@@ -170,5 +169,5 @@ ClassEx.defineProp(ObjectEx, 'dataBindings', {'dataType': DataType.ARRAY,
 		return result;
 	}
 });
-
-})();
+return Kekule
+}

@@ -12,7 +12,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -3652,7 +3653,7 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 	initialize: function($super, doc)
 	{
 		$super();
-		this._document = doc || document;
+		this._document = doc || Kekule.$jsRoot.document;
 		this._hammertime = null;  // private
 		this.setPropStoreFieldValue('popupWidgets', []);
 		this.setPropStoreFieldValue('dialogWidgets', []);
@@ -4740,5 +4741,5 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 Kekule.ClassUtils.makeSingleton(Kekule.Widget.GlobalManager);
 Kekule.Widget.globalManager = Kekule.Widget.GlobalManager.getInstance();
 
-
-})();
+	return Kekule
+}

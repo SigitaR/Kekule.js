@@ -18,9 +18,9 @@
  * requires /localization
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var AU = Kekule.ArrayUtils;
 var SU = Kekule.StyleUtils;
@@ -663,5 +663,5 @@ Kekule.Widget.WidgetGrid = Class.create(Kekule.Widget.Container,
 		}
 	}
 });
-
-})();
+return Kekule
+}

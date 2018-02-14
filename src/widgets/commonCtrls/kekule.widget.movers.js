@@ -13,9 +13,8 @@
  * requires /widgets/kekule.widget.base.js
  */
 
-(function(){
-
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 var SU = Kekule.StyleUtils;
@@ -486,5 +485,5 @@ ClassEx.defineProps(Kekule.Widget.BaseWidget, [
 	{'name': 'moveHelper', 'dataType': 'Kekule.Widget.MoveHelper', 'serializable': false, 'setter': null, 'scope': PS.PRIVATE}
 ]);
 
-
-})();
+return Kekule
+}

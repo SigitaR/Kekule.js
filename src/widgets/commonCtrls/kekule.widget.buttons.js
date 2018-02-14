@@ -14,9 +14,8 @@
  * requires /widgets/commonCtrls/kekule.widget.images.js
  */
 
-(function(){
-
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 var CNS = Kekule.Widget.HtmlClassNames;
@@ -1065,5 +1064,5 @@ Kekule.Widget.CompactButtonSet = Class.create(Kekule.Widget.DropDownButton,
 		return this;
 	}
 });
-
-})();
+return Kekule
+}

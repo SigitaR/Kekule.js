@@ -12,8 +12,8 @@
  * requires /widgets/kekule.widget.base.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 Kekule.Widget.HtmlClassNames = Object.extend(Kekule.Widget.HtmlClassNames, {
@@ -429,4 +429,5 @@ Kekule.Widget.NestedContainer = Class.create(Kekule.Widget.BaseWidget,
 			return [];
 	}
 });
-})();
+return Kekule
+}

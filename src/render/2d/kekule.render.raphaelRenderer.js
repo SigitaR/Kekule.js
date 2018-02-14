@@ -12,6 +12,8 @@
  * requires /render/2d/kekule.render.def2DRenderer.js
  */
 
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule) {
 // Some helper methods of Raphael
 if (this.Raphael)
 {
@@ -511,3 +513,6 @@ Kekule.Render.RaphaelRendererBridge.isSupported = function()
 //Kekule.ClassUtils.makeSingleton(Kekule.Render.RaphaelRendererBridge);
 
 Kekule.Render.DrawBridge2DMananger.register(Kekule.Render.RaphaelRendererBridge, 10);
+
+return Kekule
+}

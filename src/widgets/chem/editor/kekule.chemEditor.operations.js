@@ -13,8 +13,8 @@
  * requires /localization/
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * A namespace for operation about normal ChemObject instance.
@@ -1284,5 +1284,5 @@ Kekule.ChemStructOperation.StandardizeStructFragment = Class.create(Kekule.ChemO
 		return this._concreteOper? this._concreteOper.reverse(): null;
 	}
 });
-
-	})();
+return Kekule
+}

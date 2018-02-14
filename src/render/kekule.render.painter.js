@@ -13,7 +13,8 @@
  * //requires /render/kekule.render.boundInfoRecorder.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Painter used by user to draw a chem object.
@@ -478,4 +479,6 @@ Kekule.Render.ChemObjPainter3D = Class.create(Kekule.Render.ChemObjPainter,
 	}
 });
 
-})();
+
+return Kekule
+}

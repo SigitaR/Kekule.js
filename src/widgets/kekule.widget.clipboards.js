@@ -12,8 +12,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * A class to implement an internal "clipboard" to transfer data between different widgets
@@ -246,5 +246,5 @@ Kekule.Widget.Clipboard = Class.create(ObjectEx,
 });
 Kekule.ClassUtils.makeSingleton(Kekule.Widget.Clipboard);
 Kekule.Widget.clipboard = Kekule.Widget.Clipboard.getInstance();
-
-})();
+return Kekule
+}

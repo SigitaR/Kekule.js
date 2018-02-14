@@ -20,8 +20,8 @@
  * requires /widgets/chem/kekule.chemWidget.base.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var PS = Class.PropertyScope;
 var CW = Kekule.ChemWidget;
@@ -321,5 +321,5 @@ Kekule.ChemWidget.LoadDataDialog = Class.create(Kekule.Widget.Dialog,
 		return $super(result);
 	}
 });
-
-})();
+return Kekule
+}

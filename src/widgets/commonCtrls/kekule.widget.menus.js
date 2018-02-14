@@ -15,8 +15,8 @@
  * requires /widgets/commonCtrls/kekule.widget.images.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var DU = Kekule.DomUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -687,5 +687,5 @@ Kekule.Widget.MenuBar = Class.create(Kekule.Widget.Menu,
 		return $super() + ' ' + CNS.MENUBAR;
 	}
 });
-
-})();
+return Kekule
+}

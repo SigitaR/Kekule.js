@@ -23,9 +23,9 @@
  * requires /localization/kekule.localize.widget.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var PS = Class.PropertyScope;
 var ZU = Kekule.ZoomUtils;
@@ -2640,5 +2640,5 @@ Kekule._registerAfterLoadProc(function(){
 	reg(BNS.molDisplayTypeBallStick, CW.ActionDisplayerChangeMolDisplayTypeBallStick, widgetClass);
 	reg(BNS.molDisplayTypeSpaceFill, CW.ActionDisplayerChangeMolDisplayTypeSpaceFill, widgetClass);
 });
-
-})();
+return Kekule
+}

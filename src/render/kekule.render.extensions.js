@@ -12,8 +12,8 @@
  * requires /render/kekule.render.utils.js
  */
 
-(function()
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule) {
 	var K = Kekule;
 	var NL = Kekule.ChemStructureNodeLabels;
 	var CM = Kekule.CoordMode;
@@ -1777,4 +1777,5 @@
 			return result;
 		}
 	});
-})();
+	return Kekule
+}

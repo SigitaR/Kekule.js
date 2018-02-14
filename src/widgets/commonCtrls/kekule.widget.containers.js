@@ -12,7 +12,8 @@
  * requires /widgets/kekule.widget.base.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 Kekule.Widget.HtmlClassNames = Object.extend(Kekule.Widget.HtmlClassNames, {
@@ -554,5 +555,5 @@ Kekule.Widget.Toolbar = Class.create(Kekule.Widget.WidgetGroup,
 		return map? map.get(name): null;
 	}
 });
-
-})();
+return Kekule
+}

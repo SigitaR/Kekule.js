@@ -15,8 +15,8 @@
  * requires /widgets/commonCtrls/kekule.widget.formControls.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var DU = Kekule.DomUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -419,5 +419,5 @@ Kekule.Widget.TextEditor = Class.create(Kekule.Widget.FormWidget,
 		this.setFontSizeLevel(newLevel);
 	}
 });
-
-})();
+return Kekule
+}

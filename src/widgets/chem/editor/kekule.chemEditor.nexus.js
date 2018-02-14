@@ -12,8 +12,8 @@
  * requires 'widgets/advCtrls/objInspector/kekule.widget.objInspectors.js',
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * An tree view widget to display internal relationship of chem objects.
@@ -247,5 +247,5 @@ Kekule.Editor.EditorNexus = Class.create(ObjectEx,
 		}
 	}
 });
-
-})();
+return Kekule
+}

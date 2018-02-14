@@ -12,8 +12,8 @@
  * requires /localization/
  */
 
-(function(){
-"use strict"
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Operation of change a property by property editor in object inspector.
@@ -63,5 +63,5 @@ Kekule.Widget.PropEditorModifyOperation = Class.create(Kekule.Operation,
 		this.getPropEditor().setValue(this.getOldValue());
 	}
 });
-
-})();
+return Kekule
+}

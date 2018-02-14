@@ -25,8 +25,8 @@
  * requires /localization/kekule.localize.widget.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 var PS = Class.PropertyScope;
 var DU = Kekule.DomUtils;
@@ -844,5 +844,5 @@ Kekule.ChemWidget.ChemObjInserter.Configurator = Class.create(Kekule.Widget.Conf
 		}
 	}
 });
-
-})();
+return Kekule
+}

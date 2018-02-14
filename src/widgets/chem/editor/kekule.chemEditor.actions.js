@@ -19,8 +19,8 @@
  * requires /localization/kekule.localize.widget.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
 var BNS = Kekule.ChemWidget.ComponentWidgetNames;
@@ -1823,5 +1823,5 @@ Kekule._registerAfterLoadProc(function(){
 	}
 });
 
-
-})();
+return Kekule
+}

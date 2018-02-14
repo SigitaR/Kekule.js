@@ -17,9 +17,9 @@
  * requires /widgets/advCtrls/objInspector/kekule.widget.objInspector.operations.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var DU = Kekule.DomUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -1541,5 +1541,5 @@ Kekule.Widget.ObjectInspector = Class.create(Kekule.Widget.BaseWidget,
 		return result;
 	}
 });
-
-})();
+return Kekule
+}

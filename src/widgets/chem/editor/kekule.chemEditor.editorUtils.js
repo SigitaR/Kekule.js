@@ -11,8 +11,7 @@
  * requires /utils/kekule.utils.js
  */
 
-(function()
-{
+module.exports = function(Kekule) {
 
 /**
  * Util methods about chem structure.
@@ -372,5 +371,5 @@ Kekule.Editor.RepositoryStructureUtils = {
 		}
 	}
 };
-
-})();
+return Kekule
+}

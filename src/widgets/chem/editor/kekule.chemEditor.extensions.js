@@ -10,8 +10,8 @@
  * requires /utils/kekule.utils.js
  */
 
-(function()
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports =  function(Kekule) {
 
 var K = Kekule;
 var C = Kekule.CoordMode;
@@ -616,5 +616,5 @@ ClassEx.extend(Kekule.Glyph.PathGlyph,
 		$super(transformMatrix, childTransformMatrix, coordMode, false, allowCoordBorrow, _useChildCoord);
 	}
 });
-
-})();
+return Kekule
+}

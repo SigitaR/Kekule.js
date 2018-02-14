@@ -13,9 +13,8 @@
  * requires/widgets/kekule.widget.base.js
  */
 
-(function(){
-
-"use strict"
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 
@@ -163,5 +162,5 @@ RM.register(new SR(SRN.ICON_COLOR_MIXED, 'K-Res-Icon-Color-Mixed'));
 RM.register(new SR(SRN.BUTTON_YES_OK, 'K-Res-Button-YesOk'));
 RM.register(new SR(SRN.BUTTON_NO_CANCEL, 'K-Res-Button-NoCancel'));
 RM.register(new SR(SRN.BUTTON_LOAD_FILE, 'K-Res-Button-LoadFile'));
-
-})();
+	return Kekule
+}

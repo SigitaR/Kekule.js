@@ -1443,3 +1443,7 @@ Object.extend(DataType, {
 		}
 	}
 });
+
+module.exports = {
+	ObjSerializerFactory: ObjSerializerFactory
+}

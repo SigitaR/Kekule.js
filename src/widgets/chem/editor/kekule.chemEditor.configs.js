@@ -14,9 +14,9 @@
  * requires /widgets/chem/editor/kekule.chemEditor.editorUtils.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var PS = Class.PropertyScope;
 
@@ -378,5 +378,5 @@ Kekule.Editor.StyleSetterConfigs = Class.create(Kekule.AbstractConfigs,
 		this.setListedFontNames(Kekule.Widget.FontEnumerator.getAvailableFontFamilies());
 	}
 });
-
-})();
+return Kekule
+}

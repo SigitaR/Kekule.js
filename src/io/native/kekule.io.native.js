@@ -13,6 +13,8 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const {JsonUtility, XmlUtility} = require('../../lan/xmlJsons')
+const {ObjSerializerFactory} = require('../../lan/serializations')
 
 module.exports = function (Kekule) {
 	/*

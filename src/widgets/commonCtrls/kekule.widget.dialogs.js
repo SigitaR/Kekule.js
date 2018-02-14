@@ -13,9 +13,8 @@
  * requires /localization
  */
 
-(function(){
-
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var DU = Kekule.DomUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -672,5 +671,5 @@ Kekule.Widget.Dialog = Class.create(Kekule.Widget.BaseWidget,
 		}
 	}
 });
-
-})();
+return Kekule
+}

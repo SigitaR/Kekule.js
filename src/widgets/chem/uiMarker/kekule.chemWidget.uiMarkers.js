@@ -12,10 +12,9 @@
  * requires /render/2d/kekule.renderer2D.js
  */
 
-(function()
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule) {
 
-"use strict";
 
 var oneOf = Kekule.oneOf;
 
@@ -483,5 +482,5 @@ Kekule.ClassDefineUtils.addExtraTwoTupleObjMapSupport(Kekule.ChemWidget.UiMarker
 
 // register renderers
 Kekule.Render.Renderer2DFactory.register(Kekule.ChemWidget.UiMarkerCollection, Kekule.ChemWidget.UiMarkersRenderer);
-
-})();
+return Kekule
+}

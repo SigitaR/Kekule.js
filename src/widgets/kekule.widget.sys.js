@@ -11,8 +11,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 var _FontDetector = function() {
@@ -121,5 +121,5 @@ Kekule.Widget.FontEnumerator = {
 		return result;
 	}
 };
-
-})();
+	return Kekule
+}

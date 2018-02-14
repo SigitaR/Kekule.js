@@ -16,8 +16,8 @@
  * requires /localization/
  */
 
-(function()
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule) {
 
 var RT = Kekule.Render.BondRenderType;
 var D = Kekule.Render.TextDirection;
@@ -4674,4 +4674,5 @@ Kekule.Render.Renderer2DFactory.register(Kekule.ChemStructureObjectGroup, Kekule
 Kekule.Render.Renderer2DFactory.register(Kekule.ChemSpaceElement, Kekule.Render.ChemSpaceElement2DRenderer);
 Kekule.Render.Renderer2DFactory.register(Kekule.ChemSpace, Kekule.Render.ChemSpace2DRenderer);
 
-})();
+	return Kekule
+}

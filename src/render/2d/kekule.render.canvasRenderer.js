@@ -12,8 +12,8 @@
  * requires /render/2d/kekule.render.def2DRenderer.js
  */
 
-"use strict";
-
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule) {
 /**
  * Render bridge class of HTML5 Canvas.
  * @class
@@ -643,7 +643,7 @@ Kekule.Render.CanvasRendererBridge = Class.create(
 Kekule.Render.CanvasRendererBridge.isSupported = function()
 {
 	var result = false;
-	if (document && document.createElement)
+	if (Kekule.$jsRoot.document && document && document.createElement)
 	{
 		result = !!document.createElement('canvas').getContext;
 	}
@@ -653,3 +653,6 @@ Kekule.Render.CanvasRendererBridge.isSupported = function()
 //Kekule.ClassUtils.makeSingleton(Kekule.Render.CanvasRendererBridge);
 
 Kekule.Render.DrawBridge2DMananger.register(Kekule.Render.CanvasRendererBridge, 20);
+
+return Kekule
+}

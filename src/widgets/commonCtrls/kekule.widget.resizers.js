@@ -4,9 +4,8 @@
  * @author Partridge Jiang
  */
 
-(function(){
-
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 var EV = Kekule.X.Event;
@@ -403,5 +402,5 @@ ClassEx.defineProps(Kekule.Widget.BaseWidget, [
 	{'name': 'resizeGripper', 'dataType': 'Kekule.Widget.ResizeGripper', 'serializable': false, 'setter': null, 'scope': PS.PRIVATE}
 ]);
 
-
-})();
+return Kekule
+}

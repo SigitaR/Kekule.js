@@ -13,8 +13,8 @@
  * requires /widgets/kekule.widget.containers.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var EU = Kekule.HtmlElementUtils;
 var CNS = Kekule.Widget.HtmlClassNames;
@@ -374,5 +374,5 @@ ClassEx.extend(Kekule.Widget.BaseWidget, {
 		msgPanel.hide();
 	}
 });
-
-})();
+return Kekule
+}

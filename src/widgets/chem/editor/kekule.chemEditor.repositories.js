@@ -13,8 +13,8 @@
  * requires /widgets/chem/editor/kekule.chemEditor.extensions.js
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Base repository item class.
@@ -765,5 +765,5 @@ Kekule._registerAfterLoadProc(function (){
 		}
 	}
 });
-
-})();
+return Kekule
+}

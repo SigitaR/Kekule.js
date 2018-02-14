@@ -18,7 +18,8 @@
  * requires /widgets/kekule.widget.base.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var DU = Kekule.DomUtils;
 var AU = Kekule.ArrayUtils;
@@ -678,5 +679,5 @@ if ($jsRoot && $jsRoot.addEventListener && $jsRoot.postMessage)
 	}, false);
 }
 */
-
-})();
+	return Kekule
+}

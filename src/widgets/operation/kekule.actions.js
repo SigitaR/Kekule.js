@@ -15,7 +15,8 @@
  */
 
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Base class for actions.
@@ -967,5 +968,5 @@ Kekule.ActionManager = {
 	}
 };
 var AM = Kekule.ActionManager;
-
-})();
+return Kekule
+}

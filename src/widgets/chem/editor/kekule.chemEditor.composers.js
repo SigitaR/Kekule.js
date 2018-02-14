@@ -21,7 +21,8 @@
  * requires /localization
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 var PS = Class.PropertyScope;
 var CW = Kekule.ChemWidget;
@@ -2464,5 +2465,5 @@ Kekule.Editor.ComposerDialog = Class.create(Kekule.Widget.Dialog,
 		return result;
 	}
 });
-
-})();
+return Kekule
+}

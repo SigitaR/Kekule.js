@@ -15,7 +15,8 @@
  * requires /localization/
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 var OU = Kekule.ObjUtils;
 var BU = Kekule.BoxUtils;
@@ -2031,4 +2032,5 @@ Kekule.Render.Renderer3DFactory.register(Kekule.ChemStructureObjectGroup, Kekule
 Kekule.Render.Renderer3DFactory.register(Kekule.ChemSpaceElement, Kekule.Render.ChemSpaceElement3DRenderer);
 Kekule.Render.Renderer3DFactory.register(Kekule.ChemSpace, Kekule.Render.ChemSpace3DRenderer);
 
-})();
+	return Kekule
+}

@@ -12,8 +12,9 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-if (Kekule.$jsRoot.THREE)
-{
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule) {
+if (Kekule.$jsRoot.THREE) {
 	/** @ignore */
 	THREE.Object3D.prototype.clear = function(){
 		var children = this.children;
@@ -909,3 +910,6 @@ Kekule.Render.ThreeRendererBridge.CheckSupporting = function()
 //Kekule.ClassUtils.makeSingleton(Kekule.Render.ThreeRendererBridge);
 
 Kekule.Render.DrawBridge3DMananger.register(Kekule.Render.ThreeRendererBridge, 20);
+
+return Kekule
+ }

@@ -12,8 +12,8 @@
  * requires /localizations/
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * DataSet is a special class to provide large amount of data to other widgets (e.g., DataTable).
@@ -674,5 +674,5 @@ Kekule.Widget.DataPager = Class.create(ObjectEx,
 		this.fetchPageData(ops);
 	}
 });
-
-})();
+return Kekule
+}

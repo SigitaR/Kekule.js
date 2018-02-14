@@ -12,9 +12,9 @@
  * requires /widgets/chem/kekule.chemWidget.base.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var CCNS = Kekule.ChemWidget.HtmlClassNames;
 
@@ -213,5 +213,5 @@ Kekule.ChemWidget.StructureTreeView = Class.create(Kekule.Widget.TreeView,
 		return result;
 	}
 });
-
-})();
+return Kekule
+}

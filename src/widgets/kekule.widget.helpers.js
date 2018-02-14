@@ -12,7 +12,8 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 /**
  * Enumeration of modes to evoke/revoke associated widget.
@@ -346,5 +347,5 @@ Kekule.Widget.DynamicEvokeHelper = Class.create(ObjectEx,
 		}
 	}
 });
-
-})();
+return Kekule
+}

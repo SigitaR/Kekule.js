@@ -17,9 +17,9 @@
  * requires /widgets/chem/editor/kekule.chemEditor.operations.js
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+module.exports = function(Kekule){
 
-"use strict";
 
 var AU = Kekule.ArrayUtils;
 var EU = Kekule.HtmlElementUtils;
@@ -4997,5 +4997,5 @@ Kekule.Editor.BasicManipulationIaController.ManipulationType = {
 };
 /** @ignore */
 Kekule.Editor.IaControllerManager.register(Kekule.Editor.BasicManipulationIaController, Kekule.Editor.BaseEditor);
-
-})();
+return Kekule
+}

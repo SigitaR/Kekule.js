@@ -13,8 +13,8 @@
  * requires /localization
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+module.exports = function(Kekule){
 
 var OT = Kekule.OBJDEF_TEXTS;
 var PS = Class.PropertyScope;
@@ -598,4 +598,5 @@ Kekule.Render.Length3DConfigs = Class.create(Kekule.AbstractConfigs,
 	}
 });
 
-})();
+	return Kekule
+}

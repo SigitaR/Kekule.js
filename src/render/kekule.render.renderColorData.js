@@ -4,7 +4,7 @@
  * @author Partridge Jiang
  */
 
-(function(){
+module.exports = function(Kekule){
 
 var R = Kekule.Render;
 
@@ -73,5 +73,6 @@ R.atomColors = [];
 R.atomColors[R.RendererType.R2D] = R.atom2DColors;
 R.atomColors[R.RendererType.R3D] = R.atom3DColors;
 
-})();
+return Kekule
+}
 
