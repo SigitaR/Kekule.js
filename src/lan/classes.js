@@ -390,70 +390,7 @@ Object._extendSupportMethods(Function.prototype, {
     }, 10);
   }
 });
-/*
-Object._extendSupportMethods(Function.prototype, {
-	argumentNames: function() {
-		return FunctionUtils.argumentNames(this);
-	},
-	wrap: function(wrapper) {
-		return FunctionUtils.wrap(this, wrapper);
-	},
-	methodize: function() {
-		return FunctionUtils.methodize(this);
-	},
-	bind: function() {
-		return FunctionUtils.bind(this);
-	},
-	delay: function() {
-		return FunctionUtils.delay(this);
-	},
-	defer: function() {
-		return FunctionUtils.defer(this);
-	}
-});
-*/
 
-
-/** @ignore */
-/*
-Object._extendSupportMethods(Array.prototype, {
-  first: function() {
-      return this[0];
-  },
-  last: function() {
-    return this[this.length - 1];
-  },
-  clear: function() {
-    this.length = 0;
-    return this;
-  },
-  without: function() {
-    var values = __$A__(arguments);
-    return this.select(function(value) {
-      return !values.include(value);
-    });
-  },
-  removeAt: function(index)
-  {
-    this.splice(index, 1);
-  },
-  remove: function(item)
-  {
-    var index = this.indexOf(item);
-    if (index >= 0)
-      return this.removeAt(index);
-  },
-  forEach: function(func, scope)
-  {
-    var i, len;
-    for (i = 0, len = this.length; i < len; ++i) {
-      if (i in this) {
-        func.call(scope, this[i], i, this);
-      }
-    }
-  }
-});
-*/
 if (!Array.prototype.indexOf)
 {
 	/** @ignore */
@@ -542,23 +479,11 @@ Object._extendSupportMethods(String.prototype, {
   },
 
   escapeHTML: function escapeHTML() {
-		/*
-    var self = arguments.callee;
-    self.text.data = this;
-    return self.div.innerHTML;
-    */
-		return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br />');
+	return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br />');
   },
 
   unescapeHTML: function() {
-		/*
-    var div = new Element('div');
-    div.innerHTML = this.stripTags();
-    return div.childNodes[0] ? (div.childNodes.length > 1 ?
-      __$A__(div.childNodes).inject('', function(memo, node) { return memo+node.nodeValue; }) :
-      div.childNodes[0].nodeValue) : '';
-    */
-		return this.replace(/\<br \/\>/g, '\n').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+	return this.replace(/\<br \/\>/g, '\n').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
   },
 
   toQueryParams: function(separator) {
@@ -623,18 +548,18 @@ Object._extendSupportMethods(String.prototype, {
     return this.gsub(/_/,'-');
   },
 
-  inspect: function(useDoubleQuotes) {
-    var escapedString = this.gsub(/[\x00-\x1f\\]/, function(match) {
-      var character = String.specialChar[match[0]];
-      return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
-    });
-    if (useDoubleQuotes) return '"' + escapedString.replace(/"/g, '\\"') + '"';
-    return "'" + escapedString.replace(/'/g, '\\\'') + "'";
-  },
+//   inspect: function(useDoubleQuotes) {
+//     var escapedString = this.gsub(/[\x00-\x1f\\]/, function(match) {
+//       var character = String.specialChar[match[0]];
+//       return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
+//     });
+//     if (useDoubleQuotes) return '"' + escapedString.replace(/"/g, '\\"') + '"';
+//     return "'" + escapedString.replace(/'/g, '\\\'') + "'";
+// 
 
-  toJSON: function() {
-    return this.inspect(true);
-  },
+//   toJSON: function() {
+//     return this.inspect(true);
+// 
 
   unfilterJSON: function(filter) {
     return this.sub(filter || Prototype.JSONFilter, '#{1}');
