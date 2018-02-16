@@ -16,10 +16,6 @@
  */
 
 const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const Kekule = {}
-
-const defaultsDeep = require('lodash/defaultsDeep')
-
 module.exports = function(Kekule){
 
 var K = Kekule;

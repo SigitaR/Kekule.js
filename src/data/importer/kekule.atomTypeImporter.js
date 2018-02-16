@@ -10,9 +10,7 @@
  *  requires /data/kekule.dataUtils.js
  */
 
- const defaultsDeep = require('lodash/defaultsDeep')
  const { JsonUtility, XmlUtility } = require('../../lan/xmlJsons')
-
  module.exports = function (Kekule) {
 	 
 /**
