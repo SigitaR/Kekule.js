@@ -328,20 +328,11 @@ function getEssentialFiles(modules, useMinFile)
 {
 	var ms = getEssentialModules(modules);
 	var result = [];
-	for (var i = 0, l = ms.length; i < l; ++i)
-	{
+	for (var i = 0, l = ms.length; i < l; ++i) {
 		var moduleName = ms[i];
 		var m = kekuleFiles[moduleName];
-		if (m && m.files)
-		{
-			if (useMinFile)
-			{
-				var minFileName = m.minFile || (moduleName + '.min.js');
-				if (result.indexOf(minFileName) < 0)
-					result.push(minFileName);
-			}
-			else
-				result = result.concat(m.files);
+		if (m && m.files) {
+			result = result.concat(m.files);
 		}
 	}
 	return result;
@@ -349,10 +340,9 @@ function getEssentialFiles(modules, useMinFile)
 
 const scriptInfo = {
 	'src': this.__filename || '',
-	'modules': allModules,
-	'useMinFile': false
+	'modules': allModules
 }
-const files = getEssentialFiles(scriptInfo.modules, scriptInfo.useMinFile)
+const files = getEssentialFiles(scriptInfo.modules)
 
 let Kekule = {}
 files.forEach(filename => {
