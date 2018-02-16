@@ -4,10 +4,12 @@
  * @author Partridge Jiang
  */
 
+
 /*
  * requires core/kekule.common.js
  * requires /localizations/
  */
+const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 module.exports = function (Kekule) {
 	/**
  * Return value of the first setted params.

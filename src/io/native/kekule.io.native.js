@@ -42,11 +42,11 @@ module.exports = function (Kekule) {
 		{
 			var dtype = dataType || Kekule.IO.ChemDataType.TEXT;
 			var jsonObj;
-			if (dtype == Kekule.IO.ChemDataType.JSON)
-				jsonObj = data;
-			if (dtype == Kekule.IO.ChemDataType.TEXT)
-				jsonObj = JsonUtility.parse(data);
-			else // can not understand data other than text or JSON
+			if (dtype == Kekule.IO.ChemDataType.JSON){
+				jsonObj = data
+			} else if (dtype == Kekule.IO.ChemDataType.TEXT){
+				jsonObj = JsonUtility.parse(data)
+			} else // can not understand data other than text or JSON
 			{
 				Kekule.error(/*Kekule.ErrorMsg.KCJ_INPUT_DATATYPE_NOT_JSON_OR_TEXT*/Kekule.$L('ErrorMsg.KCJ_INPUT_DATATYPE_NOT_JSON_OR_TEXT'));
 				return null;
@@ -62,7 +62,7 @@ module.exports = function (Kekule) {
 				Kekule.error(/*Kekule.ErrorMsg.JSON_SERIALIZER_NOT_EXISTS*/Kekule.$L('ErrorMsg.JSON_SERIALIZER_NOT_EXISTS'));
 				return null;
 			}
-			return serializer.load(null, data);  // create new object
+			return serializer.load(null, data, Kekule);  // create new object
 		}
 	});
 

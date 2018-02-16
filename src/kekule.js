@@ -468,7 +468,7 @@
 	
 	const scriptInfo = {
 		'src': this.__filename || '',
-		'modules': usualModules,
+		'modules': allModules,
 		'useMinFile': false
 	}
 	const files = getEssentialFiles(scriptInfo.modules, scriptInfo.useMinFile)

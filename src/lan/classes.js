@@ -193,25 +193,36 @@ Object._extendSupportMethods = function(destination, methods)
 };
 /** @ignore */
 // e.g., obj.getCascadeFieldValue('level1.level2.name') will return obj.level1.level2.name.
-Object.getCascadeFieldValue = function(fieldName, root)
+Object.getCascadeFieldValue = function(fieldName, root, Kekule)
 {
-  var result;
-  var cascadeNames;
-  if (fieldName.length && fieldName.splice)  // is an array
-    cascadeNames = fieldName;
-  else
-    cascadeNames = fieldName.split('.');
-  if (!root)
-    var root = this;
-  for (var i = 0, l = cascadeNames.length; i < l; ++i)
-  {
-    result = root[cascadeNames[i]];
-    if (!result)
-      break;
-    else
-      root = result;
-  }
-  return result;
+	var result;
+	var cascadeNames;
+	if (fieldName.length && fieldName.splice)  // is an array
+		cascadeNames = fieldName;
+	else
+		cascadeNames = fieldName.split('.');
+	if (!root)
+		var root = this;
+	if(cascadeNames[0] === 'Kekule') {
+		cascadeNames.shift()
+		for (var i = 0, l = cascadeNames.length; i < l; ++i) {
+			result = Kekule[cascadeNames[i]];
+			if (!result)
+				break;
+			else
+				root = result;
+		}
+	} else {
+		for (var i = 0, l = cascadeNames.length; i < l; ++i) {
+			result = root[cascadeNames[i]];
+			if (!result)
+				break;
+			else
+				root = result;
+		}
+	}
+	
+	return result;
 };
 /** @ignore */
 Object.setCascadeFieldValue = function(fieldName, value, root, forceCreateEssentialObjs)
@@ -1596,7 +1607,7 @@ var DataType = {
 	 * @param {String} typeName
 	 * @returns {Variant}
 	 */
-	createInstance: function(typeName)
+	createInstance: function(typeName, Kekule)
 	{
 		switch (typeName)
 		{
@@ -1607,7 +1618,7 @@ var DataType = {
 			case DataType.FUNCTION: return new Function();
 			default: // maybe a ObjectEx descendant
 				{
-					var classInstance = ClassEx.findClass(typeName.capitalizeFirst()); //eval(typeName.capitalizeFirst());
+					var classInstance = ClassEx.findClass(typeName.capitalizeFirst(), undefined, Kekule); //eval(typeName.capitalizeFirst());
 					return new classInstance();
 				}
 		}
@@ -1635,24 +1646,9 @@ var ClassEx = {
 	 * @param {String} className
 	 * @returns {Class}
 	 */
-	findClass: function(className, root)
+	findClass: function(className, root, Kekule)
 	{
-    /*
-		var result;
-		var cascadeNames = className.split('.');
-    if (!root)
-		  var root = $jsRoot;
-		for (var i = 0, l = cascadeNames.length; i < l; ++i)
-		{
-			result = root[cascadeNames[i]];
-			if (!result)
-				break;
-			else
-				root = result;
-		}
-		return result;
-		*/
-		return Object.getCascadeFieldValue(className, root || $jsRoot);
+		return Object.getCascadeFieldValue(className, root || $jsRoot, Kekule);
 	},
 	/**
 	 * Get class name of aClass, usually returns CLASS_NAME field of aClass

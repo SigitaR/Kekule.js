@@ -2307,7 +2307,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 					var valueType = serializer.getStorageNodeExplicitType(itemNode) || serializer.getStorageNodeName(itemNode);
 					if (valueType)
 					{
-						connector = DataType.createInstance(valueType);
+						connector = DataType.createInstance(valueType, Kekule);
 						serializer.load(connector, itemNode);
 						// then handle connectedObjs array
 						var conObjsNode = serializer.getChildStorageNode(itemNode, serializer.propNameToStorageName('connectedObjs'));
