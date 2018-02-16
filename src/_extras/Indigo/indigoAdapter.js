@@ -1,6 +1,5 @@
-function CreateIndigo(module)  // create Indigo adapter object
+module.exports = function CreateIndigo(IndigoModule)  // create Indigo adapter object
 {
-	var Module = module || IndigoModule();
 	var result = {
 		INDIGO_RC_NOT_CENTER: -1,
 		INDIGO_RC_UNMARKED: 0,
@@ -22,13 +21,12 @@ function CreateIndigo(module)  // create Indigo adapter object
 		INDIGO_SINGLET: 101,
 		INDIGO_DOUBLET: 102,
 		INDIGO_TRIPLET: 103,
-		free: Module.cwrap('indigoFree', 'number', ['number']),
-		setOption: Module.cwrap('indigoSetOption', 'number', ['string', 'string']),
-		loadMoleculeFromString: Module.cwrap('indigoLoadMoleculeFromString', 'number', ['string']),
-		molfile: Module.cwrap('indigoMolfile', 'string', ['number']),
-		layout: Module.cwrap('indigoLayout', 'number', ['number'])
+		free: IndigoModule.cwrap('indigoFree', 'number', ['number']),
+		setOption: IndigoModule.cwrap('indigoSetOption', 'number', ['string', 'string']),
+		loadMoleculeFromString: IndigoModule.cwrap('indigoLoadMoleculeFromString', 'number', ['string']),
+		molfile: IndigoModule.cwrap('indigoMolfile', 'string', ['number']),
+		layout: IndigoModule.cwrap('indigoLayout', 'number', ['number'])
 	};
-	result._module = Module;  // save module object
+	result._module = IndigoModule;  // save module object
 	return result;
-
-};
+}

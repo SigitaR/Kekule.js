@@ -4,8 +4,7 @@
  * @author Partridge Jiang
  */
 
-(function($root)
-{
+module.exports = function(Kekule) {
 var obScriptLoaded = false;
 var initOps;
 var Module;
@@ -111,5 +110,5 @@ function generate3DMolData(molData, forceFieldName)
 	}
 	return result;
 };
-
-})(this);
+	return Kekule
+}

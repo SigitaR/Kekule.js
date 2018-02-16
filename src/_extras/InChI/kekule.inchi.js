@@ -13,8 +13,8 @@
  * requires /localization
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 var EU = Kekule.EmscriptenUtils;
@@ -217,5 +217,5 @@ Kekule.IO.enableInChIFormats = function()
 InChI._enableFuncs.push(Kekule.IO.registerAllInChIFormats);
 
 Kekule._registerAfterLoadProc(function() {if (InChI._autoEnabled) InChI._enableAllFunctions()} );
-
-})();
+	return Kekule
+}

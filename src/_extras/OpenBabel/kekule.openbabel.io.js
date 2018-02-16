@@ -14,7 +14,8 @@
  * requires /localization
  */
 
-(function(){
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 var EU = Kekule.EmscriptenUtils;
@@ -471,38 +472,5 @@ Kekule.IO.enableOpenBabelFormats = function()
 	else
 		Kekule.IO.registerAllOpenBabelFormats();
 };
-
-(function(){
-	/*
-	// register chem data formats
-
-	Kekule.IO.DataFormatsManager.register('pdb', 'chemical/x-pdb', ['pdb', 'ent'],
-		Kekule.IO.ChemDataType.TEXT, 'PDB format');
-	Kekule.IO.DataFormatsManager.register('smiles', 'chemical/x-daylight-smiles', ['smi'],
-		Kekule.IO.ChemDataType.TEXT, 'SMILES format');
-	Kekule.IO.DataFormatsManager.register('mol2', 'chemical/x-mol2', ['mol2'],
-		Kekule.IO.ChemDataType.TEXT, 'Sybyl mol2');
-	Kekule.IO.DataFormatsManager.register('cdx', 'chemical/x-cdx', ['cdx'],
-		Kekule.IO.ChemDataType.BINARY, 'ChemDraw CDX');
-
-	Kekule.IO.DataFormatsManager.register('ct', 'chemical/x-ct', ['ct'],
-		Kekule.IO.ChemDataType.TEXT, 'ct');
-
-	// register ChemData reader and writer
-	Kekule.IO.ChemDataReaderManager.register('OpenBabel', Kekule.IO.OpenBabelReader,
-		['MDL-mol', 'MDL-rxn', 'pdb', 'smiles', 'mol2', 'cdx', 'ct']);
-	Kekule.IO.ChemDataWriterManager.register('OpenBabel', Kekule.IO.OpenBabelWriter, [Kekule.StructureFragment],
-		['MDL-mol', 'pdb', 'smiles', 'mol2', 'cdx', 'ct']);
-	Kekule.IO.ChemDataWriterManager.register('OpenBabel-Rxn', Kekule.IO.OpenBabelWriter, [Kekule.Reaction],
-		['MDL-rxn']);
-	*/
-	//Kekule.X.domReady(function()
-	/*
-	Kekule._registerAfterLoadProc(function()
-	{
-		Kekule.IO.registerAllOpenBabelFormats();
-	});
-	*/
-})();
-
-})();
+	return Kekule
+}

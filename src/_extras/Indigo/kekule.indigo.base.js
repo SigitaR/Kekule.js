@@ -10,8 +10,7 @@
  * requires /localization/
  */
 
-(function($root){
-"use strict";
+module.exports = function(Kekule){
 
 /** @ignore */
 var EU = Kekule.EmscriptenUtils;
@@ -120,49 +119,17 @@ Kekule.Indigo = {
 		}
 	}
 };
-
-/** @ignore */
-Kekule.Indigo.getIndigoPath = function()
-{
-	var isMin = Kekule.scriptSrcInfo.useMinFile;
-	var path = isMin? 'extra/': '_extras/Indigo/';
-	path = Kekule.scriptSrcInfo.path + path;
-	return path;
-};
-/** @ignore */
-Kekule.Indigo.getIndigoScriptUrl = function()
-{
-	var result = KI.getIndigoPath() + KI.SCRIPT_FILE;
-	var isMin = Kekule.scriptSrcInfo.useMinFile;
-	if (!isMin)
-		result += '.dev';
-	return result;
-};
-Kekule.Indigo.getIndigoHelperScriptUrl = function()
-{
-	var result = KI.getIndigoPath() + KI.HELPER_SCRIPT_FILE;
-	return result;
-};
 /** @ignore */
 Kekule.Indigo.loadIndigoScript = function(doc, callback)
 {
-	if (!doc)
-		doc = document;
-	var done = function()
-	{
+	if (!KI._scriptLoadedBySelf && !KI.isScriptLoaded()) {
+		const IndigoModule = require('./indigo')()
+		const indigoAdapter = require('./indigoAdapter')
 		Kekule.Indigo.getIndigo();
 		if (callback)
 			callback();
-	};
-	if (!KI._scriptLoadedBySelf && !KI.isScriptLoaded())
-	{
-		//console.log('load');
-		var urls = [KI.getIndigoScriptUrl(), KI.getIndigoHelperScriptUrl()];
-		Kekule.ScriptFileUtils.appendScriptFiles(doc, urls, done);
 		KI._scriptLoadedBySelf = true;
-	}
-	else
-	{
+	} else {
 		KI._scriptLoadedBySelf = true;
 		if (callback)
 			callback();
@@ -182,5 +149,5 @@ Kekule.Indigo.AdaptUtils = {
 };
 
 Kekule._registerAfterLoadProc(function() {if (KI._autoEnabled) KI._enableAllFunctions()} );
-
-})(this);
+	return Kekule
+}

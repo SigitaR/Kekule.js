@@ -9,7 +9,7 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-(function($root) {
+module.exports = function(Kekule) {
 /** ignore */
 Kekule.EmscriptenUtils = {
 	/** @private */
@@ -18,7 +18,7 @@ Kekule.EmscriptenUtils = {
 	_createdModules: {},
 	_getActualModule: function(moduleName)
 	{
-		return $root[moduleName || EU.DEF_MODULE_NAME];
+		return Kekule[moduleName || EU.DEF_MODULE_NAME];
 	},
 	isSupported: function(moduleName)
 	{
@@ -106,5 +106,5 @@ Module = Object.extend(Module, {
 });
 */
 
-
-})(this);
+	return Kekule
+}

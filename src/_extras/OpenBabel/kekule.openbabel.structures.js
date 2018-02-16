@@ -16,8 +16,8 @@
  * requires /localization
  */
 
-(function(){
-"use strict";
+const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+module.exports = function(Kekule){
 
 /** @ignore */
 var EU = Kekule.EmscriptenUtils;
@@ -184,7 +184,5 @@ if (Kekule.Calculator)
 	Kekule.Calculator.ServiceManager.register(Kekule.Calculator.Services.GEN3D, Kekule.Calculator.ObStructure3DGenerator);
 
 }
-
-
-
-})();
+	return Kekule
+}
