@@ -5,21 +5,6 @@ Kekule.js is an open source JavaScript toolkit for chemoinformatics released und
 More details about this project can be found in [Kekule.js website](http://partridgejiang.github.io/Kekule.js/). 
 
 ## Installation
-
-For web applications, Kekule.js can be simply included in HTML page by `<script>` tag:
-
-```xml
-<script src="kekule.js?module=io,chemWidget,algorithm"></script>
-```
-
-Note the module param after "?". In the example above, module io, chemWidget and algorithm, as well as other prerequisite modules will be loaded.
-
-If widget or chem widget modules are used, additional style sheet file also need to be linked in HTML page:
-
-```xml
-<link rel="stylesheet" type="text/css" href="themes/default/kekule.css" />
-```
-
 For node applications, the whole package can be installed by npm install command:
 
 ```bash
@@ -29,30 +14,46 @@ $ npm install kekule
 Then Kekule namespace should be imported into the application:
 
 ```javascript
-var Kekule = require('kekule').Kekule;
+const Kekule = require('kekule').Kekule;
+```
+
+Other classes that Kekule relies on can also be imported: 
+```javascript
+const Class = require('kekule').Class;
+const ClassEx = require('kekule').ClassEx;
+const ObjectEx = require('kekule').ObjectEx;
+const DataType = require('kekule').DataType;
+```
+
+If widget or chem widget modules are used, additional style sheet file also need to be linked in HTML page:
+
+```xml
+<link rel="stylesheet" type="text/css" href="themes/default/kekule.css" />
 ```
 
 After installation (in web or in node.js environment), you can run a small test to ensure that the toolkit works properly:
  
 ```javascript
 // Create a simple CO2 molecule
-var mol = new Kekule.Molecule();
-var atomC = mol.appendAtom('C');
-var atomO1 = mol.appendAtom('O');
-var atomO2 = mol.appendAtom('O');
+const Kekule = require('kekule').Kekule
+
+const mol = new Kekule.Molecule();
+const atomC = mol.appendAtom('C');
+const atomO1 = mol.appendAtom('O');
+const atomO2 = mol.appendAtom('O');
 mol.appendBond([atomC, atomO1], 2);
 mol.appendBond([atomC, atomO2], 2);
 
 // Get formula
-var formula = mol.calcFormula();
+const formula = mol.calcFormula();
 console.log('Formula: ', formula.getText());
 
 // Output SMILES (IO module should be loaded in web application)
-var smiles = Kekule.IO.saveFormatData(mol, 'smi');
+const smiles = Kekule.IO.saveFormatData(mol, 'smi');
 console.log('SMILES: ', smiles);
 
 // Output MOL2k (IO module should be loaded in web application)
-var mol2k = Kekule.IO.saveFormatData(mol, 'mol');
+const mol2k = Kekule.IO.saveFormatData(mol, 'mol');
 console.log('MOL 2000: \n', mol2k);
 ```
 
