@@ -7,6 +7,9 @@
     "name": "Chen Jiang",
     "email": "partridge@cpu.edu.cn"
   },
+  "scripts": {
+    "start": "webpack --config webpack.config.js --progress"
+  },
   "contributors": [
     {
       "name": "Aaron Llanos",
@@ -43,5 +46,15 @@
   "dependencies": {
     "json2": "^0.4.0",
     "sizzle": "^2.3.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "css-loader": "^0.28.9",
+    "eslint": "^4.17.0",
+    "file-loader": "^1.1.6",
+    "style-loader": "^0.20.2",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.11.0"
   }
 }
