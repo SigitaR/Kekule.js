@@ -13,7 +13,7 @@
  * requires /localization
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const {Class} = require('../../lan/classes')
 module.exports = function(Kekule){
 
 /** @ignore */
@@ -169,7 +169,7 @@ Kekule.IO.InChIWriter = Class.create(Kekule.IO.ChemDataWriter,
 	/** @private */
 	CLASS_NAME: 'Kekule.IO.InChIWriter',
 	/** @private */
-	doWriteData: function(obj, dataType, format)
+	doWriteData: function(obj)
 	{
 		var info = InChI.getInChIInfo(obj);
 		if (info && info.inchi)
