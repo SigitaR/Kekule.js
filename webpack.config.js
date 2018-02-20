@@ -20,15 +20,13 @@ module.exports = {
     filename: 'bundle.js',
   },
   externals: [
-    "lib/indigo"
+    'lib/indigo',
+    'lib/inchi',
+    'lib/openbabel'
   ],
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: path.resolve(__dirname, 'src', '_devUtils')
-      },
+      { test: /\.js$/, loader: 'babel-loader' },
       { test: /\.css$/, use: ['style-loader','css-loader'] },
       { test: /\.woff2?$/, loader: 'url-loader?prefix=font/' },
       { test: /\.ttf$/, loader: 'url-loader?prefix=font/' },
@@ -38,13 +36,7 @@ module.exports = {
       { test: /\.gif$/, loader: 'url-loader?prefix=images/' },
       { test: /\.jpg$/, loader: 'url-loader?prefix=images/' },
       { test: /\.ico$/, loader: 'url-loader?prefix=images/' },
-      { 
-        test: /\.html$/,
-        loader: 'html-loader',
-        exclude: [
-          path.resolve(__dirname, 'src')
-        ]
-      },
+      { test: /\.html$/, loader: 'html-loader' },
       { test: /\.cur$/, loader: 'file-loader' },
     ]
   },
