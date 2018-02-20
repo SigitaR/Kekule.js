@@ -12,9 +12,6 @@ if (!Array.prototype.indexOf)
 	};
 }
 
-// check if is in Node.js environment
-var isNode = (typeof process === 'object') && (typeof process.versions === 'object') && (typeof process.versions.node !== 'undefined');
-
 var kekuleFiles = {
 	'lan': {
 		'files': [
@@ -292,7 +289,6 @@ var kekuleFiles = {
 var prequestModules = ['lan', 'root', 'localization', 'localizationData', 'common'];
 var usualModules = prequestModules.concat(['core', 'html', 'io', 'render', 'widget', 'chemWidget', 'algorithm', 'calculation', 'data']);
 var allModules = usualModules.concat(['emscripten', 'inchi', 'openbabel', 'indigo']);
-var nodeModules = prequestModules.concat(['core', 'io', 'algorithm', 'calculation', 'data']);
 
 function getEssentialModules(modules)
 {
@@ -324,7 +320,7 @@ function getEssentialModules(modules)
 	return result;
 }
 
-function getEssentialFiles(modules, useMinFile)
+function getEssentialFiles(modules)
 {
 	var ms = getEssentialModules(modules);
 	var result = [];
