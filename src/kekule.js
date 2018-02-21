@@ -1,3 +1,4 @@
+(function(root){
 // IE8 does not support array.indexOf
 if (!Array.prototype.indexOf)
 {
@@ -287,6 +288,7 @@ var kekuleFiles = {
 };
 
 var prequestModules = ['lan', 'root', 'localization', 'localizationData', 'common'];
+// var nodeModules = prequestModules.concat(['core', 'io', 'algorithm', 'calculation', 'data']);
 var usualModules = prequestModules.concat(['core', 'html', 'io', 'render', 'widget', 'chemWidget', 'algorithm', 'calculation', 'data']);
 var allModules = usualModules.concat(['emscripten', 'inchi', 'openbabel', 'indigo']);
 
@@ -351,8 +353,10 @@ Kekule._loaded()
 // export Kekule in module
 const {Class, ClassEx, ObjectEx, DataType} = require('./lan/classes')
 
-exports.Kekule = Kekule
-exports.Class = Class
-exports.ClassEx = ClassEx
-exports.ObjectEx = ObjectEx
-exports.DataType = DataType
+exports.Kekule = root.Kekule = Kekule
+exports.Class = root.Class = Class
+exports.ClassEx = root.ClassEx = ClassEx
+exports.ObjectEx = root.ObjectEx = ObjectEx
+exports.DataType = root.DataType = DataType
+
+})(this)
