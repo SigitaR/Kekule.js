@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
   cache: true,
-  context: path.join(__dirname, './'),
   entry: {
     page: './src/kekule.js'
   },
