@@ -22,13 +22,13 @@
  * requires /algorithm/kekule.structures.comparers.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-
+var Class = require('../lan/classes').Class
+var ClassEx = require('../lan/classes').ClassEx
+var ObjectEx = require('../lan/classes').ObjectEx
+var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule) {
 
-var K = Kekule;
 var AU = Kekule.ArrayUtils;
-var BT = Kekule.BondType;
 
 /**
  * An abstract class to assign index to nodes in connection table.

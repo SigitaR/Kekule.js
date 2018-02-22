@@ -12,7 +12,7 @@
  * requires /render/2d/kekule.render.def2DRenderer.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+var Class = require('../../lan/classes').Class
 module.exports = function(Kekule) {
 /**
  * Render bridge class of HTML5 Canvas.

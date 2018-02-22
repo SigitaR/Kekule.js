@@ -12,7 +12,8 @@
  * requires /render/2d/kekule.render.def2DRenderer.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+var Class = require('../../lan/classes').Class
+var DataType = require('../../lan/classes').DataType
 module.exports = function(Kekule) {
 // Some helper methods of Raphael
 if (this.Raphael)

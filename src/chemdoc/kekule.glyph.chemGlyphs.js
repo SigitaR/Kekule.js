@@ -13,10 +13,9 @@
  * requires /chemdoc/kekule.glyph.lines.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
 module.exports = function(Kekule){
 
-var NT = Kekule.Glyph.NodeType;
 var PT = Kekule.Glyph.PathType;
 
 /**

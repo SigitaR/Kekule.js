@@ -15,11 +15,10 @@
  * requires /algorithm/kekule.graph.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule){
 
 var K = Kekule;
-var AU = Kekule.ArrayUtils;
 var BT = Kekule.BondType;
 
 /**

@@ -12,9 +12,11 @@
  * requires /core/kekule.common.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
-const {JsonUtility, XmlUtility} = require('../../lan/xmlJsons')
-const {ObjSerializerFactory} = require('../../lan/serializations')
+var Class = require('../../lan/classes').Class
+var DataType = require('../../lan/classes').DataType
+var JsonUtility = require('../../lan/xmlJsons').JsonUtility
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
+var ObjSerializerFactory = require('../../lan/serializations').ObjSerializerFactory
 
 module.exports = function (Kekule) {
 	/*

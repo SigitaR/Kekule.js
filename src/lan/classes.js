@@ -197,15 +197,16 @@
     cascadeNames = fieldName;
     else cascadeNames = fieldName.split(".");
     if (!root) root = this;
+    var i, l;
     if (cascadeNames[0] === "Kekule") {
       cascadeNames.shift();
-      for (let i = 0, l = cascadeNames.length; i < l; ++i) {
+      for (i = 0, l = cascadeNames.length; i < l; ++i) {
         result = Kekule[cascadeNames[i]];
         if (!result) break;
         else root = result;
       }
     } else {
-      for (let i = 0, l = cascadeNames.length; i < l; ++i) {
+      for (i = 0, l = cascadeNames.length; i < l; ++i) {
         result = root[cascadeNames[i]];
         if (!result) break;
         else root = result;
@@ -2136,14 +2137,14 @@ getPropValue: function(propName) {
 * @returns {Hash} Stores all property name-value pair.
 */
 getPropValues: function(propNames) {
-  var result = {};
+  var result = {}, i, l;
   if (DataType.isArrayValue(propNames)) {
-    for (let i = 0, l = propNames.length; i < l; ++i) {
+    for (i = 0, l = propNames.length; i < l; ++i) {
       var pname = propNames[i];
       result[pname] = this.getPropValue(pname);
     }
   } else if (DataType.isObjectValue(propNames)) {
-    for (let pname in propNames) {
+    for (pname in propNames) {
       if ( propNames.hasOwnProperty(pname) && typeof pname !== "function" )
       result[pname] = this.getPropValue(pname);
     }

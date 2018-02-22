@@ -9,7 +9,7 @@
  * requires /core/kekule.common.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
 module.exports = function(Kekule){
 
 /**

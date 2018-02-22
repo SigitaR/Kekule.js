@@ -21,12 +21,10 @@
  * requires /localization
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+var Class = require('../../../lan/classes').Class
+var ClassEx = require('../../../lan/classes').ClassEx
+var DataType = require('../../../lan/classes').DataType
 module.exports = function(Kekule){
-
-var PS = Class.PropertyScope;
-var CW = Kekule.ChemWidget;
-var CE = Kekule.Editor;
 var CNS = Kekule.Widget.HtmlClassNames;
 var CCNS = Kekule.ChemWidget.HtmlClassNames;
 var BNS = Kekule.ChemWidget.ComponentWidgetNames;

@@ -18,8 +18,10 @@
  * requires /localization
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
-const {XmlUtility, JsonUtility} = require('../../lan/xmlJsons')
+var Class = require('../../lan/classes').Class
+var ObjectEx = require('../../lan/classes').ObjectEx
+var DataType = require('../../lan/classes').DataType
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
 module.exports = function (Kekule) {
 	
 /*

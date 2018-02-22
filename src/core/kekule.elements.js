@@ -10,7 +10,8 @@
  * requires /data/kekule.dataUtils.js
  * requires /localization/
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
+var DataType = require('../lan/classes').DataType
 
 module.exports = function (Kekule) {
 	/**
