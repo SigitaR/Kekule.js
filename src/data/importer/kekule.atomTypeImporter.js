@@ -10,9 +10,10 @@
  *  requires /data/kekule.dataUtils.js
  */
 
- const { JsonUtility, XmlUtility } = require('../../lan/xmlJsons')
+var JsonUtility = require('../../lan/xmlJsons').JsonUtility
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
  module.exports = function (Kekule) {
-	 
+
 /**
  *  An class with static methods to load content of structgen_atomtypes.xml from CDK 
  *  and save data into a JSON text.

@@ -11,7 +11,9 @@
  * requires /chemdoc/kekule.attachedMarkers.js
  * requires /chemdoc/kekule.contentBlocks.js
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
+var ClassEx = require('../lan/classes').ClassEx
+var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule){
 
 /**

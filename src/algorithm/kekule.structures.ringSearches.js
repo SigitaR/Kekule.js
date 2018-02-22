@@ -12,11 +12,11 @@
  * requires /algorithm/kekule.graph.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-
+var Class = require('../lan/classes').Class
+var ClassEx = require('../lan/classes').ClassEx
+var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule){
 
-var AU = Kekule.ArrayUtils;
 var GU = Kekule.GraphAlgorithmUtils;
 var CU = Kekule.ChemStructureUtils;
 

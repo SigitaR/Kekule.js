@@ -335,22 +335,26 @@ function getEssentialFiles(modules)
 	return result;
 }
 
-const scriptInfo = {
+var scriptInfo = {
 	'src': this.__filename || '',
 	'modules': allModules
 }
-const files = getEssentialFiles(scriptInfo.modules)
+var files = getEssentialFiles(scriptInfo.modules)
 
-let Kekule = {}
+var Kekule = {}
 files.forEach(filename => {
-	const module = require('./' + filename)
+	var module = require('./' + filename)
 	if	(typeof module === 'function') {
 		Kekule = module(Kekule)
 	}
 })
 Kekule._loaded()
 
-const {Class, ClassEx, ObjectEx, DataType} = require('./lan/classes')
+var Class = require('./lan/classes').Class
+var ClassEx = require('./lan/classes').ClassEx
+var ObjectEx = require('./lan/classes').ObjectEx
+var DataType = require('./lan/classes').DataType
+
 exports.Kekule = Kekule
 exports.Class = Class
 exports.ClassEx = ClassEx

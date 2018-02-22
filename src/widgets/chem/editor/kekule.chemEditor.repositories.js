@@ -13,7 +13,9 @@
  * requires /widgets/chem/editor/kekule.chemEditor.extensions.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+var Class = require('../../../lan/classes').Class
+var ObjectEx = require('../../../lan/classes').ObjectEx
+var DataType = require('../../../lan/classes').DataType
 module.exports = function(Kekule){
 
 /**

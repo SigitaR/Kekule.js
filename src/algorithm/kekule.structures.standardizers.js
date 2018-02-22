@@ -16,7 +16,7 @@
  * requires /algorithm/kekule.structure.stereos.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var ClassEx = require('../lan/classes').ClassEx
 module.exports = function(Kekule){
 
 /**

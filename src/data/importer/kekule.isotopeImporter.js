@@ -9,7 +9,8 @@
  *  requires /utils/kekule.utils.js
  *  requires /data/kekule/dataUtils.js
  */
- const { JsonUtility, XmlUtility } = require("../../lan/xmlJsons");
+ var JsonUtility = require('../../lan/xmlJsons').JsonUtility
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
 module.exports = function (Kekule) {
 	
 /**

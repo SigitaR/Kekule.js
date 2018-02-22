@@ -12,7 +12,7 @@
  * requires /localization
  */
 
-const {Class} = require('../../lan/classes')
+var Class = require('../../lan/classes').Class
 module.exports = function(Kekule){
 
 /** @ignore */

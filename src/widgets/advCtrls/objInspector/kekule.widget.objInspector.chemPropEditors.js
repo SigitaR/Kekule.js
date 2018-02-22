@@ -11,7 +11,9 @@
  * requires /widgets/advCtrls/objInspector/kekule.widget.objectInspector.propEditors.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../../lan/classes')
+var Class = require('../../../lan/classes').Class
+var ClassEx = require('../../../lan/classes').ClassEx
+var DataType = require('../../../lan/classes').DataType
 module.exports = function(Kekule){
 
 

@@ -12,7 +12,7 @@
  * requires /algorithm/kekule.canonicalizers.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var ClassEx = require('../lan/classes').ClassEx
 module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;

@@ -14,7 +14,8 @@
  * requires /algorithm/kekule.structure.ringSearches.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
+var ClassEx = require('../lan/classes').ClassEx
 module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;

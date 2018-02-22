@@ -12,8 +12,9 @@
  * requires /core/kekule.common.js
  * requires /localization
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
-const {JsonUtility, XmlUtility} = require('../lan/xmlJsons')
+var Class = require('../lan/classes').Class
+var ObjectEx = require('../lan/classes').ObjectEx
+var DataType = require('../lan/classes').DataType
 
 module.exports = function (Kekule) {
 	/**

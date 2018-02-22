@@ -10,13 +10,8 @@
  * requires /render/2d/kekule.render.render2D.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+var Class = require('../../lan/classes').Class
 module.exports = function(Kekule) {
-
-/** @ignore */
-var PU = Kekule.Render.DrawPathUtils;
-var CU = Kekule.Render.CoordUtils;
-var oneOf = Kekule.oneOf;
 
 var NT = Kekule.Glyph.NodeType;
 var PT = Kekule.Glyph.PathType;

@@ -11,7 +11,6 @@
  * requires /xbrowsers/kekule.x.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
 module.exports = function(Kekule){
 
 /**

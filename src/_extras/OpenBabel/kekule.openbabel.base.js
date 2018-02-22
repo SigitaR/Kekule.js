@@ -14,7 +14,6 @@
  * requires /_extras/kekule.emscriptenUtils.js
  * requires /localization/
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
 module.exports = function(Kekule){
 
 /** @ignore */

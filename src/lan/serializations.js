@@ -10,8 +10,10 @@
  * requires /lan/xmlJsons.js
  */
 
- const {Class, ClassEx, ObjectEx, DataType} = require('./classes')
- const {JsonUtility, XmlUtility} = require('./xmlJsons')
+var Class = require('./classes').Class
+var ClassEx = require('./classes').ClassEx
+var ObjectEx = require('./classes').ObjectEx
+var DataType = require('./classes').DataType
 
 var
 /**
@@ -1341,7 +1343,7 @@ ClassEx.extend(ObjectEx,
 	 */
 	saveObj: function(destNode, serializerOrName, options)
 	{
-		let serializer
+		var serializer
 		if (!serializerOrName)  // use default
 			serializer = ObjSerializerFactory.getSerializer();
 		else if (typeof(serializerOrName) == 'string')  // is name
@@ -1358,7 +1360,7 @@ ClassEx.extend(ObjectEx,
 	 */
 	loadObj: function(srcNode, serializerOrName, Kekule)
 	{
-		let serializer
+		var serializer
 		if (!serializerOrName)  // use default
 			serializer = ObjSerializerFactory.getSerializer();
 		else if (typeof(serializerOrName) == 'string')  // is name

@@ -10,7 +10,10 @@
  * requires /core/kekule.common.js
  * requires /kekule.structures.js
  */
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
+var ClassEx = require('../lan/classes').ClassEx
+var ObjectEx = require('../lan/classes').ObjectEx
+var DataType = require('../lan/classes').DataType
 
 module.exports = function (Kekule) {
 	var AU = Kekule.ArrayUtils;

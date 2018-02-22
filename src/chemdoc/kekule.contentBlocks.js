@@ -9,11 +9,9 @@
  * requires /core/kekule.common.js
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../lan/classes')
+var Class = require('../lan/classes').Class
+var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule){
-
-var CM = Kekule.CoordMode;
-var CU = Kekule.CoordUtils;
 
 /**
  * Represent an block of content in chem document (especially in 2D rendering，drawing in rect),
