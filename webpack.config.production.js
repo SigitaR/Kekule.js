@@ -16,7 +16,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'kekule.min.js',
+    libraryTarget: 'commonjs2',
+    library: 'kekule'
   },
   externals: [
     'lib/indigo',

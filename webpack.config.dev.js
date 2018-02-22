@@ -5,7 +5,7 @@ module.exports = {
   entry: {
     test: './demos/test.js'
   },
-  devtool: 'sourcemap',
+  devtool: 'source-map',
   resolve: {
     alias: {
       lib: path.resolve(__dirname, 'lib'),
