@@ -2,14 +2,14 @@ const path = require('path');
 
 module.exports = {
   cache: true,
-  context: path.join(__dirname, './'),
   entry: {
-    page: './src/kekule.js'
+    test: './demos/test.js'
   },
   devtool: 'sourcemap',
   resolve: {
     alias: {
-      lib: path.resolve(__dirname, 'lib')
+      lib: path.resolve(__dirname, 'lib'),
+      kekule: path.resolve(__dirname, 'src/kekule')
     },
     modules: [
       path.resolve(__dirname, 'lib'),
@@ -18,7 +18,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'test.js',
   },
   externals: [
     'lib/indigo',
@@ -44,5 +44,9 @@ module.exports = {
   node: {
     fs: 'empty',
     ws: 'empty'
+  },
+  devServer: {
+    host: '0.0.0.0',
+    port: 8081
   }
 };
