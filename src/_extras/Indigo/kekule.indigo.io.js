@@ -12,11 +12,9 @@
  * requires /localization
  */
 
-const {Class, ClassEx, ObjectEx, DataType} = require('../../lan/classes')
+const {Class} = require('../../lan/classes')
 module.exports = function(Kekule){
 
-/** @ignore */
-var EU = Kekule.EmscriptenUtils;
 /** @ignore */
 var KI = Kekule.Indigo;
 

@@ -6,9 +6,6 @@ module.exports = {
     page: './src/kekule.js'
   },
   resolve: {
-    alias: {
-      lib: path.resolve(__dirname, 'lib')
-    },
     modules: [
       path.resolve(__dirname, 'lib'),
       'node_modules'
@@ -21,13 +18,18 @@ module.exports = {
     library: 'kekule'
   },
   externals: [
-    'lib/indigo',
-    'lib/inchi',
-    'lib/openbabel'
+    './lib/indigo',
+    './lib/inchi',
+    './lib/openbabel'
   ],
   module: {
     rules: [
-      { test: /\.js$/, loader: 'babel-loader' },
+      { 
+        test: /\.js$/, 
+        loader: 'babel-loader',
+        exclude: path.resolve(__dirname, 'lib'),
+        include: path.resolve(__dirname, 'src')
+      },
       { test: /\.css$/, use: ['style-loader','css-loader'] },
       { test: /\.woff2?$/, loader: 'url-loader?prefix=font/' },
       { test: /\.ttf$/, loader: 'url-loader?prefix=font/' },

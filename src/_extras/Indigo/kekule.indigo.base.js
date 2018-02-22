@@ -48,7 +48,7 @@ Kekule.Indigo = {
 	isScriptLoaded: function()
 	{
 		return EU.isSupported(indigoInitOptions.moduleName)
-				&& (typeof($root[indigoInitOptions.indigoAdaptFuncName]) !== 'undefined');
+				&& (typeof(Kekule.$jsRoot[indigoInitOptions.indigoAdaptFuncName]) !== 'undefined');
 	},
 	getModule: function()
 	{
@@ -67,7 +67,7 @@ Kekule.Indigo = {
 		{
 			var module = KI.getModule();
 			if (module)
-				KI._indigo = ($root[indigoInitOptions.indigoAdaptFuncName])(module);
+				KI._indigo = (Kekule.$jsRoot[indigoInitOptions.indigoAdaptFuncName])(module);
 		}
 		return KI._indigo;
 	},
@@ -123,7 +123,7 @@ Kekule.Indigo = {
 Kekule.Indigo.loadIndigoScript = function(doc, callback)
 {
 	if (!KI._scriptLoadedBySelf && !KI.isScriptLoaded()) {
-		const IndigoModule = require('lib/indigo')
+		const IndigoModule = require('../../../lib/indigo')
 		const indigoAdapter = require('./indigoAdapter')(IndigoModule)
 		Kekule.Indigo.getIndigo();
 		if (callback)

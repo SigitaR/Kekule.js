@@ -8,7 +8,6 @@ module.exports = {
   devtool: 'source-map',
   resolve: {
     alias: {
-      lib: path.resolve(__dirname, 'lib'),
       kekule: path.resolve(__dirname, 'src/kekule')
     },
     modules: [
@@ -20,14 +19,17 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'test.js',
   },
-  externals: [
-    'lib/indigo',
-    'lib/inchi',
-    'lib/openbabel'
-  ],
   module: {
     rules: [
-      { test: /\.js$/, loader: 'babel-loader' },
+      { 
+        test: /\.js$/, 
+        loader: 'babel-loader',
+        exclude: path.resolve(__dirname, 'lib'),
+        include: [
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'demos')
+        ]
+      },
       { test: /\.css$/, use: ['style-loader','css-loader'] },
       { test: /\.woff2?$/, loader: 'url-loader?prefix=font/' },
       { test: /\.ttf$/, loader: 'url-loader?prefix=font/' },
