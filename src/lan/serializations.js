@@ -1341,10 +1341,11 @@ ClassEx.extend(ObjectEx,
 	 */
 	saveObj: function(destNode, serializerOrName, options)
 	{
-    if (!serializerOrName)  // use default
-      serializer = ObjSerializerFactory.getSerializer();
-    else if (typeof(serializerOrName) == 'string')  // is name
-      serializer = ObjSerializerFactory.getSerializer(serializerOrName);
+		let serializer
+		if (!serializerOrName)  // use default
+			serializer = ObjSerializerFactory.getSerializer();
+		else if (typeof(serializerOrName) == 'string')  // is name
+			serializer = ObjSerializerFactory.getSerializer(serializerOrName);
 		else
 			serializer = serializerOrName;
 		return serializer.save(this, destNode, options);
@@ -1355,15 +1356,16 @@ ClassEx.extend(ObjectEx,
 	 * @param {Variant} serializerOrName A {@link ObjSerializer} instance or name registered in {@link ObjSerializerFactory}.
 	 *   Can be null to use the default serializer.
 	 */
-	loadObj: function(srcNode, serializerOrName)
+	loadObj: function(srcNode, serializerOrName, Kekule)
 	{
+		let serializer
 		if (!serializerOrName)  // use default
-      serializer = ObjSerializerFactory.getSerializer();
-    else if (typeof(serializerOrName) == 'string')  // is name
-      serializer = ObjSerializerFactory.getSerializer(serializerOrName);
+			serializer = ObjSerializerFactory.getSerializer();
+		else if (typeof(serializerOrName) == 'string')  // is name
+			serializer = ObjSerializerFactory.getSerializer(serializerOrName);
 		else
 			serializer = serializerOrName;
-		return serializer.load(this, srcNode);
+		return serializer.load(this, srcNode, Kekule);
 	}
 });
 

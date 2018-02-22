@@ -2153,7 +2153,7 @@ module.exports = function(Kekule){
 		 */
 		assignTo: function($super, targetObj, withId)
 		{
-			var result = $super(targetObj);
+			var result = $super(targetObj, Kekule);
 			if (!withId && targetObj.clearIds)
 				targetObj.clearIds();
 			return result;

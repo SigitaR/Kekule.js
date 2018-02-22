@@ -1,4 +1,3 @@
-(function(root){
 // IE8 does not support array.indexOf
 if (!Array.prototype.indexOf)
 {
@@ -350,13 +349,10 @@ files.forEach(filename => {
 	}
 })
 Kekule._loaded()
-// export Kekule in module
+
 const {Class, ClassEx, ObjectEx, DataType} = require('./lan/classes')
-
-exports.Kekule = root.Kekule = Kekule
-exports.Class = root.Class = Class
-exports.ClassEx = root.ClassEx = ClassEx
-exports.ObjectEx = root.ObjectEx = ObjectEx
-exports.DataType = root.DataType = DataType
-
-})(this)
+exports.Kekule = Kekule
+exports.Class = Class
+exports.ClassEx = ClassEx
+exports.ObjectEx = ObjectEx
+exports.DataType = DataType

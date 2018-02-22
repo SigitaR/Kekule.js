@@ -3056,11 +3056,11 @@ ObjectEx = Class.create(
 	 * Assign data in this object to targetObj.
 	 * @param {ObjectEx} targetObj
 	 */
-	assignTo: function(targetObj)
+	assignTo: function(targetObj, Kekule)
 	{
 		var jsonObj = {};
 		this.saveObj(jsonObj, 'json');
-		targetObj.loadObj(jsonObj, 'json');
+		targetObj.loadObj(jsonObj, 'json', Kekule);
 	},
 	/**
 	 * Returns a cloned object.
