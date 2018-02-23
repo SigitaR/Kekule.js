@@ -1080,14 +1080,14 @@ var DataType = {
   * @param {String} typeName
   * @returns {Bool}
   */
-  isObjectExType: function(typeName) {
+  isObjectExType: function(typeName, Kekule) {
     var result =
     DataType.isComplexType(typeName) &&
     !DataType.isObjectType(typeName) &&
     !DataType.isDateType(typeName);
     if (result) {
       // check if the class exists
-      var classObj = ClassEx.findClass(typeName);
+      var classObj = ClassEx.findClass(typeName, undefined, Kekule);
       result = classObj && ClassEx.isOrIsDescendantOf(classObj, ObjectEx);
     }
     return result;
