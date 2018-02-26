@@ -897,382 +897,426 @@ Class.EventHandlerList = function() {
   this._$flag_ = "KekuleEventList";
 };
 Class.EventHandlerList.prototype = {
-  /**
-  * Add a handler to the list
-  * @param {Function} handler An event handler function.
-  * @param {Object} thisArg The handler should be bind to which scope when be invoked.
-  */
-  add: function(handler, thisArg) {
-    if (!thisArg) thisArg = null;
-    this.handlers.push({
-      thisArg: thisArg,
-      handler: handler
-    });
-  },
-  /**
-  * Remove an event handler from the list.
-  * @param {Function} handler Handler function to be removed.
-  * @param {Object} thisArg If this param is null, all functions same as handler
-  *   in the list will be removed regardless of whether their thisArg is setted.
-  */
-  remove: function(handler, thisArg) {
-    var indexes = this.indexesOf(handler, thisArg);
-    if (indexes.length > 0) {
-      for (var i = indexes.length - 1; i >= 0; --i) {
-        this.removeAt(indexes[i]);
-      }
-    }
-  },
-  /**
-  * Remove an event handler at a specified index.
-  * @param {Num} index
-  */
-  removeAt: function(index) {
-    for (var i = index, l = this.handlers.length; i < l; ++i)
-    this.handlers[i] = this.handlers[i + 1];
-    this.handlers.length = this.handlers.length - 1;
-  },
-  /**
-  * Clear all handlers in the list.
-  */
-  clear: function() {
-    this.handlers = [];
-  },
-  /**
-  * Get handler info object from the list.
-  * @param {Num} index
-  * @return {Object} Handler info object on index.
-  */
-  getHandlerInfo: function(index) {
-    return this.handlers[index];
-  },
-  /**
-  * Get the index of a handler specified with thisArg.
-  * @param {Function} handler
-  * @param {Object} thisArg
-  * @return {Num} Index of the handler. If nothing is found, returns -1.
-  */
-  indexOf: function(handler, thisArg) {
-    for (var i = 0, l = this.handlers.length; i < l; ++i) {
-      if (this.handlers[i].handler == handler) {
-        if (thisArg !== undefined && this.handlers[i].thisArg === thisArg)
-        return i;
-        else if (thisArg === undefined) return i;
-      }
-    }
-    return -1;
-  },
-  /**
-  * Seek out all indexes that match handler and thisArg.
-  * @param {Function} handler
-  * @param {Object} thisArg
-  * @return {Array} All found indexes. If nothing is found, an empty array will be returned.
-  */
-  indexesOf: function(handler, thisArg) {
-    var result = [];
-    for (var i = 0, l = this.handlers.length; i < l; ++i) {
-      if (this.handlers[i].handler == handler) {
-        if (thisArg !== undefined && this.handlers[i].thisArg === thisArg)
-        result.push(i);
-        else if (thisArg === undefined) result.push(i);
-      }
-    }
-    return result;
-  },
-  /**
-  * Get total count of registered handlers.
-  * @return {Num} Number of handlers.
-  */
-  getLength: function() {
-    return this.handlers.length;
-  }
+	/**
+	 * Add a handler to the list
+	 * @param {Function} handler An event handler function.
+	 * @param {Object} thisArg The handler should be bind to which scope when be invoked.
+	 */
+	add: function(handler, thisArg)
+	{
+		if (!thisArg)
+			thisArg = null;
+		this.handlers.push({
+			'thisArg': thisArg,
+			'handler': handler
+		});
+	},
+	/**
+	 * Remove an event handler from the list.
+	 * @param {Function} handler Handler function to be removed.
+	 * @param {Object} thisArg If this param is null, all functions same as handler
+	 *   in the list will be removed regardless of whether their thisArg is setted.
+	 */
+	remove: function(handler, thisArg)
+	{
+		var indexes = this.indexesOf(handler, thisArg);
+		if (indexes.length > 0)
+		{
+			for (var i = indexes.length - 1; i >= 0; --i)
+			{
+				this.removeAt(indexes[i]);
+			}
+		}
+	},
+	/**
+	 * Remove an event handler at a specified index.
+	 * @param {Num} index
+	 */
+	removeAt: function(index)
+	{
+		for (var i = index, l = this.handlers.length; i < l; ++i)
+			this.handlers[i] = this.handlers[i + 1];
+		this.handlers.length = this.handlers.length - 1;
+	},
+	/**
+	 * Clear all handlers in the list.
+	 */
+	clear: function()
+	{
+		this.handlers = [];
+	},
+	/**
+	 * Get handler info object from the list.
+	 * @param {Num} index
+	 * @return {Object} Handler info object on index.
+	 */
+	getHandlerInfo: function(index)
+	{
+		return this.handlers[index];
+	},
+	/**
+	 * Get the index of a handler specified with thisArg.
+	 * @param {Function} handler
+	 * @param {Object} thisArg
+	 * @return {Num} Index of the handler. If nothing is found, returns -1.
+	 */
+	indexOf: function(handler, thisArg)
+	{
+		for (var i = 0, l = this.handlers.length; i < l; ++i)
+		{
+			if (this.handlers[i].handler == handler)
+			{
+				if ((thisArg !== undefined) && (this.handlers[i].thisArg === thisArg))
+					return i;
+				else if (thisArg === undefined)
+					return i;
+			}
+		}
+		return -1;
+	},
+	/**
+	 * Seek out all indexes that match handler and thisArg.
+	 * @param {Function} handler
+	 * @param {Object} thisArg
+	 * @return {Array} All found indexes. If nothing is found, an empty array will be returned.
+	 */
+	indexesOf: function(handler, thisArg)
+	{
+		var result = [];
+		for (var i = 0, l = this.handlers.length; i < l; ++i)
+		{
+			if (this.handlers[i].handler == handler)
+			{
+				if ((thisArg !== undefined) && (this.handlers[i].thisArg === thisArg))
+					result.push(i);
+				else if (thisArg === undefined)
+					result.push(i);
+			}
+		}
+		return result;
+	},
+	/**
+	 * Get total count of registered handlers.
+	 * @return {Num} Number of handlers.
+	 */
+	getLength: function()
+	{
+		return this.handlers.length;
+	}
 };
 Class.EventHandlerList.constructor = Class.EventHandlerList;
 
 /**
-* Includes constants and mthods about data types.
-* @class
-*/
+ * Includes constants and mthods about data types.
+ * @class
+ */
 var DataType = {
-  /** Unknown data type, same as {@link DataType.VARIANT}. */
-  UNKNOWN: null,
-  /** Variant data type, same as {@link DataType.UNKNOWN}. */
-  VARIANT: null,
-  /** Basic data type, including string, number and boolean. */
-  PRIMARY: "primary",
-  /** type of JS const undefined */
-  UNDEFINED: "undefined",
-  /** Boolean. */
-  BOOL: "boolean",
-  /** Boolean. same as {@link DataType.BOOL} */
-  BOOLEAN: "boolean",
-  /** Number. */
-  NUMBER: "number",
-  /** Explicit integer number. */
-  INT: "int",
-  /** Explicit integer number, same as {@link DataType.INT} */
-  INTEGER: "int",
-  /** Explicit float number. */
-  FLOAT: "float",
-  /** String */
-  STRING: "string",
-  /** Array */
-  ARRAY: "array",
-  /** Function */
-  FUNCTION: "function",
-  /** Hash */
-  DATE: "date",
-  HASH: "object",
-  /** A normal JavaScript object. */
-  OBJECT: "object",
-  /** Object extended from {@link ObjectEx} */
-  OBJECTEX: "objectex",
-  /** A CLASS */
-  CLASS: "class",
+	/** Unknown data type, same as {@link DataType.VARIANT}. */
+	UNKNOWN: null,
+	/** Variant data type, same as {@link DataType.UNKNOWN}. */
+	VARIANT: null,
+	/** Basic data type, including string, number and boolean. */
+	PRIMARY: 'primary',
+	/** type of JS const undefined */
+	UNDEFINED: 'undefined',
+	/** Boolean. */
+	BOOL: 'boolean',
+	/** Boolean. same as {@link DataType.BOOL} */
+	BOOLEAN: 'boolean',
+	/** Number. */
+	NUMBER: 'number',
+	/** Explicit integer number. */
+	INT: 'int',
+	/** Explicit integer number, same as {@link DataType.INT} */
+	INTEGER: 'int',
+	/** Explicit float number. */
+	FLOAT: 'float',
+	/** String */
+	STRING: 'string',
+	/** Array */
+	ARRAY: 'array',
+	/** Function */
+	FUNCTION: 'function',
+	/** Hash */
+	DATE: 'date',
+	HASH: 'object',
+	/** A normal JavaScript object. */
+	OBJECT: 'object',
+	/** Object extended from {@link ObjectEx} */
+	OBJECTEX: 'objectex',
+	/** A CLASS */
+	CLASS: 'class',
 
-  /**
-  * Returns whether a type name is string, number or boolean
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isSimpleType: function(typeName) {
-    return (
-      typeName == DataType.STRING ||
-      typeName == DataType.NUMBER ||
-      typeName == DataType.INT ||
-      typeName == DataType.FLOAT ||
-      typeName == DataType.BOOL ||
-      typeName == DataType.UNDEFINED ||
-      typeName == DataType.PRIMARY
-    );
-  },
-  /**
-  * Returns whether a type name is object, array or objectex
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isComplexType: function(typeName) {
-    return !(
-      DataType.isSimpleType(typeName) || DataType.isFunctionType(typeName)
-    );
-  },
-  /**
-  * Returns whether a type name is function.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isFunctionType: function(typeName) {
-    return typeName == DataType.FUNCTION;
-  },
-  /**
-  * Returns whether a type name is object.
-  * NOTE: this function does not distinguish array.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isObjectType: function(typeName) {
-    return typeName == DataType.OBJECT;
-  },
-  /**
-  * Returns whether a type name is Date.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isDateType: function(typeName) {
-    return typeName == DataType.DATE;
-  },
-  /**
-  * Returns whether a type name is ObjectEx.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isObjectExType: function(typeName, Kekule) {
-    var result =
-    DataType.isComplexType(typeName) &&
-    !DataType.isObjectType(typeName) &&
-    !DataType.isDateType(typeName);
-    if (result) {
-      // check if the class exists
-      var classObj = ClassEx.findClass(typeName, undefined, Kekule);
-      result = classObj && ClassEx.isOrIsDescendantOf(classObj, ObjectEx);
-    }
-    return result;
-  },
-  /**
-  * Get value type and returns a data type string.
-  * @param {Variant} value
-  * @returns {String}
-  */
-  getType: function(value) {
-    var stype = typeof value;
-    switch (stype) {
-      // TODO: Some native classes such as RegExp are not checked yet
-      // basic types
-      case "undefined":
-      return DataType.UNDEFINED;
-      case "function":
-      return DataType.FUNCTION;
-      case "boolean":
-      return DataType.BOOL;
-      case "string":
-      return DataType.STRING;
-      case "number": {
-        if (Math.floor(value) == value) return DataType.INT;
-        else return DataType.FLOAT;
-      }
-      case "object": { // complex
-        if (this.isDateValue(value)) return DataType.DATE;
-        else if (DataType.isArrayValue(value)) return DataType.ARRAY;
-        else if (ClassEx.isClass(value)) return DataType.CLASS;
-        else if (DataType.isObjectExValue(value) && value.getClassName)
-        return value.getClassName();
-        else return DataType.OBJECT;
-      }
-      default:
-      return stype;
-    }
-  },
-  /**
-  * Check if value is number, string or bool.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isSimpleValue: function(value) {
-    return DataType.isSimpleType(typeof value);
-  },
-  /**
-  * Check if value is undefined
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isUndefinedValue: function(value) {
-    return typeof value == "undefined";
-  },
-  /**
-  * Check if value is null
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isNullValue: function(value) {
-    return value === null;
-  },
-  /**
-  * Check if value is a function.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isFunctionValue: function(value) {
-    return typeof value == "function";
-  },
-  /**
-  * Check if an value is an non-array Object.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isObjectValue: function(value) {
-    if (value)
-    // not null
-    return (
-      typeof value == "object" &&
-      !DataType.isArrayValue(value) &&
-      !DataType.isDateValue(value)
-    );
-    else return false;
-  },
-  /**
-  * Check if an value is an instance of Date.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isDateValue: function(value) {
-    if (value)
-    return typeof value == "object" && value.getFullYear !== undefined;
-    return false;
-  },
-  /**
-  * Check if an value is an Array
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isArrayValue: function(value) {
-    if (value) return typeof value == "object" && value.length !== undefined;
-    else return false;
-  },
-  /**
-  * Check if an value is an instance of ObjectEx
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isObjectExValue: function(value) {
-    return value instanceof ObjectEx;
-  },
-  /**
-  * Create an instance of typeName
-  * @param {String} typeName
-  * @returns {Variant}
-  */
-  createInstance: function(typeName, Kekule) {
-    switch (typeName) {
-      case DataType.UNDEFINED:
-      return undefined;
-      case DataType.DATE:
-      return new Date();
-      case DataType.ARRAY:
-      return new Array();
-      case DataType.OBJECT:
-      return new Object();
-      case DataType.FUNCTION:
-      return new Function();
-      default: // maybe a ObjectEx descendant
-      {
-        var classInstance = ClassEx.findClass(
-          typeName.capitalizeFirst(),
-          undefined,
-          Kekule
-        ); //eval(typeName.capitalizeFirst());
-        return new classInstance();
-      }
-    }
-  }
+	/**
+	 * Returns whether a type name is string, number or boolean
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isSimpleType: function(typeName)
+	{
+		return (typeName == DataType.STRING) || (typeName == DataType.NUMBER)
+			|| (typeName == DataType.INT) || (typeName == DataType.FLOAT)
+			|| (typeName == DataType.BOOL) || (typeName == DataType.UNDEFINED)
+			|| (typeName == DataType.PRIMARY);
+	},
+	/**
+	 * Returns whether a type name is object, array or objectex
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isComplexType: function(typeName)
+	{
+		return !(DataType.isSimpleType(typeName) || DataType.isFunctionType(typeName));
+	},
+	/**
+	 * Returns whether a type name is function.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isFunctionType: function(typeName)
+	{
+		return typeName == DataType.FUNCTION;
+	},
+	/**
+	 * Returns whether a type name is object.
+	 * NOTE: this function does not distinguish array.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isObjectType: function(typeName)
+	{
+		return typeName == DataType.OBJECT;
+	},
+	/**
+	 * Returns whether a type name is Date.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isDateType: function(typeName)
+	{
+		return typeName == DataType.DATE;
+	},
+	/**
+	 * Returns whether a type name is ObjectEx.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isObjectExType: function(typeName)
+	{
+		var result = DataType.isComplexType(typeName) && (!DataType.isObjectType(typeName)) && (!DataType.isDateType(typeName));
+		if (result)  // check if the class exists
+		{
+			var classObj = ClassEx.findClass(typeName);
+			result = classObj && ClassEx.isOrIsDescendantOf(classObj, ObjectEx);
+		}
+		return result;
+	},
+	/**
+	 * Get value type and returns a data type string.
+	 * @param {Variant} value
+	 * @returns {String}
+	 */
+	getType: function(value)
+	{
+		var stype = typeof(value);
+		switch (stype)
+		{
+			// TODO: Some native classes such as RegExp are not checked yet
+			// basic types
+			case 'undefined': return DataType.UNDEFINED;
+			case 'function': return DataType.FUNCTION;
+			case 'boolean': return DataType.BOOL;
+			case 'string': return DataType.STRING;
+			case 'number':
+				{
+					if (Math.floor(value) == value)
+						return DataType.INT;
+					else
+						return DataType.FLOAT;
+				}
+			case 'object':  // complex
+				{
+					if (this.isDateValue(value))
+						return DataType.DATE;
+					else if (DataType.isArrayValue(value))
+						return DataType.ARRAY;
+					else if (ClassEx.isClass(value))
+						return DataType.CLASS;
+					else if (DataType.isObjectExValue(value) && value.getClassName)
+						return value.getClassName();
+					else
+						return DataType.OBJECT;
+				}
+			default:
+				return stype;
+		}
+	},
+	/**
+	 * Check if value is number, string or bool.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isSimpleValue: function(value)
+	{
+		return DataType.isSimpleType(typeof(value));
+	},
+	/**
+	 * Check if value is undefined
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isUndefinedValue: function(value)
+	{
+		return typeof(value) == 'undefined';
+	},
+	/**
+	 * Check if value is null
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isNullValue: function(value)
+	{
+		return (value === null);
+	},
+	/**
+	 * Check if value is a function.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isFunctionValue: function(value)
+	{
+		return typeof(value) == 'function';
+	},
+	/**
+	 * Check if an value is an non-array Object.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isObjectValue: function(value)
+	{
+		if (value)  // not null
+			return (typeof(value) == 'object') && (!DataType.isArrayValue(value)) && (!DataType.isDateValue(value));
+		else
+			return false;
+	},
+	/**
+	 * Check if an value is an instance of Date.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isDateValue: function(value)
+	{
+		if (value)
+			return ((typeof(value) == 'object') && (value.getFullYear !== undefined));
+		return false;
+	},
+	/**
+	 * Check if an value is an Array
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isArrayValue: function(value)
+	{
+		if (value)
+			return ((typeof(value) == 'object') && (value.length !== undefined));
+		else
+			return false;
+	},
+	/**
+	 * Check if an value is an instance of ObjectEx
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isObjectExValue: function(value)
+	{
+		return (value instanceof ObjectEx);
+	},
+	/**
+	 * Create an instance of typeName
+	 * @param {String} typeName
+	 * @returns {Variant}
+	 */
+	createInstance: function(typeName, Kekule)
+	{
+		switch (typeName)
+		{
+			case DataType.UNDEFINED: return undefined;
+			case DataType.DATE: return new Date();
+			case DataType.ARRAY: return new Array();
+			case DataType.OBJECT: return new Object();
+			case DataType.FUNCTION: return new Function();
+			default: // maybe a ObjectEx descendant
+				{
+					var classInstance = ClassEx.findClass(typeName.capitalizeFirst(), undefined, Kekule); //eval(typeName.capitalizeFirst());
+					return new classInstance();
+				}
+		}
+	}
 };
 
+// Wether has full support of Object/defineProperty method (IE8 has partial support and will return false)
+var __definePropertyAvailable__ = Object.defineProperty &&
+  (function () { try { Object.defineProperty({}, 'x', {}); return true; } catch (e) { return false; } } ())
+
+
 /**
-* A pack of utility methods to modify a existing class.
-* @class ClassEx
-*/
+ * A pack of utility methods to modify a existing class.
+ * @class ClassEx
+ */
 var ClassEx = {
-  /**
-  * Checks if a object is a class object.
-  * @param {Object} classObj
-  */
-  isClass: function(classObj) {
-    if (!classObj) return false;
-    return !!(classObj.superclass || classObj.subclasses);
-  },
-  /**
-  * Return class object from class name. If this class is not found, null will be returned.
-  * @param {String} className
-  * @returns {Class}
-  */
-  findClass: function(className, root, Kekule) {
-    return Object.getCascadeFieldValue(className, root || $jsRoot, Kekule);
-  },
-  /**
-  * Get class name of aClass, usually returns CLASS_NAME field of aClass
-  * @returns {String} Class name.
-  */
-  getClassName: function(aClass) {
-    if (aClass) return aClass.prototype.CLASS_NAME;
-    else return null;
-  },
+	/**
+	 * Checks if a object is a class object.
+	 * @param {Object} classObj
+	 */
+	isClass: function(classObj)
+	{
+		if (!classObj)
+			return false;
+		return !!(classObj.superclass || classObj.subclasses);
+	},
+	/**
+	 * Return class object from class name. If this class is not found, null will be returned.
+	 * @param {String} className
+	 * @returns {Class}
+	 */
+	findClass: function(className, root, Kekule)
+	{
+    /*
+		var result;
+		var cascadeNames = className.split('.');
+    if (!root)
+		  var root = $jsRoot;
+		for (var i = 0, l = cascadeNames.length; i < l; ++i)
+		{
+			result = root[cascadeNames[i]];
+			if (!result)
+				break;
+			else
+				root = result;
+		}
+		return result;
+		*/
+		return Object.getCascadeFieldValue(className, root || $jsRoot, Kekule);
+	},
+	/**
+	 * Get class name of aClass, usually returns CLASS_NAME field of aClass
+	 * @returns {String} Class name.
+	 */
+	getClassName: function(aClass)
+	{
+    if (aClass)
+		  return aClass.prototype.CLASS_NAME;
+    else
+      return null;
+	},
   /**
   * Get last part of class name of this class.
   * For example, 'Atom' will be returned by class 'Kekule.Atom'.
@@ -1960,13 +2004,45 @@ ObjectEx = Class.create(
     //options.storeField = this.getDefPropStoreFieldName(propName);
     var list = this.getOwnPropList();
     var prop = list.addProperty(propName, options);
-    if (options.getter !== null)
-    prop.getter = this.createPropGetter(prop, options.getter);
-    if (options.setter !== null)
-    prop.setter = this.createPropSetter(prop, options.setter);
+    var propGetterInfo, propSetterInfo;
+    if (options.getter !== null && options.getter !== false)
+    {
+      propGetterInfo = this.createPropGetter(prop, options.getter);
+      prop.getter = propGetterInfo.doGetterName;
+    }
+    if (options.setter !== null && options.setter !== false)
+    {
+      propSetterInfo = this.createPropSetter(prop, options.setter);
+      prop.setter = propSetterInfo.doSetterName;
+    }
 
     // to accelerate property access, add a hash key here
     this[this.getPropInfoHashKey(propName)] = prop;
+
+    // Add property to object in supported browsers
+    if (__definePropertyAvailable__)
+    {
+      var descs = {
+        'enumerable': options.enumerable,
+        'configurable': false
+      };
+      if (descs.enumerable === undefined)
+        descs.enumerable = true;
+      if (propGetterInfo)
+        descs.get = this[propGetterInfo.getterName];
+      if (propSetterInfo)
+        descs.set = this[propSetterInfo.setterName];
+      try
+      {
+        Object.defineProperty(this, propName, descs);
+      }
+      catch(e)
+      {
+        console.log(this.getClassName(), propName);
+        throw e;
+      }
+    }
+ 
     return prop;
   },
   /** @private */
@@ -1986,23 +2062,26 @@ ObjectEx = Class.create(
     //'var args = Array.prototype.slice(arguments); args.unshift("' + prop.name + '");'
     //+ 'return this.getPropValue.apply(this, args);'
     'return this.getPropValue("' + prop.name + '");'
-  );
+    );
+    */
+    /*
+    this.getPrototype()[getterName] = function()
+    {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(prop.name);
+    return this.getPropValue.apply(this, args);
+  };
   */
-  /*
-  this.getPrototype()[getterName] = function()
-  {
-  var args = Array.prototype.slice.call(arguments);
-  args.unshift(prop.name);
-  return this.getPropValue.apply(this, args);
-};
-*/
-//this.getPrototype()[getterName] = actualGetter;
-this.getPrototype()[getterName] = function() {
-  var args = arguments; // Array.prototype.slice.call(arguments);
-  return this[doGetterName].apply(this, args);
-};
+  //this.getPrototype()[getterName] = actualGetter;
+  this.getPrototype()[getterName] = function() {
+    var args = arguments; // Array.prototype.slice.call(arguments);
+    return this[doGetterName].apply(this, args);
+  };
 
-return doGetterName; //actualGetter; //this[getterName];
+ 	return {
+    'getterName': getterName,
+    'doGetterName': doGetterName   // actual method to retrieve value
+  };
 },
 /** @private */
 createPropSetter: function(prop, setter) {
@@ -2044,7 +2123,10 @@ this.getPrototype()[setterName] = function() {
 };
 
 //this.getPrototype()[setterName] = actualSetter;
-return doSetterName; // actualSetter; //this[setterName];
+return {
+  'setterName': setterName,
+  'doSetterName': doSetterName   // actual method to set value
+};
 },
 /**
 * Check if property exists in current class.
