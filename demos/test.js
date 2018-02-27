@@ -27,44 +27,48 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
      console.log(composer)
 
      // bind event
-       var BNS = Kekule.ChemWidget.ComponentWidgetNames;
-       console.log('BNS', BNS)
-       composer.setCommonToolButtons([BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
-         BNS.manipulate,
-         BNS.erase,
-         {'name': 'Custom', 'actionClass': Kekule.Editor.ActionOnComposerAdv,
-           'text': 'Create', 'hint': 'My create button', 'id': 'btnMyCreate', 'htmlClass': 'MYBUTTON',
-           'widget': Kekule.Widget.RadioButton,
-           'attached': [
-           BNS.molBondSingle, BNS.molBondDouble, BNS.molBondTriple,  //only show single, double and triple bounds
-           /*  Hide other bond buttons
+      /*var BNS = Kekule.ChemWidget.ComponentWidgetNames;
+      console.log('BNS', BNS)
+      composer.setCommonToolButtons([BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
+        BNS.manipulate,
+        BNS.erase,
+        {'name': 'Custom', 'actionClass': Kekule.Editor.ActionOnComposerAdv,
+          'text': 'Create', 'hint': 'My create button', 'id': 'btnMyCreate', 'htmlClass': 'MYBUTTON',
+          'widget': Kekule.Widget.RadioButton,
+          'attached': [
+          BNS.molBondSingle, BNS.molBondDouble, BNS.molBondTriple,  //only show single, double and triple bounds
+          /*  Hide other bond buttons
 
-            BNS.molBondCloser, BNS.molBondWedgeUp, BNS.molBondWedgeDown,
-            BNS.molRepMethane,
-            BNS.molRepFischer1, BNS.molRepFischer2,
-            BNS.molRepSawhorseStaggered, BNS.molRepSawhorseEclipsed
-            */
-           //{'name': BNS.molAtom, 'actionClass': Kekule.Editor.ActionComposerSetAtomController}
-           BNS.molAtom
-         ]},
-         //BNS.molAtom,
-         BNS.molFormula,
-         BNS.molRing,
-         {
-           'name': BNS.molCharge,
-           'attached': [
-             BNS.molChargeClear,
-             BNS.molChargePositive,
-             BNS.molChargeNegative,
-             BNS.molElectronLonePair,
-             {
-               'name': 'singleElectron', 'actionClass': MySingleElectronAction
-             }
-           ]
-         }
-         // BNS.molCharge,
-         // BNS.textImage
-       ]);
+           BNS.molBondCloser, BNS.molBondWedgeUp, BNS.molBondWedgeDown,
+           BNS.molRepMethane,
+           BNS.molRepFischer1, BNS.molRepFischer2,
+           BNS.molRepSawhorseStaggered, BNS.molRepSawhorseEclipsed
+           */
+          //{'name': BNS.molAtom, 'actionClass': Kekule.Editor.ActionComposerSetAtomController}
+        /*  BNS.molAtom
+        ]},
+        //BNS.molAtom,
+        BNS.molFormula,
+        BNS.molRing,
+        {
+          'name': BNS.molCharge,
+          'attached': [
+            BNS.molChargeClear,
+            BNS.molChargePositive,
+            BNS.molChargeNegative,
+            BNS.molElectronLonePair,
+            {
+              'name': 'singleElectron', 'actionClass': MySingleElectronAction
+            }
+          ]
+        }
+        // BNS.molCharge,
+        // BNS.textImage
+      ]);*/
+
+
+      composer.setCommonToolButtons(null).setChemToolButtons(null);
+
      })
 
 
