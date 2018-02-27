@@ -307,7 +307,7 @@ ClassEx.extend(Kekule.Widget.BaseWidget,
 		do
 		{
 			var className = ClassEx.getClassName(c) + '.Configurator';
-			result = ClassEx.findClass(className);
+			result = ClassEx.findClass(className, undefined, Kekule);
 			c = ClassEx.getSuperClass(c);
 		}
 		while (c && !result)
@@ -321,6 +321,7 @@ ClassEx.extend(Kekule.Widget.BaseWidget,
 	createConfigurator: function()
 	{
 		var cclass = this.getConfiguratorClass();
+		console.log(cclass)
 		return new cclass(this);
 	},
 	/**
