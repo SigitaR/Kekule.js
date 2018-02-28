@@ -11,9 +11,6 @@
     "start": "webpack-dev-server --config webpack.config.dev.js --progress",
     "build": "webpack --config webpack.config.production.js --progress"
   },
-  "files": [
-    "public", "src"
-  ],
   "contributors": [
     {
       "name": "Aaron Llanos",
