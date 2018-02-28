@@ -11,8 +11,8 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
      'AttachedMarkerIaController',
      'AttachedMarkerIaController-SingleElectron',
      {
-       'markerClassName': 'Kekule.ChemMarker.UnbondedElectronSet',
-       'targetClassName': 'Kekule.AbstractAtom',
+       'markerClass': Kekule.ChemMarker.UnbondedElectronSet,
+       'targetClass': Kekule.AbstractAtom,
        'initialPropValues': {'electronCount': 1}
      },
      null, null,
@@ -27,7 +27,7 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
      console.log(composer)
 
      // bind event
-      /*var BNS = Kekule.ChemWidget.ComponentWidgetNames;
+      var BNS = Kekule.ChemWidget.ComponentWidgetNames;
       console.log('BNS', BNS)
       composer.setCommonToolButtons([BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
         BNS.manipulate,
@@ -37,15 +37,9 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
           'widget': Kekule.Widget.RadioButton,
           'attached': [
           BNS.molBondSingle, BNS.molBondDouble, BNS.molBondTriple,  //only show single, double and triple bounds
-          /*  Hide other bond buttons
 
-           BNS.molBondCloser, BNS.molBondWedgeUp, BNS.molBondWedgeDown,
-           BNS.molRepMethane,
-           BNS.molRepFischer1, BNS.molRepFischer2,
-           BNS.molRepSawhorseStaggered, BNS.molRepSawhorseEclipsed
-           */
           //{'name': BNS.molAtom, 'actionClass': Kekule.Editor.ActionComposerSetAtomController}
-        /*  BNS.molAtom
+          BNS.molAtom
         ]},
         //BNS.molAtom,
         BNS.molFormula,
@@ -64,10 +58,9 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
         }
         // BNS.molCharge,
         // BNS.textImage
-      ]);*/
+      ]);
 
-
-      composer.setCommonToolButtons(null).setChemToolButtons(null);
+      //composer.setCommonToolButtons(null).setChemToolButtons(null);
 
      })
 
