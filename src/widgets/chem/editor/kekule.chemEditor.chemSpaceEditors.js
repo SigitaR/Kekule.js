@@ -4206,11 +4206,15 @@ Kekule.Editor.AttachedMarkerIaController = Class.create(Kekule.Editor.BaseEditor
 		this.defineProp('targetClass', {'dataType': DataType.CLASS, 'serializable': false});
 		this.defineProp('markerClassName', {'dataType': DataType.STRING,
 			'getter': function() { return ClassEx.getClassName(this.getMarkerClass()); },
-			'setter': function(value) { this.setMarkerClass(ClassEx.findClass(value, undefined, Kekule)); }
+			'setter': function(value) {
+				this.setMarkerClass(ClassEx.findClass(value, undefined, Kekule));
+			 }
 		});
 		this.defineProp('targetClassName', {'dataType': DataType.STRING,
 			'getter': function() { return ClassEx.getClassName(this.getTargetClass()); },
-			'setter': function(value) { this.setTargetClass(ClassEx.findClass(value, undefined, Kekule)); }
+			'setter': function(value) {
+				this.setTargetClass(ClassEx.findClass(value, undefined, Kekule));
+			}
 		});
 		this.defineProp('initialPropValues', {'dataType': DataType.HASH});
 	},
