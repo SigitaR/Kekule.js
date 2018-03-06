@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'source-map',
   resolve: {
     alias: {
-      kekule: path.resolve(__dirname, 'src/kekule')
+      kekule: path.resolve(__dirname, 'dist/kekule.min')
     },
     modules: [
       path.resolve(__dirname, 'lib'),

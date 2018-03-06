@@ -2,13 +2,13 @@
   "name": "kekule",
   "version": "0.7.6",
   "description": "Open source JavaScript toolkit for chemoinformatics",
-  "main": "src/kekule.js",
+  "main": "dist/kekule.min.js",
   "author": {
     "name": "Chen Jiang",
     "email": "partridge@cpu.edu.cn"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.dev.js --progress",
+    "start": "webpack-dev-server --config webpack.config.dev.js --progress -w",
     "build": "webpack --config webpack.config.production.js --progress"
   },
   "contributors": [

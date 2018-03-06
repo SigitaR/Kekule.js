@@ -17,11 +17,6 @@ module.exports = {
     libraryTarget: 'commonjs2',
     library: 'kekule'
   },
-  externals: [
-    './lib/indigo',
-    './lib/inchi',
-    './lib/openbabel'
-  ],
   module: {
     rules: [
       { 
