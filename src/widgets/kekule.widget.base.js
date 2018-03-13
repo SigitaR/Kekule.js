@@ -393,10 +393,10 @@ Kekule.Widget.BaseWidget = Class.create(ObjectEx,
 		this.setPropStoreFieldValue('useNormalBackground', true);
 
 		$super();
-		this.setPropStoreFieldValue('isDumb', !!isDumb);
-		if (!isDumb)
-			this.reactUiEventBind = this.reactUiEvent.bind(this);
-
+		//this.setPropStoreFieldValue('isDumb', !!isDumb);
+		//if (!isDumb){
+		//	this.reactUiEventBind = this.reactUiEvent.bind(this);
+		//}
 		/*
 		this.setShowText(true);
 		this.setShowGlyph(true);
