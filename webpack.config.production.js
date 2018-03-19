@@ -22,7 +22,6 @@ module.exports = {
       { 
         test: /\.js$/, 
         loader: 'babel-loader',
-        exclude: path.resolve(__dirname, 'lib'),
         include: path.resolve(__dirname, 'src')
       },
       { test: /\.css$/, use: ['style-loader','css-loader'] },
