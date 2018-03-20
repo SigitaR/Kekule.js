@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.dev.js --progress -w",
-    "build": "webpack --config webpack.config.production.js --progress"
+    "build": "webpack --config webpack.config.production.js --progress -p"
   },
   "contributors": [
     {
@@ -51,6 +51,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.9",
     "eslint": "^4.17.0",
     "file-loader": "^1.1.6",

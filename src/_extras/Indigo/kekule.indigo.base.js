@@ -123,8 +123,6 @@ Kekule.Indigo = {
 Kekule.Indigo.loadIndigoScript = function(doc, callback)
 {
 	if (!KI._scriptLoadedBySelf && !KI.isScriptLoaded()) {
-		var IndigoModule = require('../../../lib/indigo')
-		var indigoAdapter = require('./indigoAdapter')(IndigoModule)
 		Kekule.Indigo.getIndigo();
 		if (callback)
 			callback();

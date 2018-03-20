@@ -12,342 +12,137 @@ if (!Array.prototype.indexOf)
 	};
 }
 
-var kekuleFiles = {
-	'lan': {
-		'files': [
-			'lan/classes.js',
-			'lan/xmlJsons.js',
-			'lan/serializations.js'
-		],
-		'category': 'lan',
-		'minFile': 'root.min.js'
-	},
-	'root': {
-		'files': [
-			'core/kekule.root.js'
-		],
-		'category': 'root',
-		'minFile': 'root.min.js'
-	},
-
-	'localization': {
-		'requires': ['lan', 'root'],
-		'files': [
-			'localization/kekule.localizations.js'
-		],
-		'category': 'localization',
-		'minFile': 'localization.min.js'
-	},
-	'localizationData': {
-		'requires': ['localization'],
-		'files': [
-			'localization/en/kekule.localize.general.en.js',
-			'localization/en/kekule.localize.widget.en.js',
-			'localization/en/kekule.localize.objDefines.en.js'
-		],
-		'category': 'localization',
-		'minFile': 'localization.min.js'
-	},
-
-	'common': {
-		'requires': ['lan', 'root', 'localization'],
-		'files': [
-			'core/kekule.common.js',
-			'core/kekule.exceptions.js',
-			'utils/kekule.utils.js'
-		],
-		'category': 'common',
-		'minFile': 'common.min.js'
-	},
-
-	'core': {
-		'requires': ['lan', 'root', 'common', 'data'],
-		'files': [
-			'core/kekule.configs.js',
-			'core/kekule.elements.js',
-			'core/kekule.electrons.js',
-			'core/kekule.valences.js',
-			'core/kekule.structures.js',
-			'core/kekule.structureBuilder.js',
-			'core/kekule.reactions.js',
-			'core/kekule.chemUtils.js',
-
-			'chemdoc/kekule.glyph.base.js',
-			'chemdoc/kekule.glyph.pathGlyphs.js',
-			'chemdoc/kekule.glyph.lines.js',
-			'chemdoc/kekule.glyph.chemGlyphs.js',
-			'chemdoc/kekule.contentBlocks.js',
-			'chemdoc/kekule.attachedMarkers.js',
-			'chemdoc/kekule.commonChemMarkers.js'
-		],
-		'category': 'core'
-	},
-
-	'html': {
-		'requires': ['lan', 'root', 'common'],
-		'files': [
-			'xbrowsers/kekule.x.js',
-			'html/kekule.nativeServices.js',
-			'html/kekule.predefinedResLoaders.js',
-			'utils/kekule.domUtils.js',
-			'utils/kekule.domHelper.js'
-		],
-		'category': 'core'
-	},
-
-	'io': {
-		'requires': ['lan', 'root', 'common', 'core'],
-		'files': [
-			'utils/kekule.textHelper.js',
-			'io/kekule.io.js',
-			'io/cml/kekule.io.cml.js',
-			'io/mdl/kekule.io.mdlBase.js',
-			'io/mdl/kekule.io.mdl2000.js',
-			'io/mdl/kekule.io.mdl3000.js',
-			'io/mdl/kekule.io.mdlIO.js',
-			'io/smiles/kekule.io.smiles.js',
-			'io/native/kekule.io.native.js'
-		],
-		'category': 'io'
-	},
-
-	'render': {
-		'requires': ['lan', 'root', 'common', 'core', 'html'],
-		'files': [
-			'render/kekule.render.extensions.js',
-			'render/kekule.render.base.js',
-			'render/kekule.render.renderColorData.js',
-			'render/kekule.render.utils.js',
-			'render/kekule.render.configs.js',
-			'render/kekule.render.baseTextRender.js',
-			'render/kekule.render.boundInfoRecorder.js',
-			'render/2d/kekule.render.renderer2D.js',
-			'render/2d/kekule.render.glyphRender2D.js',
-			'render/2d/kekule.render.canvasRenderer.js',
-			'render/2d/kekule.render.raphaelRenderer.js',
-			'render/3d/kekule.render.renderer3D.js',
-			'render/3d/kekule.render.threeRenderer.js',
-			'render/kekule.render.painter.js'
-		],
-		'category': 'render'
-	},
-
-	'widget': {
-		'requires': ['lan', 'root', 'common', 'html'],
-		'files': [
-			'widgets/operation/kekule.operations.js',
-			'widgets/operation/kekule.actions.js',
-
-			'widgets/kekule.widget.bindings.js',
-			'widgets/kekule.widget.base.js',
-			'widgets/kekule.widget.sys.js',
-			'widgets/kekule.widget.clipboards.js',
-			'widgets/kekule.widget.helpers.js',
-			'widgets/kekule.widget.styleResources.js',
-			'widgets/kekule.widget.autoLaunchers.js',
-			'widgets/transitions/kekule.widget.transitions.js',
-			'widgets/transitions/kekule.widget.transMgr.js',
-			'widgets/commonCtrls/kekule.widget.resizers.js',
-			'widgets/commonCtrls/kekule.widget.movers.js',
-			'widgets/commonCtrls/kekule.widget.images.js',
-			'widgets/commonCtrls/kekule.widget.containers.js',
-			'widgets/commonCtrls/kekule.widget.menus.js',
-			'widgets/commonCtrls/kekule.widget.buttons.js',
-			'widgets/commonCtrls/kekule.widget.formControls.js',
-			'widgets/commonCtrls/kekule.widget.nestedContainers.js',
-			'widgets/commonCtrls/kekule.widget.treeViews.js',
-			'widgets/commonCtrls/kekule.widget.dialogs.js',
-			'widgets/commonCtrls/kekule.widget.msgPanels.js',
-			'widgets/commonCtrls/kekule.widget.tabViews.js',
-			'widgets/advCtrls/kekule.widget.valueListEditors.js',
-			'widgets/advCtrls/kekule.widget.colorPickers.js',
-			'widgets/advCtrls/kekule.widget.textEditors.js',
-			'widgets/advCtrls/kekule.widget.widgetGrids.js',
-			'widgets/advCtrls/objInspector/kekule.widget.objInspectors.js',
-			'widgets/advCtrls/objInspector/kekule.widget.objInspector.propEditors.js',
-			'widgets/advCtrls/objInspector/kekule.widget.objInspector.operations.js',
-			'widgets/advCtrls/kekule.widget.configurators.js',
-			'widgets/advCtrls/grids/kekule.widget.dataSets.js',
-			'widgets/advCtrls/grids/kekule.widget.dataGrids.js',
-			'widgets/sys/kekule.widget.sysMsgs.js',
-
-			'widgets/operation/kekule.operHistoryTreeViews.js'  // debug
-		],
-		'category': 'widget'
-	},
-
-	'chemWidget': {
-		'requires': ['lan', 'root', 'common', 'core', 'html', 'io', 'render', 'algorithm', 'widget'],
-		'files': [
-			'widgets/chem/kekule.chemWidget.base.js',
-			'widgets/chem/kekule.chemWidget.dialogs.js',
-			'widgets/chem/periodicTable/kekule.chemWidget.periodicTables.js',
-			'widgets/chem/kekule.chemWidget.chemObjDisplayers.js',
-			'widgets/chem/structureTreeView/kekule.chemWidget.structureTreeViews.js',
-			'widgets/chem/uiMarker/kekule.chemWidget.uiMarkers.js',
-			'widgets/chem/viewer/kekule.chemWidget.viewers.js',
-			'widgets/chem/viewer/kekule.chemWidget.viewerGrids.js',
-			'widgets/chem/viewer/kekule.chemWidget.chemObjInserters.js',
-
-			'widgets/chem/editor/kekule.chemEditor.extensions.js',
-			'widgets/chem/editor/kekule.chemEditor.baseEditors.js',
-			'widgets/chem/editor/kekule.chemEditor.operations.js',
-			'widgets/chem/editor/kekule.chemEditor.editorUtils.js',
-			'widgets/chem/editor/kekule.chemEditor.configs.js',
-			'widgets/chem/editor/kekule.chemEditor.repositoryData.js',
-			'widgets/chem/editor/kekule.chemEditor.repositories.js',
-			'widgets/chem/editor/kekule.chemEditor.chemSpaceEditors.js',
-			'widgets/chem/editor/kekule.chemEditor.nexus.js',
-			'widgets/chem/editor/kekule.chemEditor.composers.js',
-			'widgets/chem/editor/kekule.chemEditor.actions.js',
-
-			'widgets/advCtrls/objInspector/kekule.widget.objInspector.chemPropEditors.js'
-		],
-		'category': 'chemWidget'
-	},
-
-	'algorithm': {
-		'requires': ['lan', 'root', 'common', 'core'],
-		'files': [
-			'algorithm/kekule.graph.js',
-			'algorithm/kekule.structures.helpers.js',
-			//'algorithm/kekule.structures.comparers.js',
-			'algorithm/kekule.structures.canonicalizers.js',
-			'algorithm/kekule.structures.ringSearches.js',
-			'algorithm/kekule.structures.aromatics.js',
-			'algorithm/kekule.structures.standardizers.js',
-			'algorithm/kekule.structures.searches.js',
-			'algorithm/kekule.structures.stereos.js'
-		],
-		'category': 'algorithm'
-	},
-
-	'calculation': {
-		'requires': ['lan', 'root', 'common', 'core', 'algorithm'],
-		'files': [
-			'calculation/kekule.calc.base.js'
-		]
-	},
-
-	'data': {
-		'requires': ['root'],
-		'files': [
-			'data/kekule.chemicalElementsData.js',
-			'data/kekule.isotopesData.organSet.js',
-			'data/kekule.structGenAtomTypesData.js',
-			'data/kekule.dataUtils.js'
-		]
-	},
-
-	'emscripten': {
-		'requires': ['root', 'common'],
-		'files': [
-			'_extras/kekule.emscriptenUtils.js'
-		],
-		'category': 'extra'
-	},
-
-	'openbabel': {
-		'requires': ['lan', 'root', 'core', 'emscripten', 'io'],
-		'files': [
-			'localization/en/kekule.localize.extras.openbabel.en.js',
-			'_extras/OpenBabel/kekule.openbabel.base.js',
-			'_extras/OpenBabel/kekule.openbabel.io.js',
-			'_extras/OpenBabel/kekule.openbabel.structures.js'
-		],
-		'category': 'extra'
-	},
-	'indigo': {
-		'requires': ['lan', 'root', 'core', 'emscripten', 'io'],
-		'files': [
-			'_extras/Indigo/kekule.indigo.base.js',
-			'_extras/Indigo/kekule.indigo.io.js'
-		],
-		'category': 'extra'
-	},
-	'inchi': {
-		'requires': ['lan', 'root', 'core', 'emscripten', 'io'],
-		'files': [
-			'_extras/InChI/kekule.inchi.js'
-		],
-		'category': 'extra'
-	},
-
-	// Localization resources
-	'localizationData.zh': {
-		'requires': ['localization'],
-		'files': [
-			'localization/zh/kekule.localize.general.zh.js',
-			'localization/zh/kekule.localize.widget.zh.js'
-			//'localization/zh/kekule.localize.objDefines.zh.js'
-		],
-		'category': 'localizationData.zh',
-		'autoCompress': false  // do not compress js automatically
-	}
-};
-
-var prequestModules = ['lan', 'root', 'localization', 'localizationData', 'common'];
-// var nodeModules = prequestModules.concat(['core', 'io', 'algorithm', 'calculation', 'data']);
-var usualModules = prequestModules.concat(['core', 'html', 'io', 'render', 'widget', 'chemWidget', 'algorithm', 'calculation', 'data']);
-var allModules = usualModules.concat(['emscripten', 'inchi', 'openbabel', 'indigo']);
-
-function getEssentialModules(modules)
-{
-	var ms = modules || usualModules;
-	ms = prequestModules.concat(ms);
-	var result = [];
-
-	var pushModule = function(modules, moduleName)
-	{
-		if (modules.indexOf(moduleName) < 0)
-		{
-			var module = kekuleFiles[moduleName];
-			if (module && module.requires)
-			{
-				for (var j = 0, k = module.requires.length; j < k; ++j)
-				{
-					var rm = module.requires[j];
-					pushModule(modules, rm);
-				}
-			}
-			modules.push(moduleName);
-		}
-	};
-	for (var i = 0, l = ms.length; i < l; ++i)
-	{
-		var module = ms[i];
-		pushModule(result, module);
-	}
-	return result;
-}
-
-function getEssentialFiles(modules)
-{
-	var ms = getEssentialModules(modules);
-	var result = [];
-	for (var i = 0, l = ms.length; i < l; ++i) {
-		var moduleName = ms[i];
-		var m = kekuleFiles[moduleName];
-		if (m && m.files) {
-			result = result.concat(m.files);
-		}
-	}
-	return result;
-}
-
-var scriptInfo = {
-	'src': this.__filename || '',
-	'modules': allModules
-}
-var files = getEssentialFiles(scriptInfo.modules)
+require('./lan/classes')
+require('./lan/xmlJsons')
+require('./lan/serializations')
 
 var Kekule = {}
-files.forEach(filename => {
-	var module = require('./' + filename)
-	if	(typeof module === 'function') {
-		Kekule = module(Kekule)
-	}
-})
+Kekule = require('./core/kekule.root')(Kekule)
+Kekule = require('./localization/kekule.localizations')(Kekule)
+Kekule = require('./localization/en/kekule.localize.general.en')(Kekule)
+Kekule = require('./localization/en/kekule.localize.widget.en')(Kekule)
+Kekule = require('./localization/en/kekule.localize.objDefines.en')(Kekule)
+Kekule = require('./core/kekule.common')(Kekule)
+Kekule = require('./core/kekule.exceptions')(Kekule)
+Kekule = require('./utils/kekule.utils')(Kekule)
+Kekule = require('./data/kekule.dataUtils')(Kekule)
+Kekule = require('./core/kekule.configs')(Kekule)
+Kekule = require('./core/kekule.elements')(Kekule)
+Kekule = require('./core/kekule.electrons')(Kekule)
+Kekule = require('./core/kekule.valences')(Kekule)
+Kekule = require('./core/kekule.structures')(Kekule)
+Kekule = require('./core/kekule.structureBuilder')(Kekule)
+Kekule = require('./core/kekule.reactions')(Kekule)
+Kekule = require('./core/kekule.chemUtils')(Kekule)
+Kekule = require('./chemdoc/kekule.glyph.base')(Kekule)
+Kekule = require('./chemdoc/kekule.glyph.pathGlyphs')(Kekule)
+Kekule = require('./chemdoc/kekule.glyph.lines')(Kekule)
+Kekule = require('./chemdoc/kekule.glyph.chemGlyphs')(Kekule)
+Kekule = require('./chemdoc/kekule.contentBlocks')(Kekule)
+Kekule = require('./chemdoc/kekule.attachedMarkers')(Kekule)
+Kekule = require('./chemdoc/kekule.commonChemMarkers')(Kekule)
+Kekule = require('./xbrowsers/kekule.x')(Kekule)
+Kekule = require('./html/kekule.nativeServices')(Kekule)
+Kekule = require('./html/kekule.predefinedResLoaders')(Kekule)
+Kekule = require('./utils/kekule.domUtils')(Kekule)
+Kekule = require('./utils/kekule.domHelper')(Kekule)
+Kekule = require('./utils/kekule.textHelper')(Kekule)
+Kekule = require('./io/kekule.io')(Kekule)
+Kekule = require('./io/cml/kekule.io.cml')(Kekule)
+Kekule = require('./io/mdl/kekule.io.mdlBase')(Kekule)
+Kekule = require('./io/mdl/kekule.io.mdl2000')(Kekule)
+Kekule = require('./io/mdl/kekule.io.mdl3000')(Kekule)
+Kekule = require('./io/mdl/kekule.io.mdlIO')(Kekule)
+Kekule = require('./io/smiles/kekule.io.smiles')(Kekule)
+Kekule = require('./io/native/kekule.io.native')(Kekule)
+Kekule = require('./render/kekule.render.extensions')(Kekule)
+Kekule = require('./render/kekule.render.base')(Kekule)
+Kekule = require('./render/kekule.render.renderColorData')(Kekule)
+Kekule = require('./render/kekule.render.utils')(Kekule)
+Kekule = require('./render/kekule.render.configs')(Kekule)
+Kekule = require('./render/kekule.render.baseTextRender')(Kekule)
+Kekule = require('./render/kekule.render.boundInfoRecorder')(Kekule)
+Kekule = require('./render/2d/kekule.render.renderer2D')(Kekule)
+Kekule = require('./render/2d/kekule.render.glyphRender2D')(Kekule)
+Kekule = require('./render/2d/kekule.render.canvasRenderer')(Kekule)
+Kekule = require('./render/2d/kekule.render.raphaelRenderer')(Kekule)
+Kekule = require('./render/3d/kekule.render.renderer3D')(Kekule)
+Kekule = require('./render/3d/kekule.render.threeRenderer')(Kekule)
+Kekule = require('./render/kekule.render.painter')(Kekule)
+Kekule = require('./widgets/operation/kekule.operations')(Kekule)
+Kekule = require('./widgets/operation/kekule.actions')(Kekule)
+Kekule = require('./widgets/kekule.widget.bindings')(Kekule)
+Kekule = require('./widgets/kekule.widget.base')(Kekule)
+Kekule = require('./widgets/kekule.widget.sys')(Kekule)
+Kekule = require('./widgets/kekule.widget.clipboards')(Kekule)
+Kekule = require('./widgets/kekule.widget.helpers')(Kekule)
+Kekule = require('./widgets/kekule.widget.styleResources')(Kekule)
+Kekule = require('./widgets/kekule.widget.autoLaunchers')(Kekule)
+Kekule = require('./widgets/transitions/kekule.widget.transitions')(Kekule)
+Kekule = require('./widgets/transitions/kekule.widget.transMgr')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.resizers')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.movers')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.images')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.containers')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.menus')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.buttons')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.formControls')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.nestedContainers')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.treeViews')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.dialogs')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.msgPanels')(Kekule)
+Kekule = require('./widgets/commonCtrls/kekule.widget.tabViews')(Kekule)
+Kekule = require('./widgets/advCtrls/kekule.widget.valueListEditors')(Kekule)
+Kekule = require('./widgets/advCtrls/kekule.widget.colorPickers')(Kekule)
+Kekule = require('./widgets/advCtrls/kekule.widget.textEditors')(Kekule)
+Kekule = require('./widgets/advCtrls/kekule.widget.widgetGrids')(Kekule)
+Kekule = require('./widgets/advCtrls/objInspector/kekule.widget.objInspectors')(Kekule)
+Kekule = require('./widgets/advCtrls/objInspector/kekule.widget.objInspector.propEditors')(Kekule)
+Kekule = require('./widgets/advCtrls/objInspector/kekule.widget.objInspector.operations')(Kekule)
+Kekule = require('./widgets/advCtrls/kekule.widget.configurators')(Kekule)
+Kekule = require('./widgets/advCtrls/grids/kekule.widget.dataSets')(Kekule)
+Kekule = require('./widgets/advCtrls/grids/kekule.widget.dataGrids')(Kekule)
+Kekule = require('./widgets/sys/kekule.widget.sysMsgs')(Kekule)
+Kekule = require('./widgets/operation/kekule.operHistoryTreeViews')(Kekule)
+Kekule = require('./algorithm/kekule.graph')(Kekule)
+Kekule = require('./algorithm/kekule.structures.helpers')(Kekule)
+Kekule = require('./algorithm/kekule.structures.canonicalizers')(Kekule)
+Kekule = require('./algorithm/kekule.structures.ringSearches')(Kekule)
+Kekule = require('./algorithm/kekule.structures.aromatics')(Kekule)
+Kekule = require('./algorithm/kekule.structures.standardizers')(Kekule)
+Kekule = require('./algorithm/kekule.structures.searches')(Kekule)
+Kekule = require('./algorithm/kekule.structures.stereos')(Kekule)
+Kekule = require('./widgets/chem/kekule.chemWidget.base')(Kekule)
+Kekule = require('./widgets/chem/kekule.chemWidget.dialogs')(Kekule)
+Kekule = require('./widgets/chem/periodicTable/kekule.chemWidget.periodicTables')(Kekule)
+Kekule = require('./widgets/chem/kekule.chemWidget.chemObjDisplayers')(Kekule)
+Kekule = require('./widgets/chem/structureTreeView/kekule.chemWidget.structureTreeViews')(Kekule)
+Kekule = require('./widgets/chem/uiMarker/kekule.chemWidget.uiMarkers')(Kekule)
+Kekule = require('./widgets/chem/viewer/kekule.chemWidget.viewers')(Kekule)
+Kekule = require('./widgets/chem/viewer/kekule.chemWidget.viewerGrids')(Kekule)
+Kekule = require('./widgets/chem/viewer/kekule.chemWidget.chemObjInserters')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.extensions')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.baseEditors')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.operations')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.editorUtils')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.configs')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.repositoryData')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.repositories')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.chemSpaceEditors')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.nexus')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.composers')(Kekule)
+Kekule = require('./widgets/chem/editor/kekule.chemEditor.actions')(Kekule)
+Kekule = require('./widgets/advCtrls/objInspector/kekule.widget.objInspector.chemPropEditors')(Kekule)
+Kekule = require('./calculation/kekule.calc.base')(Kekule)
+Kekule = require('./_extras/kekule.emscriptenUtils')(Kekule)
+Kekule = require('./_extras/InChI/kekule.inchi')(Kekule)
+Kekule = require('./localization/en/kekule.localize.extras.openbabel.en')(Kekule)
+Kekule = require('./_extras/OpenBabel/kekule.openbabel.base')(Kekule)
+Kekule = require('./_extras/OpenBabel/kekule.openbabel.io')(Kekule)
+Kekule = require('./_extras/OpenBabel/kekule.openbabel.structures')(Kekule)
+Kekule = require('./_extras/Indigo/kekule.indigo.base')(Kekule)
+Kekule = require('./_extras/Indigo/kekule.indigo.io')(Kekule)
+
 Kekule._loaded()
 
 var Class = require('./lan/classes').Class
