@@ -433,7 +433,7 @@ Kekule.Glyph.PathGlyph = Class.create(Kekule.Glyph.Base,
 	 */
 	hasNode: function(node, checkNestedStructure)
 	{
-		return this.hasCtab()? the.getCtab().hasNode(node, checkNestedStructure): null;
+		return this.hasCtab()? this.getCtab().hasNode(node, checkNestedStructure): null;
 	},
 	/**
 	 * Add node to container. If node already in container, nothing will be done.

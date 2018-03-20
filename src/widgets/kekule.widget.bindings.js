@@ -74,7 +74,7 @@ Kekule.DataBingItem = Class.create(ObjectEx,
 			}
 			else
 			{
-				var data = src.getDataByBindingName(sourceName);
+				var data = src.getDataByBindingName(srcName);
 				target.setDataByBindingName(targetName, data);
 			}
 		}

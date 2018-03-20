@@ -695,11 +695,11 @@ module.exports = function(Kekule){
 			 */
 			set2DSizeX: function(x)
 			{
-				var c = fetchSize2D();
+				var c = this.fetchSize2D();
 				if (c.x != x)
 				{
 					c.x = x;
-					notifySize2DChanged(c);
+					this.notifySize2DChanged(c);
 				}
 			},
 			/**
@@ -718,11 +718,11 @@ module.exports = function(Kekule){
 			 */
 			set2DSizeY: function(y)
 			{
-				var c = fetchSize2D();
+				var c = this.fetchSize2D();
 				if (c.y != y)
 				{
 					c.y = y;
-					notifySize2DChanged(c);
+					this.notifySize2DChanged(c);
 				}
 			}
 		},
@@ -797,11 +797,11 @@ module.exports = function(Kekule){
 			 */
 			set3DSizeX: function(x)
 			{
-				var c = fetchSize3D();
+				var c = this.fetchSize3D();
 				if (c.x != x)
 				{
 					c.x = x;
-					notifySize3DChanged(c);
+					this.notifySize3DChanged(c);
 				}
 			},
 			/**
@@ -820,11 +820,11 @@ module.exports = function(Kekule){
 			 */
 			set3DSizeY: function(y)
 			{
-				var c = fetchSize3D();
+				var c = this.fetchSize3D();
 				if (c.y != y)
 				{
 					c.y = y;
-					notifySize3DChanged(c);
+					this.notifySize3DChanged(c);
 				}
 			},
 			/**
@@ -843,11 +843,11 @@ module.exports = function(Kekule){
 			 */
 			set3DSizeZ: function(z)
 			{
-				var c = fetchSize3D();
+				var c = this.fetchSize3D();
 				if (c.z != z)
 				{
 					c.z = z;
-					notifySize3DChanged(c);
+					this.notifySize3DChanged(c);
 				}
 			}
 		},
@@ -2617,7 +2617,8 @@ module.exports = function(Kekule){
 		isEmpty: function()
 		{
 			//var result = $super();
-			return result && (this.getItemCount() <= 0);
+			// return result && (this.getItemCount() <= 0);
+			return false
 		},
 
 		/** @private */

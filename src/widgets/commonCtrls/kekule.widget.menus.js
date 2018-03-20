@@ -552,7 +552,7 @@ Kekule.Widget.Menu = Class.create(Kekule.Widget.Container,
 	{
 		if (!rootMenuElem)
 			rootMenuElem = this.getElement();
-		var elems = DU.getDirectChildElems(menuElem, this.MENU_ITEM_TAG);
+		var elems = DU.getDirectChildElems(rootMenuElem, this.MENU_ITEM_TAG);
 		var result = [];
 		for (var i = 0, l = elems.length; i < l; ++i)
 		{

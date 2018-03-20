@@ -2736,7 +2736,7 @@ Kekule.Editor.BaseEditor = Class.create(Kekule.ChemWidget.ChemObjDisplayer,
 	doSetObjSize: function(obj, size)
 	{
 		if (obj.setSizeOfMode)
-			obj.setSizeOfMode(dimension, this.getCoordMode());
+			obj.setSizeOfMode(size, this.getCoordMode());
 	},
 
 	/**
@@ -3184,7 +3184,7 @@ Kekule.Editor.BaseEditor = Class.create(Kekule.ChemWidget.ChemObjDisplayer,
 		var h = this.getOperHistory();
 		if (h)
 		{
-			r = h.pop(operation);
+			r = h.pop();
 			if (autoReverse)
 				r.reverse();
 		}

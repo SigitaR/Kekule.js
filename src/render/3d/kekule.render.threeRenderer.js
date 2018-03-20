@@ -15,8 +15,10 @@
 var Class = require('../../lan/classes').Class
 var ObjectEx = require('../../lan/classes').ObjectEx
 var DataType = require('../../lan/classes').DataType
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
 module.exports = function(Kekule) {
 if (Kekule.$jsRoot.THREE) {
+	var THREE = Kekule.$jsRoot.THREE
 	/** @ignore */
 	THREE.Object3D.prototype.clear = function(){
 		var children = this.children;
@@ -619,7 +621,7 @@ Kekule.Render.ThreeRendererBridge = Class.create(
 		geom.vertices.push(new THREE.Vector3(coord1.x, coord1.y, coord1.z));
 		geom.vertices.push(new THREE.Vector3(coord2.x, coord2.y, coord2.z));
 
-		line = new THREE.Line(geom, lineMat);
+		var line = new THREE.Line(geom, lineMat);
 		context.getScene().add(line);
 		return line;
 	},

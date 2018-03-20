@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   cache: true,
@@ -40,5 +41,15 @@ module.exports = {
   node: {
     fs: 'empty',
     ws: 'empty'
-  }
+  },
+  plugins: [
+    // new webpack.optimize.UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     mangle: false
+    //   }
+    // })
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: false
+    })
+  ]
 };

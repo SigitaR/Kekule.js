@@ -357,6 +357,7 @@ Kekule.AtomTypeDataUtil = {
 	 */
 	getAtomTypeInfoObj: function(symbolOrAtomicNumber)
 	{
+		var atomicNumber
 		if (typeof(symbolOrAtomicNumber) == 'number')
 			atomicNumber = symbolOrAtomicNumber;
 		else

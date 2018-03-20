@@ -1,3 +1,5 @@
+var Kekule = {}
+
 /** @ignore */
 Kekule.Localization.setCurrModule("widget");
 

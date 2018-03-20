@@ -664,7 +664,7 @@ X.Event._MouseEventEx = {
 			|| ((eventType === 'mouseleave') && X.Event.isSupported('mouseleave'));
 		if (isSupported)
 			//return Kekule.X.Event.removeListener(element, eventType, handler);
-			return element.removeEventListener(eventType, handler, useCapture);  // IE support leave/enter event and has no extra code added, so we can use w3c method directly
+			return element.removeEventListener(eventType, handler);  // IE support leave/enter event and has no extra code added, so we can use w3c method directly
 		else
 		{
 			var newType = (eventType === 'mouseenter')? 'mouseover': 'mouseout';
@@ -905,6 +905,7 @@ X.Event._IE = {
 	/** @private */
 	unregisterHandler: function(element, eventType, handler)
 	{
+		var handlers = X.Event._handlers;
 		if (!handlers[eventType])
 			return;
 		var hs = handlers[eventType];
@@ -978,7 +979,7 @@ X.Event._IEMethods = {
 	}
 }
 
-if (this.document && document.addEventListener)  // W3C browser
+if (Kekule.$document && Kekule.$document.addEventListener)  // W3C browser
 {
 	X.Event = Object.extend(X.Event, X.Event._W3C);
 	X.Event.Methods = Object.extend(X.Event.Methods, X.Event._W3CMethods);
@@ -987,7 +988,7 @@ if (this.document && document.addEventListener)  // W3C browser
 		X.Event = Object.extend(X.Event, X.Event._Gecko);
 	}
 }
-else if (this.document && document.attachEvent)  // IE 8
+else if (Kekule.$document && Kekule.$document.attachEvent)  // IE 8
 {
 	X.Event = Object.extend(X.Event, X.Event._IE);
 	X.Event.Methods = Object.extend(X.Event.Methods, X.Event._IEMethods);
@@ -1006,13 +1007,13 @@ if (Kekule.$jsRoot.window && Kekule.$jsRoot.window.Event)
 	eproto = window.Event.prototype;
 if (!eproto)
 {
-	if (this.document && document.createEvent)
+	if (Kekule.$document && Kekule.$document.createEvent)
 		eproto = document.createEvent('HTMLEvents').__proto__;
 }
 var hasEventPrototype = !!eproto;
 var eventObjMethods = {};
 var methods = X.Event.Methods;
-for (name in methods)
+for (var name in methods)
 {
 	if (methods.hasOwnProperty(name) && (typeof(methods[name]) === 'function'))
 	{
@@ -1187,7 +1188,7 @@ Kekule.X.DomReady = {
 		DOM.initReady();//如果没有建成DOM树，则走第二步，存储起来一起杀
 		if (!DOM.isReady)
 		{
-			var readyState = Kekule.$jsRoot.document && Kekule.$jsRoot.document && Kekule.$jsRoot.document.readyState;
+			var readyState = Kekule.$document && Kekule.$document && Kekule.$document.readyState;
 			if (readyState === 'complete' || readyState === 'loaded'    // document already loaded, call fn directly
 				|| (readyState === 'interactive' && !Kekule.Browser.IE))
 			{
@@ -1251,15 +1252,14 @@ Kekule.X.DomReady = {
 	},
   initReady: function()
   {
-    if (Kekule.$jsRoot.document && Kekule.$jsRoot.document.addEventListener) {
+    if (Kekule.$document && Kekule.$document.addEventListener) {
       document.addEventListener( "DOMContentLoaded", function(){
-        document.removeEventListener( "DOMContentLoaded", arguments.callee, false );//清除加载函数
         DOM.fireReady();
       }, false);
     }
     else
     {
-      if (Kekule.$jsRoot.document && Kekule.$jsRoot.document.getElementById) {
+      if (Kekule.$document && Kekule.$document.getElementById) {
         document.write('<script id="ie-domReady" defer="defer" src="\//:"><\/script>');
         document.getElementById("ie-domReady").onreadystatechange = function() {
           if (this.readyState === "complete") {

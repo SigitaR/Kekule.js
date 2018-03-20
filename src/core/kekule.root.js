@@ -65,12 +65,17 @@ module.exports = function(Kekule) {
 	/**
 	 * Root object of JavaScript environment, usually window.
 	 */
-	Kekule.$jsRoot = this;
+	if (typeof window !== 'undefined') {
+		Kekule.$jsRoot = window
+	}
+
 	/**
 	 * Root document of JavaScript environment.
 	 * Can be null in Node.js.
 	 */
-	Kekule.$document = this.document || null;
+	if (typeof document !== 'undefined') {
+		Kekule.$document = document
+	}
 
 	Kekule.scriptSrcInfo = Kekule.$jsRoot['__$kekule_load_info__'];
 	if (Kekule.scriptSrcInfo && Kekule.scriptSrcInfo.language)  // force Language

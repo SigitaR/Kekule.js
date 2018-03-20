@@ -28,6 +28,7 @@
 var Class = require('../../../lan/classes').Class
 var ClassEx = require('../../../lan/classes').ClassEx
 var DataType = require('../../../lan/classes').DataType
+var JsonUtility = require('../../../lan/xmlJsons').JsonUtility
 module.exports = function(Kekule){
 
 var PS = Class.PropertyScope;

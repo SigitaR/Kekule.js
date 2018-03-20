@@ -11,11 +11,13 @@
  * requires /utils/kekule.domUtils.js
  * requires /xbrowsers/kekule.x.js
  */
-
+var Hammer = require('hammerjs')
 var Class = require('../lan/classes').Class
 var ClassEx = require('../lan/classes').ClassEx
 var ObjectEx = require('../lan/classes').ObjectEx
 var DataType = require('../lan/classes').DataType
+var ObjSerializerFactory = require('../lan/serializations').ObjSerializerFactory
+
 module.exports = function(Kekule){
 
 var AU = Kekule.ArrayUtils;
@@ -3234,7 +3236,7 @@ Kekule.Widget.PlaceHolder = Class.create(Kekule.Widget.BaseWidget,
 			'getter': function()
 			{
 				var c = this.getTargetWidgetClass();
-				var result = c? ClassEx.getClassName(C): this.getPropStoreFieldValue('targetWidgetClassName');
+				var result = c? ClassEx.getClassName(c): this.getPropStoreFieldValue('targetWidgetClassName');
 				return result;
 			},
 			'setter': function(value)
@@ -3656,7 +3658,7 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 	initialize: function($super, doc)
 	{
 		$super();
-		this._document = doc || Kekule.$jsRoot.document;
+		this._document = doc || Kekule.$document;
 		this._hammertime = null;  // private
 		this.setPropStoreFieldValue('popupWidgets', []);
 		this.setPropStoreFieldValue('dialogWidgets', []);
@@ -3926,13 +3928,10 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 	 */
 	installGlobalTouchHandlers: function(target)
 	{
-		if (typeof(Hammer) !== 'undefined')
-		{
-			var result = Hammer(target).on(Kekule.Widget.TouchGestures.join(' '), this.reactTouchGestureBind);
-			//console.log(result);
-			//result.stop_browser_behavior.touchAction = 'none';
-			return result;
-		}
+		var result = Hammer(target).on(Kekule.Widget.TouchGestures.join(' '), this.reactTouchGestureBind);
+		//console.log(result);
+		//result.stop_browser_behavior.touchAction = 'none';
+		return result;
 	},
 	/**
 	 * Uninstall touch event (touch, swipe, pinch...) handlers to element.
@@ -4253,8 +4252,8 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 		var isShown = widget.isShown();
 		if (!isShown)
 		{
-			dropElem.style.visible = 'hidden';
-			dropElem.style.display = '';
+			elem.style.visible = 'hidden';
+			elem.style.display = '';
 		}
 
 		var clientRect = EU.getElemBoundingClientRect(elem);

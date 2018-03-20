@@ -188,7 +188,7 @@ Kekule.IO.CmlUtils = {
 		{
 			case R.REAGENT: return 'reagent';
 			case R.CATALYST: return 'catalyst';
-			case R.CATALYST: return 'solvent';
+			case R.SOLVENT: return 'solvent';
 			default: return kekuleRole;
 		}
 	},
@@ -267,8 +267,9 @@ Kekule.IO.CmlUtils = {
 	 */
 	createNodeByCmdElementType: function(id, elemType, massNumber)
 	{
+		var result
 		if (Kekule.IO.CmlUtils.isDummyElementType(elemType))
-				result = new Kekule.Pseudoatom(id, Kekule.PseudoatomType.DUMMY);
+			result = new Kekule.Pseudoatom(id, Kekule.PseudoatomType.DUMMY);
 		else if (Kekule.IO.CmlUtils.isRGroupElementType(elemType))
 			result = new Kekule.RGroup(id);
 		else if (Kekule.IO.CmlUtils.isAtomListElementType(elemType))
@@ -373,7 +374,7 @@ Kekule.IO.CmlDomUtils = {
 		}
 		if (propName)
 		{
-			var propValue = Kekule.DomUtils.getElementText(node);
+			var propValue = Kekule.DomUtils.getElementText(elem);
 			return {'name': propName, 'value': propValue};
 		}
 		else
@@ -440,7 +441,7 @@ Kekule.IO.CmlDomUtils = {
 
 		if (propName)
 		{
-			var propValue = Kekule.DomUtils.getElementText(node);
+			var propValue = Kekule.DomUtils.getElementText(elem);
 			var values = Kekule.IO.CmlDomUtils.splitCmlArrayValue(propValue);
 			switch (Kekule.DomUtils.getLocalName(elem))
 			{
@@ -1322,14 +1323,6 @@ Kekule.IO.CmlScalarReader = Class.create(Kekule.IO.CmlElementReader,
 					case 'xsd:float':
 					case 'xsd:double':
 					case 'xsd:duration':
-					/*
-					{
-						jsonObj.value = parseFloat(jsonObj.value);
-						if (jsonObj.errorValue)
-							jsonObj.errorValue = parseFloat(jsonObj.errorValue);
-						break;
-					}
-					*/
 					case 'xsd:decimal':
 					case 'xsd:integer':
 					case 'xsd:nonPositiveInteger':
@@ -1638,10 +1631,10 @@ Kekule.IO.CmlFormulaReader = Class.create(Kekule.IO.CmlChemStructureReader,
 					default:
 						{
 							// bypass CML1 style typed elements
-							if (Kekule.IO.CmlDomUtils.isCmlTypedElem(node) || Kekule.IO.CmlDomUtils.isCmlTypedArrayElem(node))
+							if (Kekule.IO.CmlDomUtils.isCmlTypedElem(childElems[i]) || Kekule.IO.CmlDomUtils.isCmlTypedArrayElem(childElems[i]))
 								;
 							else
-								this.readChildElementDef(node, result);
+								this.readChildElementDef(childElems[i], result);
 						}
 				}
 			}
@@ -2256,7 +2249,7 @@ Kekule.IO.CmlMoleculeReader = Class.create(Kekule.IO.CmlChemStructureReader,
 		//var attribs = []; // store properties of this atom
 		//var hasChildInfoElems = false;  // in mode I, atom may has scalar, electron, atomParity... to store additional information
 		// check if elem has string/integer/float children, if so, the old CML1 mode
-		hasChildInfoElems = !Kekule.IO.CmlDomUtils.hasDirectCmlTypedElemChildren(elem, this.getCoreNamespaceURI());
+		var hasChildInfoElems = !Kekule.IO.CmlDomUtils.hasDirectCmlTypedElemChildren(elem, this.getCoreNamespaceURI());
 		//attribs = Kekule.IO.CmlDomUtils.fetchCmlElemAttributeValuesToJson(elem, Kekule.IO.CmlDomUtils.FILTER_TYPED_ELEM, true, domHelper);
 		var attribs = this.atomInfoToJSON(elem, domHelper);
 

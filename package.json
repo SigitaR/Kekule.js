@@ -8,8 +8,9 @@
     "email": "partridge@cpu.edu.cn"
   },
   "scripts": {
+    "lint": "eslint ./src",
     "start": "webpack-dev-server --config webpack.config.dev.js --progress -w",
-    "build": "webpack --config webpack.config.production.js --progress -p"
+    "build": "webpack --config webpack.config.production.js --progress -p -w"
   },
   "contributors": [
     {
@@ -45,6 +46,7 @@
     "molecule"
   ],
   "dependencies": {
+    "hammerjs": "^2.0.8",
     "json2": "^0.4.0",
     "sizzle": "^2.3.3"
   },

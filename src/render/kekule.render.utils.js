@@ -1015,6 +1015,7 @@ Kekule.Render.TextDrawUtils = {
 	 */
 	getActualDirection: function(direction, parentDirection)
 	{
+		var TD = Kekule.Render.TextDirection;
 		if (direction === TD.LINE_BREAK)
 		{
 			return ((parentDirection === TD.TTB) || (parentDirection === TD.BTT))? TD.LTR:
@@ -1888,12 +1889,13 @@ Kekule.Render.MetaShapeUtils = {
 	 */
 	isIntersectingBox: function(shapeInfo, box)
 	{
+		var U = Kekule.Render.MetaShapeUtils;
 		if (U.isCompositeShape(shapeInfo))
 		{
 			for (var i = 0, l = shapeInfo.length; i < l; ++i)
 			{
 				var childShape = shapeInfo[i];
-				var childInside = Kekule.Render.MetaShapeUtils.isIntersectingBox(childShape, box);
+				var childInside = U.isIntersectingBox(childShape, box);
 				if (childInside)
 					return true;
 			}
@@ -2049,7 +2051,7 @@ Kekule.Render.RenderOptionUtils = {
 	 */
 	getConnectorRenderType: function(renderOptions)
 	{
-		return renderOptions? renderOption.renderType: null;
+		return renderOptions? renderOptions.renderType: null;
 	},
 	/**
 	 * Retrieve params for drawing connectors.

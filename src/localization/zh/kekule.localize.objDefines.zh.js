@@ -1,3 +1,5 @@
+var Kekule = {}
+
 Kekule.Localization.setCurrModule("objDefines");
 
 Kekule.Localization.addResource("zh", "OBJDEF_TEXTS", 

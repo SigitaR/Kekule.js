@@ -556,7 +556,7 @@ Kekule.StyleUtils = {
 		r.total = value;
 		r.value = parseFloat(value);
 		var sunit;
-		if (value && value.length && (r.value !== undefined) && (r.value !== NaN))
+		if (value && value.length && (r.value !== undefined) && (!isNaN(r.value)))
 		{
 			sunit = '';
 			for (var i = value.length - 1; i >= 0; --i)
@@ -1004,7 +1004,7 @@ Kekule.HtmlElementUtils = {
 	getElemViewportPos: function(elem)
 	{
 		var rect = Kekule.HtmlElementUtils.getElemBoundingClientRect(elem);
-		return {'x': rect.left, 'y': left.top};
+		return {'x': rect.left, 'y': rect.top};
 	},
 
 	/**

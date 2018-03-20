@@ -659,6 +659,9 @@
 
   // Add Node.XXXX support in IE
   //if (!window.Node) var Node = { };
+  if (!$jsRoot && typeof window !== 'undefined') {
+    $jsRoot = window
+  }
   if (!$jsRoot.Node) $jsRoot.Node = {};
 
   if (!$jsRoot.Node.ELEMENT_NODE) {

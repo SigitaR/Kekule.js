@@ -426,12 +426,8 @@ Kekule.Calculator.generate3D = function(sourceMol, options, callback, errCallbac
 			{
 				error(e);
 			}
-		}
-		finally
-		{
-			//o.finalize();
-			return o;
-		}
+		} catch (e) {}
+		return o;
 	}
 	else
 	{

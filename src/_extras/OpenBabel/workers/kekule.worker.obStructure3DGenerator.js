@@ -18,7 +18,7 @@ function initEnv()
 	if (initOps)
 	{
 		var moduleName = initOps.moduleName;
-		var module = $root[moduleName];
+		var module = Kekule.$jsRoot[moduleName];
 		if (initOps.usingModulaize && typeof(module) === 'function')
 		{
 			module = module();
@@ -51,7 +51,7 @@ function handleMessages(msgData)
 	if (msgType === 'importScript')
 	{
 		//console.log('import script', msgData.url);
-		importScripts(msgData.url);
+		// importScripts(msgData.url);
 		obScriptLoaded = true;
 		// after import, set intial data
 		initEnv();

@@ -154,12 +154,6 @@ Kekule.Render.Abstract3DDrawBridge = Class.create(
 	{
 
 	},
-	/*
-	drawParallelLines: function(context, lineInfos)
-	{
-
-	}
-	*/
 	createDrawGroup: function(context)
 	{
 
@@ -379,7 +373,7 @@ Kekule.Render.Base3DRenderer = Class.create(Kekule.Render.CompositeRenderer,  //
 		var b = this.getDrawBridge();
 		if (b.drawParallelLines)
 		{
-			return b.drawParallelLines(this.getActualTargetContext(context), lineInfos, drawEndCaps);
+			return b.drawParallelLines(this.getActualTargetContext(context), lineInfos);
 		}
 		else if (b.drawLine)
 		{
@@ -1186,6 +1180,7 @@ Kekule.Render.ChemCtab3DRenderer = Class.create(Kekule.Render.ChemObj3DRenderer,
 	{
 		var localOptions = node.getOverriddenRender3DOptions() || {};
 		var atomicNumber = node.getAtomicNumber? node.getAtomicNumber(): null;
+		var radius
 		if (localOptions.nodeRadius || renderOptions.nodeRadius)  // radius explicitly set
 			radius = localOptions.nodeRadius || renderOptions.nodeRadius;
 		else if (oneOf(localOptions.useVdWRadius, renderOptions.useVdWRadius) && atomicNumber) // use vdW radius and is atom
@@ -1282,7 +1277,7 @@ Kekule.Render.ChemCtab3DRenderer = Class.create(Kekule.Render.ChemObj3DRenderer,
 	{
 		if (obj && obj.getAbsBaseCoord3D)
 		{
-			coord = obj.getAbsBaseCoord3D(allowCoordBorrow);
+			var coord = obj.getAbsBaseCoord3D(allowCoordBorrow);
 			if (coord)
 			{
 				var newCoord = Kekule.CoordUtils.transform3DByMatrix(coord, transformMatrix);
@@ -1394,7 +1389,7 @@ Kekule.Render.ChemCtab3DRenderer = Class.create(Kekule.Render.ChemObj3DRenderer,
 		else // draw node ball
 		{
 			//op = Object.extend(op, node.getRender3DOptions());
-			op = Kekule.Render.RenderOptionUtils.mergeObjLocalRender3DOptions(node, options);
+			var op = Kekule.Render.RenderOptionUtils.mergeObjLocalRender3DOptions(node, options);
 
 			var ballRadius;
 			// calc node ball radius

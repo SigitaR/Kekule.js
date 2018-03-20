@@ -158,7 +158,7 @@ Kekule.ChemMarker.ChemPropertyMarker = Class.create(Kekule.ChemMarker.BaseMarker
 
 	// editor related methods
 	/** @ignore */
-	beforAddingByEditor: function(newParent, refSibling)
+	beforAddingByEditor: function(newParent, refSibling, $super)
 	{
 		if (newParent) // when adding to new parent, update value of parent
 		{
@@ -166,7 +166,6 @@ Kekule.ChemMarker.ChemPropertyMarker = Class.create(Kekule.ChemMarker.BaseMarker
 			if (Kekule.ObjUtils.notUnset(value))
 				this.setParentPropValue(value);  // update to parent
 		}
-		$super();
 	},
 	/** @ignore */
 	beforeRemovingByEditor: function(parent)

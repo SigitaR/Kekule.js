@@ -14,10 +14,12 @@
 
 var Class = require('../../lan/classes').Class
 var DataType = require('../../lan/classes').DataType
+var XmlUtility = require('../../lan/xmlJsons').XmlUtility
 module.exports = function(Kekule) {
 // Some helper methods of Raphael
-if (this.Raphael)
+if (Kekule.$jsRoot.Raphael)
 {
+	var Raphael = Kekule.$jsRoot.Raphael
 	// draw a simple line
 	/** @ignore */
 	Raphael.fn.line = function(x1, y1, x2, y2)

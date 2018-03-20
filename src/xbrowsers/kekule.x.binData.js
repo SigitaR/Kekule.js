@@ -9,7 +9,8 @@
 //   Cross browser binary data supporting
 /////////////////////////////////////////////////////////////
 // TODO: unfinished
-X.BinData = function()
+var Kekule = {}
+Kekule.X.BinData = function()
 {
 
 };
