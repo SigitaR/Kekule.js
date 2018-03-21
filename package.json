@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "start": "webpack-dev-server --config webpack.config.dev.js --progress -w",
-    "build": "webpack --config webpack.config.production.js --progress -p -w"
+    "build": "webpack --config webpack.config.production.js --progress"
   },
   "contributors": [
     {

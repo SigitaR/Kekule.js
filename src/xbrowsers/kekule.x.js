@@ -700,7 +700,7 @@ X.Event._W3C =
 	 */
 	removeListener: function(element, eventType, handler, useCapture)
 	{
-		if (X.Event._MouseEventEx.isMouseEnterLeaveEvent(eventType) && handler.__$listenerWrapper__)
+		if (X.Event._MouseEventEx.isMouseEnterLeaveEvent(eventType) && handler && handler.__$listenerWrapper__)
 			return X.Event._MouseEventEx.removeMouseEnterLeaveListener(element, eventType, handler.__$listenerWrapper__);
 		else
 			return element.removeEventListener(eventType, handler, useCapture);
