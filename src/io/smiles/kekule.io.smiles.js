@@ -195,7 +195,7 @@ Kekule.IO.SmilesMolWriter = Class.create(Kekule.IO.ChemDataWriter,
 			return writer.writeBlock(obj);
 			*/
 			var mol = this.getMolecule(obj);
-			return this.writeStructFragment(mol, options);
+			return mol? this.writeStructFragment(mol, options): '';
 		}
 	},
 	/**
@@ -210,7 +210,7 @@ Kekule.IO.SmilesMolWriter = Class.create(Kekule.IO.ChemDataWriter,
 	/** @private */
 	writeStructFragment: function(mol, options)
 	{
-		if (mol.hasCtab())
+		if (mol.hasCtab() && !mol.isEmpty())
 		{
 			// standardize molecule and mark the aromatic rings
 			var dupMol = mol.clone();
