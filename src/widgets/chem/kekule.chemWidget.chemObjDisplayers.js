@@ -700,7 +700,6 @@ Kekule.ChemWidget.ChemObjDisplayer = Class.create(Kekule.ChemWidget.AbstractWidg
 			var p = this.getPropStoreFieldValue('painter');
 			if (p)
 				p.clear(c);
-
 			this.getDrawBridge().clearContext(c);
 		}
 	},
