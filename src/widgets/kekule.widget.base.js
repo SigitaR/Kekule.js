@@ -395,7 +395,7 @@ Kekule.Widget.BaseWidget = Class.create(ObjectEx,
 		this.setPropStoreFieldValue('useNormalBackground', true);
 
 		$super();
-		//this.setPropStoreFieldValue('isDumb', !!isDumb);
+		this.setPropStoreFieldValue('isDumb', !!isDumb);
 		if (!isDumb){
 			this.reactUiEventBind = this.reactUiEvent.bind(this);
 		}
@@ -3671,7 +3671,7 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 		this.react_keydown_binding = this.react_keydown.bind(this);
 		this.react_touchstart_binding = this.react_touchstart.bind(this);
 		*/
-		// this.reactUiEventBind = this.reactUiEvent.bind(this);
+		this.reactUiEventBind = this.reactUiEvent.bind(this);
 		this.reactTouchGestureBind = this.reactTouchGesture.bind(this);
 		/*
 		this.reactPageShowBind = this.reactPageShow.bind(this);
