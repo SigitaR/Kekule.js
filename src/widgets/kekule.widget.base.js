@@ -11,7 +11,6 @@
  * requires /utils/kekule.domUtils.js
  * requires /xbrowsers/kekule.x.js
  */
-var Hammer = require('hammerjs')
 var Class = require('../lan/classes').Class
 var ClassEx = require('../lan/classes').ClassEx
 var ObjectEx = require('../lan/classes').ObjectEx
@@ -20,6 +19,7 @@ var ObjSerializerFactory = require('../lan/serializations').ObjSerializerFactory
 
 module.exports = function(Kekule){
 
+var Hammer = Kekule.$document ? require('hammerjs') : {}
 var AU = Kekule.ArrayUtils;
 var EU = Kekule.HtmlElementUtils;
 
