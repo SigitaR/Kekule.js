@@ -68,7 +68,7 @@ module.exports = function(Kekule) {
 	if (typeof window !== 'undefined') {
 		Kekule.$jsRoot = window
 	} else {
-		Kekule.$jsRoot = this
+		Kekule.$jsRoot = this || global
 	}
 
 	/**

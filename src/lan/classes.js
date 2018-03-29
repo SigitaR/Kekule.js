@@ -661,7 +661,10 @@
   //if (!window.Node) var Node = { };
   if (!$jsRoot && typeof window !== 'undefined') {
     $jsRoot = window
+  } else {
+    $jsRoot = this || global
   }
+  
   if (!$jsRoot.Node) $jsRoot.Node = {};
 
   if (!$jsRoot.Node.ELEMENT_NODE) {
