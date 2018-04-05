@@ -85,11 +85,11 @@
 }
  .K-Chem-Editor .K-Chem-Editor-Client{
     background-color:#fff;
-    outline:1px solid #666
 }
- .K-Chem-Composer .K-Chem-Editor{
-    background-color:#aaa;
-    outline:1px solid #ddd
+ .K-Chem-Composer .K-Chem-Editor
+{
+    background-color: ##f4f4f4;
+    outline: 1px solid #ddd;
 }
  .K-Chem-Viewer-Menu-Button > .K-Pri-Glyph-Content{
     background-image:url(sprite/chemWidgetColor.png);
