@@ -196,14 +196,14 @@
     // is an array
     cascadeNames = fieldName;
     else cascadeNames = fieldName.split(".");
-    if (!root) root = this;
+    if (!root) root = $jsRoot;
     var i, l;
     if (cascadeNames[0] === "Kekule") {
       cascadeNames.shift();
       for (i = 0, l = cascadeNames.length; i < l; ++i) {
         result = Kekule[cascadeNames[i]];
         if (!result) break;
-        else root = result;
+        else Kekule = result;
       }
     } else {
       for (i = 0, l = cascadeNames.length; i < l; ++i) {
