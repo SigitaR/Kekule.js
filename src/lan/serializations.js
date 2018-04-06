@@ -693,7 +693,7 @@ ObjSerializer = Class.create(
 					if (valueType) // complex value
 					{
 						obj = DataType.createInstance(valueType, Kekule);
-						this.load(obj, node);
+						this.load(obj, node, Kekule);
 					}
 					else
 					{

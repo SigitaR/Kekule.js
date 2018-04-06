@@ -59,7 +59,7 @@ module.exports = function (Kekule) {
 	/** @lends Kekule.UnbondedElectronSet# */
 	{
 		/** @private */
-		CLASS_NAME: 'Kekule.UnBondedElectronSet',
+		CLASS_NAME: 'Kekule.UnbondedElectronSet',
 		/**
 		 * @constructs
 		 */
