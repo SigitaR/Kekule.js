@@ -6,68 +6,65 @@ const CORRECT_MOL_WITH_ELECTRONS = `{"id":"m1","attachedMarkers":[],"coordPos2D"
 
 
 var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass(
-     'Kekule.Editor.ActionComposerSetAttachedMarkerIaControllerSingleElectron',
-     'Single Electron',
-     'Add single electron',
-     'AttachedMarkerIaController',
-     'AttachedMarkerIaController-SingleElectron',
-     {
-       'markerClass': Kekule.ChemMarker.UnbondedElectronSet,
-       'targetClass': Kekule.AbstractAtom,
-       'initialPropValues': {'electronCount': 1}
-     },
-     null, null,
-     'singleElectron'
-   );
+  'Kekule.Editor.ActionComposerSetAttachedMarkerIaControllerSingleElectron',
+  'Single Electron',
+  'Add single electron',
+  'AttachedMarkerIaController',
+  'AttachedMarkerIaController-SingleElectron',
+  {
+    'markerClass': Kekule.ChemMarker.UnbondedElectronSet,
+    'targetClass': Kekule.AbstractAtom,
+    'initialPropValues': {'electronCount': 1}
+  },
+  null, null,
+  'singleElectron'
+);
 
-   // initialize Composer
-  Kekule.X.domReady(function(){
-    var composer = new Kekule.Editor.Composer(document.getElementById('composer'))
+// initialize Composer
+Kekule.X.domReady(function(){
+  var composer = new Kekule.Editor.Composer(document.getElementById('composer'))
 
-     //var composer = Kekule.Widget.getWidgetById('composer');
-     console.log(composer)
+  //var composer = Kekule.Widget.getWidgetById('composer');
+  console.log(composer)
 
-     // bind event
-      var BNS = Kekule.ChemWidget.ComponentWidgetNames;
-      console.log('BNS', BNS)
-      composer.setCommonToolButtons([BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
-        BNS.manipulate,
-        BNS.erase,
-        {'name': 'Custom', 'actionClass': Kekule.Editor.ActionOnComposerAdv,
-          'text': 'Create', 'hint': 'My create button', 'id': 'btnMyCreate', 'htmlClass': 'MYBUTTON',
-          'widget': Kekule.Widget.RadioButton,
-          'attached': [
-          BNS.molBondSingle, BNS.molBondDouble, BNS.molBondTriple,  //only show single, double and triple bounds
+  // bind event
+  var BNS = Kekule.ChemWidget.ComponentWidgetNames;
+  console.log('BNS', BNS)
+  composer.setCommonToolButtons([BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
+    BNS.manipulate,
+    BNS.erase,
+    {'name': 'Custom', 'actionClass': Kekule.Editor.ActionOnComposerAdv,
+      'text': 'Create', 'hint': 'My create button', 'id': 'btnMyCreate', 'htmlClass': 'MYBUTTON',
+      'widget': Kekule.Widget.RadioButton,
+      'attached': [
+      BNS.molBondSingle, BNS.molBondDouble, BNS.molBondTriple,  //only show single, double and triple bounds
 
-          //{'name': BNS.molAtom, 'actionClass': Kekule.Editor.ActionComposerSetAtomController}
-          BNS.molAtom
-        ]},
-        //BNS.molAtom,
-        BNS.molFormula,
-        BNS.molRing,
+      //{'name': BNS.molAtom, 'actionClass': Kekule.Editor.ActionComposerSetAtomController}
+      BNS.molAtom
+    ]},
+    //BNS.molAtom,
+    BNS.molFormula,
+    BNS.molRing,
+    {
+      'name': BNS.molCharge,
+      'attached': [
+        BNS.molChargeClear,
+        BNS.molChargePositive,
+        BNS.molChargeNegative,
+        BNS.molElectronLonePair,
         {
-          'name': BNS.molCharge,
-          'attached': [
-            BNS.molChargeClear,
-            BNS.molChargePositive,
-            BNS.molChargeNegative,
-            BNS.molElectronLonePair,
-            {
-              'name': 'singleElectron', 'actionClass': MySingleElectronAction
-            }
-          ]
+          'name': 'singleElectron', 'actionClass': MySingleElectronAction
         }
-        // BNS.molCharge,
-        // BNS.textImage
-      ]);
+      ]
+    }
+    // BNS.molCharge,
+    // BNS.textImage
+  ]);
+  let validKekule = Kekule.IO.loadFormatData(CORRECT_MOL_WITH_ELECTRONS, 'Kekule-JSON');
+  composer.setChemObj(validKekule)
 
-      //composer.setCommonToolButtons(null).setChemToolButtons(null);
-
-     })
-
-
-
-
+  //composer.setCommonToolButtons(null).setChemToolButtons(null);
+})
 
 function validateKekule (kekuleJSON) {
     let validKekule = false;
