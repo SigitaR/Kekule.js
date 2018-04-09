@@ -548,7 +548,6 @@ Kekule.Render.Base2DRenderer = Class.create(Kekule.Render.CompositeRenderer,  //
 	},
 	drawRichText: function(context, coord, richText, options)  // note: return {drawnObj, boundRect}
 	{
-		var metrics = context.measureText(richText.anchorItem.anchorItem.text);
 		var drawer = this.getRichTextDrawer();
 		// debug
 		//console.log('draw richText', richText, options);
