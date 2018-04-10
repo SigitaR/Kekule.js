@@ -198,7 +198,16 @@ module.exports = function(Kekule){
 	Kekule.globalOptions = {
 		add: function(optionName, valueOrHash)
 		{
-			Object.setCascadeFieldValue(optionName, valueOrHash, Kekule.globalOptions, true);
+				var oldValue = Object.getCascadeFieldValue(optionName, Kekule.globalOptions);
+				if (oldValue)  // value already exists
+				{
+					if (DataType.isObjectValue(oldValue) && (DataType.isObjectValue(valueOrHash)))
+					{
+						Object.extend(oldValue, valueOrHash);
+					}
+				}
+				else
+					Object.setCascadeFieldValue(optionName, valueOrHash, Kekule.globalOptions, true);
 		}
 	};
 
