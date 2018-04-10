@@ -20,9 +20,11 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
   'singleElectron'
 );
 
+var composer;
+
 // initialize Composer
 Kekule.X.domReady(function(){
-  var composer = new Kekule.Editor.Composer(document.getElementById('composer'))
+  composer = new Kekule.Editor.Composer(document.getElementById('composer'))
 
   //var composer = Kekule.Widget.getWidgetById('composer');
   console.log(composer)
@@ -62,7 +64,18 @@ Kekule.X.domReady(function(){
   ]);
   let validKekule = Kekule.IO.loadFormatData(CORRECT_MOL_WITH_ELECTRONS, 'Kekule-JSON');
   composer.setChemObj(validKekule)
-
+  var skeletalDisplay = document.getElementById('skeletal-switch')
+  skeletalDisplay.addEventListener('change', function changeSkeletalDisplay (event) {
+    let renderConfigs = composer.getRenderConfigs()
+    let newDisplayType = 2 //2 is CONDENSED
+    if(event.target.checked){
+      newDisplayType = 1 //1 is SKELETAL
+    }
+    renderConfigs.getMoleculeDisplayConfigs().setDefMoleculeDisplayType(newDisplayType)
+    composer.getEditor().repaint()
+  })
+  
+  
   //composer.setCommonToolButtons(null).setChemToolButtons(null);
 })
 
