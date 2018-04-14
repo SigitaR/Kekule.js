@@ -72,6 +72,7 @@ Object.extend(Kekule.ChemWidget.ComponentWidgetNames, {
 	molRing8: 'ring8',
 	molRingAr6: 'ringAr6',
 	molRingAr5: 'ringAr5',
+	molFlexRing: 'flexRing',
 
 	molRepCyclopentaneHaworth1: 'repCyclopentaneHaworth1',
 	molRepCyclopentaneHaworth2: 'repCyclopentaneHaworth2',
@@ -1144,18 +1145,13 @@ Kekule.Editor.ActionComposerSetRepositorySubBondMarkController = Kekule.Editor.c
 	BNS.molRepSubBondMark
 );
 
-Kekule.Editor.ActionComposerSetRepositoryMolChainController = Kekule.Editor.createComposerIaControllerActionClass(
-		'Kekule.Editor.ActionComposerSetRepositoryMolChainController',
-		Kekule.$L('ChemWidgetTexts.CAPTION_MOL_CHAIN'),
-		Kekule.$L('ChemWidgetTexts.HINT_MOL_CHAIN'),
-		'MolChainIaController',
-		'MolChainIaController',
-		/*
-		{
-			'ringAtomCount': 3,
-			'isAromatic': false
-		},
-		*/null,
+Kekule.Editor.ActionComposerSetRepositoryMolFlexChainController = Kekule.Editor.createComposerIaControllerActionClass(
+		'Kekule.Editor.ActionComposerSetRepositoryMolFlexChainController',
+		Kekule.$L('ChemWidgetTexts.CAPTION_MOL_FLEXCHAIN'),
+		Kekule.$L('ChemWidgetTexts.HINT_MOL_FLEXCHAIN'),
+		'MolFlexChainIaController',
+		'MolFlexChainIaController',
+		null,
 		null, null,
 		BNS.molChain
 );
@@ -1176,7 +1172,7 @@ Kekule.Editor.ActionComposerSetBondController = Kekule.Editor.createComposerIaCo
 		Kekule.Editor.ActionComposerSetBondControllerWedgeDown,
 		Kekule.Editor.ActionComposerSetBondControllerWedgeUpOrDown,
 		//Kekule.Editor.ActionComposerSetBondControllerDoubleEither,
-		Kekule.Editor.ActionComposerSetRepositoryMolChainController,
+		Kekule.Editor.ActionComposerSetRepositoryMolFlexChainController,
 		//Kekule.Editor.ActionComposerSetRepositoryMethaneController,
 		//Kekule.Editor.ActionComposerSetRepositorySubBondMarkController,
 		Kekule.Editor.ActionComposerSetRepositoryFischer1Controller,
@@ -1506,6 +1502,17 @@ Kekule.Editor.ActionComposerSetRepositoryRingAr5Controller = Kekule.Editor.creat
 	BNS.molRingAr5
 );
 
+Kekule.Editor.ActionComposerSetRepositoryMolFlexRingController = Kekule.Editor.createComposerIaControllerActionClass(
+	'Kekule.Editor.ActionComposerSetRepositoryMolFlexRingController',
+	Kekule.$L('ChemWidgetTexts.CAPTION_MOL_FLEXRING'),
+	Kekule.$L('ChemWidgetTexts.HINT_MOL_FLEXRING'),
+	'MolFlexRingIaController',
+	'MolFlexRingIaController',
+	null,
+	null, null,
+	BNS.molFlexRing
+);
+
 Kekule.Editor.ActionComposerSetRepositoryCyclopentaneHaworth1Controller = Kekule.Editor.createComposerIaControllerActionClass(
 	'Kekule.Editor.ActionComposerSetRepositoryCyclopentaneHaworth1Controller',
 	Kekule.$L('ChemWidgetTexts.CAPTION_REPOSITORY_CYCLOPENTANE_HARWORTH1'),
@@ -1593,8 +1600,9 @@ Kekule.Editor.ActionComposerSetRepositoryRingController = Kekule.Editor.createCo
 		Kekule.Editor.ActionComposerSetRepositoryRing6Controller,
 		Kekule.Editor.ActionComposerSetRepositoryRing7Controller,
 		Kekule.Editor.ActionComposerSetRepositoryRing8Controller,
+		Kekule.Editor.ActionComposerSetRepositoryMolFlexRingController,
 		Kekule.Editor.ActionComposerSetRepositoryRingAr6Controller,
-		Kekule.Editor.ActionComposerSetRepositoryRingAr5Controller,
+		//Kekule.Editor.ActionComposerSetRepositoryRingAr5Controller,
 		Kekule.Editor.ActionComposerSetRepositoryCyclopentaneHaworth1Controller,
 		Kekule.Editor.ActionComposerSetRepositoryCyclopentaneHaworth2Controller,
 		Kekule.Editor.ActionComposerSetRepositoryCyclohexaneHaworth1Controller,

@@ -3841,6 +3841,9 @@ Kekule.Editor.BasicManipulationIaController = Class.create(Kekule.Editor.BaseEdi
 		this.defineProp('enableResize', {'dataType': DataType.BOOL, 'serializable': false});
 		this.defineProp('enableRotate', {'dataType': DataType.BOOL, 'serializable': false});
 		this.defineProp('state', {'dataType': DataType.INT, 'serializable': false});
+		// the screen coord that start this manipulation, since startCoord may be changed during rotation, use this
+		// to get the inital coord of mouse down
+		this.defineProp('baseCoord', {'dataType': DataType.HASH, 'serializable': false});
 		this.defineProp('startCoord', {'dataType': DataType.HASH, 'serializable': false/*,
 		 'setter': function(value)
 		 {
@@ -4747,6 +4750,7 @@ Kekule.Editor.BasicManipulationIaController = Class.create(Kekule.Editor.BaseEdi
 	{
 		var objs = Kekule.ArrayUtils.toArray(objOrObjs);
 		this.setState(Kekule.Editor.BasicManipulationIaController.State.MANIPULATING);
+		this.setBaseCoord(startCoord);
 		this.setStartCoord(startCoord);
 		this.setRotateRefCoord(rotateRefCoord);
 		this.setIsManipulatingSelection(false);
@@ -4940,6 +4944,7 @@ Kekule.Editor.BasicManipulationIaController = Class.create(Kekule.Editor.BaseEdi
 			var coord = this._getEventMouseCoord(e);
 			if ((this.getState() === S.NORMAL)/* && (this.getEditor().getMouseLBtnDown()) */)
 			{
+				this.setBaseCoord(coord);
 				this.setStartCoord(coord);
 				var coordRegion = this.getEditor().getCoordRegionInSelectionMarker(coord);
 				var R = Kekule.Editor.BoxRegion;
