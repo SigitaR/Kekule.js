@@ -1999,6 +1999,13 @@ module.exports = function(Kekule){
 			// change scalar owners
 			for (var i = 0, l = this.getScalarAttribCount(); i < l; ++i)
 				this.getScalarAttribAt(i).setOwner(newOwner);
+			// change owner of children
+			for (var i = 0, l = this.getChildCount(); i < l; ++i)
+			{
+				var c = this.getChildAt(i);
+				if (c && c.setOwner)
+					c.setOwner(newOwner);
+			}
 		},
 		/**
 		 * Called after a new parent property is set. Descendants can override this method.
@@ -2609,12 +2616,13 @@ module.exports = function(Kekule){
 			this.parentChanged(this.getParent());
 		},
 
-		/** @private */
+		/** @private
 		ownerChanged: function($super, newOwner)
 		{
 			this.changeAllItemsOwner();
 			$super(newOwner);
 		},
+		*/
 		/** @private */
 		parentChanged: function($super, newParent)
 		{
@@ -3250,7 +3258,7 @@ module.exports = function(Kekule){
 			{
 				var obj = this.getOwnedObjAt(i);
 				if (obj.getId)
-					if (obj.getId() == id)
+					if (obj.getId() === id)
 						return obj;
 			}
 			return null;
@@ -3275,24 +3283,15 @@ module.exports = function(Kekule){
 				index = fromIndex;
 			else
 			{
+				/*
 				index = this._autoIdMap[prefix] || 0;
 				++index;
+				*/
+				index = 1;
 			}
 			var index = this._getAutoIdIndex(prefix, index);
 			this._autoIdMap[prefix] = index;
 			return prefix + Number(index).toString();
-
-			/*
-			var start = fromIndex || 0;
-			var i = start;
-			var result = prefix + Number(i).toString();
-			while (this.getObjById(result))  // repeat until no duplicated id
-			{
-				++i;
-				result = prefix + Number(i).toString();
-			}
-			return result;
-			*/
 		},
 
 		/** @private */
