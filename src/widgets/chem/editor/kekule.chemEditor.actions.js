@@ -63,6 +63,7 @@ Object.extend(Kekule.ChemWidget.ComponentWidgetNames, {
 	molRadicalDoublet: 'radicalDoublet',
 	molElectronLonePair: 'electronLonePair',
 
+	molChain: 'chain',
 	molRing3: 'ring3',
 	molRing4: 'ring4',
 	molRing5: 'ring5',
@@ -1143,6 +1144,22 @@ Kekule.Editor.ActionComposerSetRepositorySubBondMarkController = Kekule.Editor.c
 	BNS.molRepSubBondMark
 );
 
+Kekule.Editor.ActionComposerSetRepositoryMolChainController = Kekule.Editor.createComposerIaControllerActionClass(
+		'Kekule.Editor.ActionComposerSetRepositoryMolChainController',
+		Kekule.$L('ChemWidgetTexts.CAPTION_MOL_CHAIN'),
+		Kekule.$L('ChemWidgetTexts.HINT_MOL_CHAIN'),
+		'MolChainIaController',
+		'MolChainIaController',
+		/*
+		{
+			'ringAtomCount': 3,
+			'isAromatic': false
+		},
+		*/null,
+		null, null,
+		BNS.molChain
+);
+
 Kekule.Editor.ActionComposerSetBondController = Kekule.Editor.createComposerIaControllerActionClass(
 	'Kekule.Editor.ActionComposerSetBondController',
 	Kekule.$L('ChemWidgetTexts.CAPTION_MOL_BOND'), //Kekule.ChemWidgetTexts.CAPTION_MOL_BOND,
@@ -1158,8 +1175,9 @@ Kekule.Editor.ActionComposerSetBondController = Kekule.Editor.createComposerIaCo
 		Kekule.Editor.ActionComposerSetBondControllerWedgeUp,
 		Kekule.Editor.ActionComposerSetBondControllerWedgeDown,
 		Kekule.Editor.ActionComposerSetBondControllerWedgeUpOrDown,
-		Kekule.Editor.ActionComposerSetBondControllerDoubleEither,
-		Kekule.Editor.ActionComposerSetRepositoryMethaneController,
+		//Kekule.Editor.ActionComposerSetBondControllerDoubleEither,
+		Kekule.Editor.ActionComposerSetRepositoryMolChainController,
+		//Kekule.Editor.ActionComposerSetRepositoryMethaneController,
 		//Kekule.Editor.ActionComposerSetRepositorySubBondMarkController,
 		Kekule.Editor.ActionComposerSetRepositoryFischer1Controller,
 		Kekule.Editor.ActionComposerSetRepositoryFischer2Controller,

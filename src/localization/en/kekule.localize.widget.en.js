@@ -21,31 +21,31 @@ module.exports = function (Kekule) {
 		CAPTION_YES: 'Yes',
 		CAPTION_NO: 'No',
 		CAPTION_BROWSE_COLOR: 'Browse colors',
-
+	
 		HINT_BROWSE_COLOR: 'Browse more colors',
-
+	
 		S_COLOR_UNSET: '(unset)',
 		S_COLOR_DEFAULT: '(default)',
 		S_COLOR_MIXED: '(mixed)',
 		S_COLOR_TRANSPARENT: '(transparent)',
-
+	
 		S_OBJECT_UNSET: '(none)',
-
+	
 		// property editors
 		S_ITEMS: 'item(s)',
 		S_OBJECT: 'object',
 		S_VALUE_UNSET: '(Unset)',
-
+	
 		// General
 		CAPTION_MENU: 'Menu',
 		HINT_MENU: 'Open menu',
-
+	
 		// Object inspector
 		S_INSPECT_NONE: '(none)',
 		S_INSPECT_OBJECTS: '({0} objects)',
 		S_INSPECT_ID_OBJECT: '{0}: {1}',
 		S_INSPECT_ANONYMOUS_OBJECT: '({0})',
-
+	
 		CAPTION_TOGGLE_TEXTWRAP: 'Toggle text wrapping',
 		CAPTION_INC_TEXT_SIZE: 'Increase text size',
 		CAPTION_DEC_TEXT_SIZE: 'Decrease text size',
@@ -53,7 +53,7 @@ module.exports = function (Kekule) {
 		HINT_INC_TEXT_SIZE: 'Increase text size',
 		HINT_DEC_TEXT_SIZE: 'Decrease text size',
 		HINT_CHOOSE_FONT_FAMILY: 'Choose font family',
-
+	
 		// Page Navigator
 		CAPTION_FIRST_PAGE: 'First',
 		CAPTION_LAST_PAGE: 'Last',
@@ -64,7 +64,7 @@ module.exports = function (Kekule) {
 		HINT_PREV_PAGE: 'Previous page',
 		HINT_NEXT_PAGE: 'Next page',
 		HINT_CURR_PAGE: 'Current page',
-
+	
 		// Data table
 		MSG_RETRIEVING_DATA: 'Loading data...',
 		CAPTION_DATATABLE_EDIT: 'Edit',
@@ -73,17 +73,17 @@ module.exports = function (Kekule) {
 		HINT_DATATABLE_EDIT: 'Edit',
 		HINT_DATATABLE_DELETE: 'Delete',
 		HINT_DATATABLE_INSERT: 'Insert',
-
+	
 		// widget grid
 		CAPTION_ADD_CELL: '+',
 		HINT_ADD_CELL: 'Add new cell',
 		CAPTION_REMOVE_CELL: 'Remove',
 		HINT_REMOVE_CELL: 'Remove cell',
-
+	
 		// configurator
 		CAPTION_CONFIG: 'Settings...',
 		HINT_CONFIG: 'Change settings',
-
+	
 		// image type titles
 		TITLE_IMG_FORMAT_PNG: 'PNG format image',
 		TITLE_IMG_FORMAT_JPG: 'Jpeg format image',
@@ -121,9 +121,9 @@ module.exports = function (Kekule) {
 		CAPTION_SPACEFILL: 'Space Fill',
 		CAPTION_HIDEHYDROGENS: 'Show/hide hydrogens',
 		CAPTION_OPENEDITOR: 'Edit...',
-
+	
 		CAPTION_EDIT_OBJ: 'Edit',
-
+	
 		HINT_CLEAROBJS: 'Clear objects',
 		HINT_LOADFILE: 'Load from file',
 		HINT_LOADDATA: 'Load data',
@@ -147,7 +147,7 @@ module.exports = function (Kekule) {
 		HINT_SPACEFILL: 'Show molecule in space-fill style',
 		HINT_HIDEHYDROGENS: 'Show/hide hydrogen atoms in model',
 		HINT_OPENEDITOR: 'Open an editor to modify displayed object',
-
+	
 		// chem editor
 		CAPTION_NEWDOC: 'New',
 		CAPTION_UNDO: 'Undo',
@@ -181,7 +181,9 @@ module.exports = function (Kekule) {
 		CAPTION_TEXT_BLOCK: 'Text Block',
 		CAPTION_IMAGE_BLOCK: 'Image Block',
 		CAPTION_TEXT_IMAGE: 'Text and Image',
-
+	
+		CAPTION_MOL_CHAIN: 'Chain',
+	
 		CAPTION_REPOSITORY_RING: 'Rings',
 		CAPTION_REPOSITORY_RING_3: 'Cyclopropane',
 		CAPTION_REPOSITORY_RING_4: 'Cyclobutane',
@@ -197,16 +199,16 @@ module.exports = function (Kekule) {
 		CAPTION_REPOSITORY_CYCLOHEXANE_HARWORTH2: 'Cyclohexane Haworth 2',
 		CAPTION_REPOSITORY_CYCLOPENTANE_HARWORTH1: 'Cyclopentane Haworth 1',
 		CAPTION_REPOSITORY_CYCLOPENTANE_HARWORTH2: 'Cyclopentane Haworth 2',
-
+	
 		CAPTION_REPOSITORY_METHANE: 'Methane',
 		CAPTION_REPOSITORY_FISCHER1: 'Fischer projection 1',
 		CAPTION_REPOSITORY_FISCHER2: 'Fischer projection 2',
 		CAPTION_REPOSITORY_FISCHER3: 'Fischer projection 3',
 		CAPTION_REPOSITORY_SAWHORSE_STAGGERED: 'Sawhorse staggered',
 		CAPTION_REPOSITORY_SAWHORSE_ECLIPSED: 'Sawhorse eclipsed',
-
+	
 		CAPTION_REPOSITORY_SUBBOND_MARK: 'Substituent bond',
-
+	
 		CAPTION_REPOSITORY_ARROWLINE: 'Arrows & lines',
 		CAPTION_REPOSITORY_GLYPH: 'Glyphs',
 		CAPTION_REPOSITORY_GLYPH_LINE: 'Line',
@@ -216,18 +218,21 @@ module.exports = function (Kekule) {
 		CAPTION_REPOSITORY_GLYPH_DI_TRIANGLE_ARROW_LINE: 'Bidirectional triangle arrow line',
 		CAPTION_REPOSITORY_GLYPH_REV_ARROW_LINE: 'Reversible arrow line',
 		CAPTION_REPOSITORY_GLYPH_OPEN_ARROW_DILINE: 'Open arrow double line',
-
+	
 		CAPTION_REPOSITORY_HEAT_SYMBOL: 'Heat symbol',
 		CAPTION_REPOSITORY_ADD_SYMBOL: 'Add symbol',
-
+	
+		CAPTION_TEXT_FORMAT: 'Text format',
 		CAPTION_PICK_COLOR: 'Color',
+		CAPTION_FONTNAME: 'Font name',
+		CAPTION_FONTSIZE: 'Font size',
 		CAPTION_TEXT_DIRECTION: 'Text direction',
 		CAPTION_TEXT_DIRECTION_DEFAULT: 'Default',
 		CAPTION_TEXT_DIRECTION_LTR: 'Left to right',
 		CAPTION_TEXT_DIRECTION_RTL: 'Right to left',
 		CAPTION_TEXT_DIRECTION_TTB: 'Top to bottom',
 		CAPTION_TEXT_DIRECTION_BTT: 'Bottom to top',
-
+	
 		CAPTION_TEXT_HORIZONTAL_ALIGN: 'Text horizontal alignment',
 		CAPTION_TEXT_VERTICAL_ALIGN: 'Text vertical alignment',
 		CAPTION_TEXT_ALIGN_DEFAULT: 'Default',
@@ -238,7 +243,7 @@ module.exports = function (Kekule) {
 		CAPTION_TEXT_ALIGN_RIGHT: 'Right',
 		CAPTION_TEXT_ALIGN_TOP: 'Top',
 		CAPTION_TEXT_ALIGN_BOTTOM: 'Bottom',
-
+	
 		HINT_NEWDOC: 'Create new document',
 		HINT_UNDO: 'Undo',
 		HINT_REDO: 'Redo',
@@ -271,7 +276,9 @@ module.exports = function (Kekule) {
 		HINT_TEXT_BLOCK: 'Text block tool',
 		HINT_IMAGE_BLOCK: 'Image block tool',
 		HINT_TEXT_IMAGE: 'Text and image tool',
-
+	
+		HINT_MOL_CHAIN: 'Carbon chain',
+	
 		HINT_REPOSITORY_RING: 'Ring structures',
 		HINT_REPOSITORY_RING_3: 'Cyclopropane',
 		HINT_REPOSITORY_RING_4: 'Cyclobutane',
@@ -287,16 +294,16 @@ module.exports = function (Kekule) {
 		HINT_REPOSITORY_CYCLOHEXANE_HARWORTH2: 'Cyclohexane Haworth 2',
 		HINT_REPOSITORY_CYCLOPENTANE_HARWORTH1: 'Cyclopentane Haworth 1',
 		HINT_REPOSITORY_CYCLOPENTANE_HARWORTH2: 'Cyclopentane Haworth 2',
-
+	
 		HINT_REPOSITORY_SUBBOND_MARK: 'Substituent bond',
-
+	
 		HINT_REPOSITORY_METHANE: 'Methane',
 		HINT_REPOSITORY_FISCHER1: 'Fischer projection with one chiral center',
 		HINT_REPOSITORY_FISCHER2: 'Fischer projection with two chiral centers',
 		HINT_REPOSITORY_FISCHER3: 'Fischer projection with three chiral centers',
 		HINT_REPOSITORY_SAWHORSE_STAGGERED: 'Sawhorse staggered',
 		HINT_REPOSITORY_SAWHORSE_ECLIPSED: 'Sawhorse eclipsed',
-
+	
 		HINT_REPOSITORY_ARROWLINE: 'Arrows and lines',
 		HINT_REPOSITORY_GLYPH: 'Glyphs',
 		HINT_REPOSITORY_GLYPH_LINE: 'Line',
@@ -308,28 +315,31 @@ module.exports = function (Kekule) {
 		HINT_REPOSITORY_GLYPH_OPEN_ARROW_DILINE: 'Open arrow double line',
 		HINT_REPOSITORY_HEAT_SYMBOL: 'Heat symbol',
 		HINT_REPOSITORY_ADD_SYMBOL: 'Add symbol',
-
+	
+		HINT_TEXT_FORMAT: 'Set text format',
 		HINT_FONTNAME: 'Set font name',
 		HINT_FONTSIZE: 'Set font size',
 		HINT_PICK_COLOR: 'Select color',
 		HINT_TEXT_DIRECTION: 'Set text direction',
 		HINT_TEXT_HORIZONTAL_ALIGN: 'Set text horizontal alignment',
 		HINT_TEXT_VERTICAL_ALIGN: 'Set text vertical alignment',
-
+	
+		HINT_USE_ATOM_CUSTOM_COLOR: '(use atom custom color)',
+	
 		// load data dialog
 		CAPTION_LOADDATA_DIALOG: 'Load data',
 		CAPTION_DATA_FORMAT: 'Data format:',
 		CAPTION_DATA_SRC: 'Input or paste data below:',
 		CAPTION_LOADDATA_FROM_FILE: 'Load from file',
-
+	
 		// Choose file format dialog
 		CAPTION_CHOOSEFILEFORMAT: 'Choose file format',
 		CAPTION_SELECT_FORMAT: 'Select format:',
 		CAPTION_PREVIEW_FILE_CONTENT: 'Preview: ',
-
+	
 		// file name
 		S_DEF_SAVE_FILENAME: 'Unnamed',
-
+	
 		// Atom edit list
 		CAPTION_ATOMLIST_PERIODIC_TABLE: 'more...',
 		CAPTION_RGROUP: 'Sub group',
@@ -339,22 +349,22 @@ module.exports = function (Kekule) {
 		CAPTION_DUMMY_ATOM: 'Dummy Atom',
 		CAPTION_HETERO_ATOM: 'Hetero Atom',
 		CAPTION_ANY_ATOM: 'Any Atom',
-
+	
 		// Periodic table dialog in editor
 		CAPTION_PERIODIC_TABLE_DIALOG: 'Periodic table',
 		CAPTION_PERIODIC_TABLE_DIALOG_SEL_ELEM: 'Select element',
 		CAPTION_PERIODIC_TABLE_DIALOG_SEL_ELEMS: 'Select elements',
-
+	
 		// Text block editor
 		CAPTION_TEXTBLOCK_INIT: 'Enter text here',
-
+	
 		// Periodic table
 		LEGEND_CAPTION: 'Legend',
 		LEGEND_ELEM_SYMBOL: 'Symbol',
 		LEGEND_ELEM_NAME: 'name',
 		LEGEND_ATOMIC_NUM: 'atomic number',
 		LEGEND_ATOMIC_WEIGHT: 'atomic weight',
-
+	
 		// ChemObjInserter
 		CAPTION_2D: '2D',
 		CAPTION_3D: '3D',
@@ -368,10 +378,10 @@ module.exports = function (Kekule) {
 		PLACEHOLDER_HEIGHT: 'height',
 		HINT_AUTOSIZE: 'Whether graph size is determined by object automatically',
 		HINT_AUTOFIT: 'Whether object is zoomed to fullfill the whole graph',
-
-
+	
+	
 		//HINT_SHOWSIZEINFO: 'Whether show width and height of context',
-
+	
 		// misc
 		S_VALUE_DEFAULT: '(Default)'
 	});
@@ -415,7 +425,7 @@ module.exports = function (Kekule) {
 		INVALID_OR_EMPTY_IMAGE: 'Image is empty or invalidate'
 
 		//WIDGET_UNAVAILABLE_FOR_PLACEHOLDER: 'Widget of this placeholder is unavailable'
-	});
+		});
 
-	return Kekule
+		return Kekule
 }
