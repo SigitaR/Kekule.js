@@ -315,7 +315,7 @@ Kekule.Render.BoundInfoRecorder = Class.create(ObjectEx,
 		else
 		{
 			// since this is not a weak map, we can get its array properties
-			return map.values; // TODO: here we use the internal structure of map, should change in the future
+			return map.getValues();
 		}
 	},
 	/**
