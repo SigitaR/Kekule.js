@@ -548,6 +548,7 @@ module.exports = function(Kekule){
 		{
 			this.nonWeak = nonWeak;
 			this.map = new Kekule.MapEx(nonWeak);
+			this._level1Cache = {};  // a cache for quickly find level 1 map
 		},
 		/**
 		 * Free resources.
@@ -559,13 +560,23 @@ module.exports = function(Kekule){
 		/** @private */
 		getSecondLevelMap: function(key1, allowCreate)
 		{
-			var result = this.map.get(key1);
-			if ((!result) && allowCreate)
+			if (key1 && (key1 === this._level1Cache.key) && this._level1Cache.value)
 			{
-				result = new Kekule.MapEx(this.nonWeak);
-				this.map.set(key1, result);
+				return this._level1Cache.value;
 			}
-			return result;
+			else
+			{
+				var result = this.map.get(key1);
+				if ((!result) && allowCreate)
+				{
+					result = new Kekule.MapEx(this.nonWeak);
+					this.map.set(key1, result);
+				}
+				// set to cache
+				this._level1Cache.key = key1;
+				this._level1Cache.value = result;
+				return result;
+			}
 		},
 
 		/**
