@@ -440,7 +440,8 @@ module.exports = function(Kekule) {
 		setAbsBaseCoord: function(value, coordMode, allowCoordBorrow)
 		{
 			var coordPos = this.getCoordPos(coordMode);
-			var coord = Object.extend({}, value);
+			//var coord = Object.extend({}, value);
+			var coord = Kekule.CoordUtils.clone(value);
 			if (value && coordPos !== Kekule.Render.CoordPos.CENTER)
 			{
 				if (coordPos === Kekule.Render.CoordPos.CORNER_TL)  // now only handles 2D situation
@@ -698,7 +699,7 @@ module.exports = function(Kekule) {
 				if (box)
 				{
 					if (!result)
-						result = Object.extend({}, box);
+						result = Kekule.BoxUtils.clone(box); //Object.extend({}, box);
 					else
 						result = Kekule.BoxUtils.getContainerBox(result, box);
 				}
@@ -1744,7 +1745,7 @@ module.exports = function(Kekule) {
 					if (box)
 					{
 						if (!result)
-							result = Object.extend({}, box);
+							result = Kekule.BoxUtils.clone(box); // Object.extend({}, box);
 						else
 							result = Kekule.BoxUtils.getContainerBox(result, box);
 					}

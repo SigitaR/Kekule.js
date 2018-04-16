@@ -1639,7 +1639,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 				if (b)
 				{
 					if (!result)
-						result = Object.extend({}, b);
+						result = BU.clone(b); //Object.extend({}, b);
 					else
 						result = BU.getContainerBox(result, b);
 				}
