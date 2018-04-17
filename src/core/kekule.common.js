@@ -306,7 +306,7 @@ module.exports = function(Kekule){
 		/** @private */
 		CLASS_NAME: 'Kekule.MapEx',
 		/** @constructs */
-		initialize: function(nonWeak)
+		initialize: function(nonWeak, enableCache)
 		{
 			this.isWeak = !nonWeak;
 			if (!Kekule.MapEx._inited)
@@ -320,6 +320,8 @@ module.exports = function(Kekule){
 			}
 			else
 				this._implementation = new _implClass();
+			if (enableCache)
+				this._cache = {};  // cache enabled for performance
 			/*
 			if ((!Kekule.MapEx._implementation) || (!this.isWeak))  // use JavaScript implementation
 			if (!this._implementation)
@@ -340,6 +342,7 @@ module.exports = function(Kekule){
 			{
 				this._keys = null;
 				this._values = null;
+				this._cache = null;
 			}
 		},
 		/**
@@ -362,6 +365,10 @@ module.exports = function(Kekule){
 					this._values.push(value);
 				}
 			}
+			if (this._cache && this._cache.key === key)
+			{
+				this._cache.value = value;
+			}
 			//console.log(key, value, this.get(key));
 			return this;
 		},
@@ -373,10 +380,18 @@ module.exports = function(Kekule){
 		 */
 		get: function(key, defaultValue)
 		{
+			if (this._cache && this._cache.key === key)  // has cache, return directly
+				return this._cache.value;
+	
+			var result;
+			var found = false;
 			if (this._implementation)
 			{
-				var result = this._implementation.has(key)? this._implementation.get(key): defaultValue;
-				return result;
+				if (this._implementation.has(key))
+				{
+					result = this._implementation.get(key);
+					found = true;
+				}
 			}
 			else
 			{
@@ -384,8 +399,18 @@ module.exports = function(Kekule){
 				if (index >= 0)
 					return this._values[index];
 				else  // not found
-					return defaultValue;
+				{
+					result = this._values[index];
+					found = true;
+				}
 			}
+
+			if (found && this._cache)  // set cache
+			{
+				this._cache.key = key;
+				this._cache.value = result;
+			}
+			return found? result: defaultValue;
 		},
 		/**
 		 * Check whether a value has been associated to the key object.
@@ -408,6 +433,8 @@ module.exports = function(Kekule){
 		 */
 		remove: function(key)
 		{
+			if (this._cache && this._cache.key === key)  // clear cache
+				this._cache = {};
 			if (this._implementation)
 				return this._implementation['delete'](key);  // avoid IE regard delete as a reserved word
 			else
@@ -426,6 +453,8 @@ module.exports = function(Kekule){
 		 */
 		clear: function()
 		{
+			if (this._cache)  // clear cache
+				this._cache = {};
 			if (!this._implementation || this._debug)
 			{
 				this._keys = [];
@@ -544,23 +573,26 @@ module.exports = function(Kekule){
 		/** @private */
 		CLASS_NAME: 'Kekule.TwoTupleMapEx',
 		/** @constructs */
-		initialize: function(nonWeak)
+		initialize: function(nonWeak, enableCache)
 		{
 			this.nonWeak = nonWeak;
-			this.map = new Kekule.MapEx(nonWeak);
-			this._level1Cache = {};  // a cache for quickly find level 1 map
+			this.map = new Kekule.MapEx(nonWeak, enableCache);
+
+			if (enableCache)
+				this._level1Cache = {};  // a cache for quickly find level 1 map
 		},
 		/**
 		 * Free resources.
 		 */
 		finalize: function()
 		{
+			this._level1Cache = null;
 			this.map.finalize();
 		},
 		/** @private */
 		getSecondLevelMap: function(key1, allowCreate)
 		{
-			if (key1 && (key1 === this._level1Cache.key) && this._level1Cache.value)
+			if (key1 && this._level1Cache && (key1 === this._level1Cache.key) && this._level1Cache.value)
 			{
 				return this._level1Cache.value;
 			}
@@ -572,9 +604,11 @@ module.exports = function(Kekule){
 					result = new Kekule.MapEx(this.nonWeak);
 					this.map.set(key1, result);
 				}
+				/*
 				// set to cache
 				this._level1Cache.key = key1;
 				this._level1Cache.value = result;
+				*/
 				return result;
 			}
 		},
@@ -637,6 +671,8 @@ module.exports = function(Kekule){
 		clear: function()
 		{
 			this.map.clear();
+			if (this._level1Cache)
+				this._level1Cache = {};
 		}
 	});
 
@@ -1541,7 +1577,7 @@ module.exports = function(Kekule){
 					var result = this.getPropStoreFieldValue(mapName);
 					if (!result)
 					{
-						result = new Kekule.MapEx(true);
+						result = new Kekule.MapEx(true, true);  // enable cache
 						this.setPropStoreFieldValue(mapName, result);
 					}
 					return result;
@@ -1620,7 +1656,7 @@ module.exports = function(Kekule){
 					var result = this.getPropStoreFieldValue(mapName);
 					if (!result)
 					{
-						result = new Kekule.TwoTupleMapEx(true);
+						result = new Kekule.MapEx(true, true);  // enable cache
 						this.setPropStoreFieldValue(mapName, result);
 					}
 					return result;
