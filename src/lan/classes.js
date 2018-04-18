@@ -1732,108 +1732,102 @@ var /**
 * @event
 */
 ObjectEx = Class.create(
-  /** @lends ObjectEx# */
-  {
-    /**
-    * name of class
-    * @private
-    */
-    CLASS_NAME: "ObjectEx",
-    //* @private */
-    //PROPINFO_HASHKEY_PREFIX: '__$propInfo__',
-    /**
-    * @constructs
-    */
-    initialize: function() {
-      this._initPropertySystem();
-      this.initPropValues();
-      this._updateStatus = 0; // used internal in begin/endUpdate methods
-      this._childChangeEventSuppressed = false;
-      this._modifiedProps = []; // used internal in begin/endUpdate methods
-      this._finalized = false; // used internally, mark if the object has been freed
-      this.afterInitialization();
-    },
-    /**
-    * Do jobs after initialization, desendants can override this method
-    */
-    afterInitialization: function() {
-      // do nothing here
-    },
-    /**
-    *  Free resources used. Like finalize method in Java.
-    */
-    finalize: function() {
-      if (!this._finalized) {
-        // avoid call finalize multiple times on one object
-        this.doFinalize();
-        this.invokeEvent("finalize", { obj: this });
-        // free all event objects
-        this.setPropStoreFieldValue("eventHandlers", null);
-        this._finalized = true;
-      }
-    },
-    /**
-    *  Do actual work of finalize.
-    *  @private
-    */
-    doFinalize: function() {
-      // do nothing here
-    },
-    /**
-    * Define all essential properties in this method.
-    * You do not need to call $super here in descendant classes. Each class only need to
-    * declare his own properties.
-    */
-    initProperties: function() {
-      // define properties
-      this.defineProp("enablePropValueGetEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("enablePropValueSetEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("bubbleEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("suppressChildChangeEventInUpdating", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      // private, event storer
-      this.defineProp("eventHandlers", {
-        dataType: DataType.HASH,
-        serializable: false,
-        scope: Class.PropertyScope.PRIVATE,
-        getter: function() {
-          var r = this.getPropStoreFieldValue("eventHandlers");
-          if (!r) {
-            r = {};
-            this.setPropStoreFieldValue("eventHandlers", r);
-          }
-          return r;
-        }
-      });
-      /*
-      // define two events that related with properties
-      this.defineEvent('propValueGet');
-      this.defineEvent('propValueSet');
-      this.defineEvent('change');
-      */
-    },
-    /**
-    * Set initial value of properties.
-    * Desendants can override this method.
-    */
-    initPropValues: function() {
-      // do nothing here
-    },
+/** @lends ObjectEx# */
+{
+	/**
+	 * name of class
+	 * @private
+	 */
+	CLASS_NAME: 'ObjectEx',
+	//* @private */
+	//PROPINFO_HASHKEY_PREFIX: '__$propInfo__',
+  /** @private */
+  EVENT_HANDLERS_FIELD: '__$__k__eventhandlers__$__',
+	/**
+	 * @constructs
+	 */
+	initialize: function()
+	{
+		this._initPropertySystem();
+		this.initPropValues();
+		this._updateStatus = 0;  // used internal in begin/endUpdate methods
+    this._childChangeEventSuppressed = false;
+		this._modifiedProps = [];  // used internal in begin/endUpdate methods
+		this._finalized = false;  // used internally, mark if the object has been freed
+		this.afterInitialization();
+	},
+	/**
+	 * Do jobs after initialization, desendants can override this method
+	 */
+	afterInitialization: function()
+	{
+		// do nothing here
+	},
+	/**
+	 *  Free resources used. Like finalize method in Java.
+	 */
+	finalize: function()
+	{
+		if (!this._finalized)  // avoid call finalize multiple times on one object
+		{
+			this.doFinalize();
+			this.invokeEvent('finalize', {'obj': this});
+      // free all event objects
+      //this.setPropStoreFieldValue('eventHandlers', null);
+      this[this.EVENT_HANDLERS_FIELD] = null;
+			this._finalized = true;
+		}
+	},
+	/**
+	 *  Do actual work of finalize.
+	 *  @private
+	 */
+	doFinalize: function()
+	{
+		// do nothing here
+	},
+	/**
+	 * Define all essential properties in this method.
+	 * You do not need to call $super here in descendant classes. Each class only need to
+	 * declare his own properties.
+	 */
+	initProperties: function()
+	{
+		// define properties
+		this.defineProp('enablePropValueGetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		this.defineProp('enablePropValueSetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		this.defineProp('bubbleEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+    this.defineProp('suppressChildChangeEventInUpdating', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		// private, event storer
+		this.defineProp('eventHandlers', {'dataType': DataType.HASH, 'serializable': false, 'scope': Class.PropertyScope.PRIVATE, 'setter': null,
+			'getter': function()
+				{
+					//var r = this.getPropStoreFieldValue('eventHandlers');
+          var r = this[this.EVENT_HANDLERS_FIELD];  // direct access, for speed
+					if (!r)
+					{
+						r = {};
+						//this.setPropStoreFieldValue('eventHandlers', r);
+            this[this.EVENT_HANDLERS_FIELD] = r;
+					}
+					return r;
+				}
+		});
+		/*
+		// define two events that related with properties
+		this.defineEvent('propValueGet');
+		this.defineEvent('propValueSet');
+		this.defineEvent('change');
+		*/
+	},
+	/**
+	 * Set initial value of properties.
+   * Desendants can override this method.
+	 */
+	initPropValues: function()
+	{
+		// do nothing here
+	},
 
     /**
     * Get object level above this one.
@@ -2259,7 +2253,7 @@ getPropValue: function(propName)
      {
        for (var pname in propNames)
        {
-         if (propNames.hasOwnProperty(pname) && typeof(obj[pname]) !== 'function')
+         if (propNames.hasOwnProperty(pname) && typeof(propNames[pname]) !== 'function')
            result[pname] = this.getPropValue(pname);
        }
      }
@@ -2630,7 +2624,7 @@ return result;
   dispatchEvent: function(eventName, event)
   {
   	var handlerList = this.getEventHandlerList(eventName);
-  	if (this.isEventHandlerList(handlerList))
+  	//if (this.isEventHandlerList(handlerList))
   	{
 	  	for (var i = 0, l = handlerList.getLength(); i < l; ++i)
 	  	{
@@ -2641,15 +2635,14 @@ return result;
         }
 	  	}
   	}
-    else
+    if (!event.cancelBubble && this.getBubbleEvent())
     {
-      //console.log(eventName, this.getClassName(), handlerList._$flag_);
+      var higherObj = this.getHigherLevelObj();
+      if (higherObj && higherObj.relayEvent)
+      {
+        higherObj.relayEvent(eventName, event);
+      }
     }
-  	var higherObj = this.getHigherLevelObj();
-  	if (higherObj && higherObj.relayEvent && !event.cancelBubble && this.getBubbleEvent())
-  	{
-  		higherObj.relayEvent(eventName, event);
-  	}
   },
   /**
    * Stop propagation of event, disallow it to bubble to higher level.

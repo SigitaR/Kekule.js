@@ -1601,7 +1601,7 @@ module.exports = function(Kekule){
 			 */
 			getExtraProp2: function(obj1, obj2, propName)
 			{
-				var info = this.getExtraTwoTupleObjMap().get(obj1, obj2);
+				var info = (this.__$__k__extraTwoTupleObjMap__$__ || this.getExtraTwoTupleObjMap()).get(obj1, obj2);
 				if (info)
 					return propName? info[propName]: info;
 				else
@@ -1624,7 +1624,7 @@ module.exports = function(Kekule){
 				{
 					var info = {};
 					info[propName] = propValue;
-					this.getExtraTwoTupleObjMap().set(obj1, obj2, info);
+					(this.__$__k__extraTwoTupleObjMap__$__ || this.getExtraTwoTupleObjMap()).set(obj1, obj2, info);
 				}
 			},
 			/**
@@ -1658,6 +1658,7 @@ module.exports = function(Kekule){
 					{
 						result = new Kekule.MapEx(true, true);  // enable cache
 						this.setPropStoreFieldValue(mapName, result);
+						this.__$__k__extraTwoTupleObjMap__$__ = result;  // a field to store the map, for performance
 					}
 					return result;
 				}

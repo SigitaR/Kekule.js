@@ -125,7 +125,7 @@ ClassEx.extend(Kekule.ChemObject,
 		var result = [];
 		if (this.getAttachedMarkers)
 		{
-			var markers = this.getAttachedMarkers();
+			var markers = this.getAttachedMarkers() || [];
 			for (var i = 0, l = markers.length; i < l; ++i)
 			{
 				result = result.concat(markers[i].getCoordDependentObjects());
