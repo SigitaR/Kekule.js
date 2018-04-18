@@ -1703,7 +1703,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 	{
 		var chemObj = this.getChemObj();
 		if (chemObj && chemObj.getAttachedMarkers)
-			return [].concat(chemObj.getAttachedMarkers());
+			return [].concat(chemObj.getAttachedMarkers() || []);
 		else
 			return [];
 	},
