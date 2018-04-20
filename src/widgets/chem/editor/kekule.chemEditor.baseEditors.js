@@ -1315,7 +1315,8 @@ Kekule.Editor.BaseEditor = Class.create(Kekule.ChemWidget.ChemObjDisplayer,
 			// can merge
 			if (destItem.obj === targetItem.obj)
 			{
-				Kekule.ArrayUtils.pushUnique(destItem.propNames, targetItem.propNames);
+				//console.log(destItem.propNames, targetItem.propNames);
+				Kekule.ArrayUtils.pushUnique(destItem.propNames || [], targetItem.propNames || []);
 				return;
 			}
 		}
@@ -3662,7 +3663,26 @@ Kekule.Editor.BaseEditorIaController = Class.create(Kekule.Widget.InteractionCon
 			this.getEditor().zoomOut(-zoomLevel);
 	},
 
-
+	/** @private */
+	react_touchstart: function(e)
+	{
+		e.preventDefault();
+	},
+	/** @private */
+	react_touchend: function(e)
+	{
+		e.preventDefault();
+	},
+	/** @private */
+	react_touchcancel: function(e)
+	{
+		e.preventDefault();
+	},
+	/** @private */
+	react_touchmove: function(e)
+	{
+		e.preventDefault();
+	},
 	/** @private */
 	react_mousemove: function(e)
 	{
