@@ -1689,20 +1689,23 @@ extend: function(aClass, extension) {
 }
 };
 
-var /**
-* @class ObjectEx
-* @description Base class for property support.
-*
-* //@property {Bool} enablePropValueGetEvent Whether propValueGet event should
-* //  be fired when a property value is read.
-* @property {Bool} enablePropValueSetEvent Whether propValueSet event should
-*   be fired when a property value is written.
-* @property {Bool} bubbleEvent Whether event evoked can be relayed to higher level object.
-* @property {Bool} suppressChildChangeEventInUpdating If this property is true, when object is updating
-*   (calling obj.beginUpdate()), received "change" event will always not be bubbled. Instead, when updating
-*   finished (calling obj.endUpdate()), a "change" event of self (not child object) will be triggered with special
-*   property name '[chilren]'.
-*/
+var
+/**
+ * @class ObjectEx
+ * @description Base class for property support.
+ *
+ * //@property {Bool} enablePropValueGetEvent Whether propValueGet event should
+ * //  be fired when a property value is read.
+ * @property {Bool} enableObjectChangeEvent Whether event "change" will be automatically fired when the object is changed.
+ * @property {Bool} enablePropValueSetEvent Whether propValueSet event should
+ *   be fired when a property value is written.
+ * //  Note, if property {@link ObjectEx#enableObjectChangeEvent} is false, this event will never be fired.
+ * @property {Bool} bubbleEvent Whether event evoked can be relayed to higher level object.
+ * @property {Bool} suppressChildChangeEventInUpdating If this property is true, when object is updating
+ *   (calling obj.beginUpdate()), received "change" event will always not be bubbled. Instead, when updating
+ *   finished (calling obj.endUpdate()), a "change" event of self (not child object) will be triggered with special
+ *   property name '[chilren]'.
+ */
 /*
 * Invoked when a property value is gotten by its getter.
 *   event param of it has two fields: {propName, propValue}
@@ -1795,7 +1798,8 @@ ObjectEx = Class.create(
 	{
 		// define properties
 		this.defineProp('enablePropValueGetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
-		this.defineProp('enablePropValueSetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+    this.defineProp('enablePropValueSetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		this.defineProp('enableObjectChangeEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
 		this.defineProp('bubbleEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
     this.defineProp('suppressChildChangeEventInUpdating', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
 		// private, event storer
@@ -2383,37 +2387,40 @@ notifyPropSet: function(propName, newValue, doNotEvokeObjChange) {
   */
   //if (this.getEnablePropValueSetEvent()) // cause recursion
 
-  this.doPropChanged(propName, newValue);
-  if (this.getPropStoreFieldValue("enablePropValueSetEvent")) {
-    this.invokeEvent("propValueSet", {
-      propName: propName,
-      propValue: newValue
-    });
-  }
-  if (!doNotEvokeObjChange) {
-    this.objectChange([propName]);
-  }
-},
-/**
-* Called when object is changed.
-* @privte
-*/
-objectChange: function(modifiedPropNames) {
-  this.doObjectChange(modifiedPropNames);
-  this.invokeEvent("change", { changedPropNames: modifiedPropNames });
-},
-/** @private */
-doObjectChange: function() {
-  // do nothing
-},
-/**
-* Do some job when a property value is changed. Descendants can override this.
-* @param {String} propName Name of property.
-* @param {Variant} newValue New value of the property.
-*/
-doPropChanged: function() {
-  // do nothing here
-},
+		this.doPropChanged(propName, newValue);
+  	if (this.getPropStoreFieldValue('enablePropValueSetEvent'))
+  	{
+  		this.invokeEvent('propValueSet', {'propName': propName, 'propValue': newValue});
+  	}
+		if (!doNotEvokeObjChange)
+		{
+			this.objectChange([propName]);
+		}
+  },
+	/**
+	 * Called when object is changed.
+	 * @privte
+	 */
+	objectChange: function(modifiedPropNames)
+	{
+		this.doObjectChange(modifiedPropNames);
+    if (this.getEnableObjectChangeEvent())
+		  this.invokeEvent('change', {'changedPropNames': modifiedPropNames});
+	},
+	/** @private */
+	doObjectChange: function(modifiedPropNames)
+	{
+		// do nothing
+	},
+	/**
+   * Do some job when a property value is changed. Descendants can override this.
+   * @param {String} propName Name of property.
+   * @param {Variant} newValue New value of the property.
+   */
+	doPropChanged: function(propName, newValue)
+	{
+		// do nothing here
+	},
 
 // multi-broadcast support
 /**
@@ -2506,6 +2513,10 @@ return result;
   	var handlerList = this.getEventHandlerList(eventName);
   	if (this.isEventHandlerList(handlerList))
   	{
+      if (eventName === 'change')  // automatically turn on object change monitor
+      {
+        this.setEnableObjectChangeEvent(true);
+      }
   		return handlerList.add(listener, thisArg);
   	}
   	else

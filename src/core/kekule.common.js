@@ -2050,6 +2050,12 @@ module.exports = function(Kekule){
 				}
 			});
 		},
+		/** @ignore */
+		initPropValues: function($super)
+		{
+			$super();
+			this.setEnableObjectChangeEvent(true);
+		},
 
 		/** @private */
 		getHigherLevelObj: function()
