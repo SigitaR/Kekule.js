@@ -3858,7 +3858,7 @@ Kekule.Editor.BasicEraserIaController = Class.create(Kekule.Editor.BaseEditorIaC
 	/** @private */
 	react_mouseup: function(e)
 	{
-		if (this.isRemoving() && e.getButton() === Kekule.X.Event.MOUSE_BTN_LEFT)
+		if (e.getButton() === Kekule.X.Event.MOUSE_BTN_LEFT)
 		{
 			this.endRemove();
 			e.preventDefault();
@@ -5151,6 +5151,7 @@ Kekule.Editor.BasicManipulationIaController = Class.create(Kekule.Editor.BaseEdi
 				this.stopManipulate();
 				e.preventDefault();
 				this.setState(S.NORMAL);
+				e.preventDefault();
 			}
 		}
 		return true;
