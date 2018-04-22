@@ -146,12 +146,26 @@
   };
 
   /** @ignore */
-  Object.extend = function( destination, source, ignoreUnsetValue, ignoreEmptyString ) {
-    for (var property in source) {
-      var value = source[property];
-      if (ignoreUnsetValue && (value === undefined || value === null)) continue;
-      if (ignoreEmptyString && value === "") continue;
-      destination[property] = value;
+  Object.extend = function( destination, source, ignoreUnsetValue, ignoreEmptyString )
+  {
+    if (!ignoreUnsetValue && !ignoreEmptyString)  // normal situation, extract out for performance
+    {
+      for (var property in source)
+      {
+        destination[property] = source[property];
+      }
+    }
+    else
+    {
+      for (var property in source)
+      {
+        var value = source[property];
+        if (ignoreUnsetValue && ((value === undefined) || (value === null)))
+          continue;
+        if (ignoreEmptyString && (value === ''))
+          continue;
+        destination[property] = value;
+      }
     }
     return destination;
   };
@@ -2082,49 +2096,57 @@ ObjectEx = Class.create(
 		*/
     this.getPrototype()[getterName] = this.getPrototype()[doGetterName];
 
- 	return {
-    'getterName': getterName,
-    'doGetterName': doGetterName   // actual method to retrieve value
-  };
-},
-/** @private */
-createPropSetter: function(prop, setter) {
-  var propName = prop.name.toString();
-  var propNameBase = propName.upperFirst();
-  var setterName = "set" + propNameBase;
-  var doSetterName = "doSet" + propNameBase;
-  var actualSetter = this[doSetterName];
+  	return {
+      'getterName': getterName,
+      'doGetterName': doGetterName   // actual method to retrieve value
+    };
+  },
+  /** @private */
+  createPropSetter: function(prop, setter)
+  {
+		var propName = prop.name.toString();
+  	var propNameBase = propName.upperFirst();
+  	var setterName = 'set' + propNameBase;
+		var doSetterName = 'doSet' + propNameBase;
+  	var actualSetter = this[doSetterName];
 
-  if (!this[doSetterName]) {
-    actualSetter =
-    setter ||
-    new Function("value", 'this["' + prop.storeField + '"] = value;');
-    this.getPrototype()[doSetterName] = actualSetter; // doSetXXX, descendant can override this method
-  }
-  /*
-  this.getPrototype()[setterName] = new Function('value',
-  'return this.setPropValue("' + prop.name + '", value);'
-);
-*/
-this.getPrototype()[setterName] = function() {
-    var args = Array.prototype.slice.call(arguments);
-    var value = args[0];
-  
-    /*
-    args.unshift(prop.name);
-    return this.setPropValueX.apply(this, args);
-    */
-    this[doSetterName].apply(this, args);
-    this.notifyPropSet(propName, value);
-    /*
-    // NOTE: here we call actualSetter directly instead of call setPropValue
-    // because the former can pass multiple args inside
-    actualSetter.apply(this, args);
-    this.notifyPropSet(propName, value);
-    */
-  
-    return this;
-  };
+		if (!this[doSetterName])
+		{
+			actualSetter = setter || new Function('value', 'this["' + prop.storeField + '"] = value;');
+  		this.getPrototype()[doSetterName] = actualSetter; // doSetXXX, descendant can override this method
+		}
+  	/*
+  	this.getPrototype()[setterName] = new Function('value',
+  		'return this.setPropValue("' + prop.name + '", value);'
+  	);
+  	*/
+		this.getPrototype()[setterName] = function()
+			{
+        /*
+				var args = Array.prototype.slice.call(arguments);
+				var value = args[0];
+				*/
+        //var args = arguments;
+        var value = arguments[0];
+
+				/*
+				args.unshift(prop.name);
+				return this.setPropValueX.apply(this, args);
+				*/
+				this[doSetterName].apply(this, arguments);
+				this.notifyPropSet(propName, value);
+				/*
+				// NOTE: here we call actualSetter directly instead of call setPropValue
+				// because the former can pass multiple args inside
+				actualSetter.apply(this, args);
+				this.notifyPropSet(propName, value);
+				*/
+
+				return this;
+			};
+
+  	//this.getPrototype()[setterName] = actualSetter;
+  	//return doSetterName; // actualSetter; //this[setterName];
     return {
       'setterName': setterName,
       'doSetterName': doSetterName   // actual method to set value
@@ -2615,8 +2637,14 @@ return result;
       event.target = this;
     }
     if (!event.stopPropagation)
-      event.stopPropagation = function() { event.cancelBubble = true; };
-    this.dispatchEvent(eventName, event);
+      event.stopPropagation = this._eventCancelBubble;  // function() { event.cancelBubble = true; };
+  	this.dispatchEvent(eventName, event);
+  },
+  /** @private */
+  _eventCancelBubble: function()
+  {
+    // called with event.stopPropagation, so this here is the event object
+    this.cancelBubble = true;
   },
   /**
    * Relay event from child of this object.
