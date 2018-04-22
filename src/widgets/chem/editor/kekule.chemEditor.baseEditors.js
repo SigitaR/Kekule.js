@@ -1315,8 +1315,10 @@ Kekule.Editor.BaseEditor = Class.create(Kekule.ChemWidget.ChemObjDisplayer,
 			// can merge
 			if (destItem.obj === targetItem.obj)
 			{
-				//console.log(destItem.propNames, targetItem.propNames);
-				Kekule.ArrayUtils.pushUnique(destItem.propNames || [], targetItem.propNames || []);
+				if (!destItem.propNames)
+					destItem.propNames = [];
+				if (targetItem.propNames)
+					Kekule.ArrayUtils.pushUnique(destItem.propNames, targetItem.propNames);
 				return;
 			}
 		}
