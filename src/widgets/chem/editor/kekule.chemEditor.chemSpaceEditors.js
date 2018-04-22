@@ -1494,7 +1494,7 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 				 */
 				// If merge on only one node, other node position may also be changed
 				// e.g. add repository ring structure to another node
-				var needCreateNewMerge = (mergedObjCount <= 1); //false;
+				var needCreateNewMerge = (mergedObjCount <= 1); // false;
 				// check if need create new merge operation
 				if (!needCreateNewMerge)
 				{
@@ -1515,9 +1515,7 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 
 				if (needCreateNewMerge)
 				{
-					// console.log('reverse old merge', mergedObjCount);
-					this.reverseMergeOpers(this.getMergeOperationsInManipulating());
-
+					this.reverseMergeOpers();
 
 					// also need to adjust position of rest manipulatedObjs
 					var CU = Kekule.CoordUtils;
@@ -1529,20 +1527,23 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 						var coordTranslate = CU.substract(destCoord, currCoord);
 						// change all currInfo coord, and redo apply job
 						var needReApply = false;
-						for (var i = 0, l = manipulatedObjs.length; i < l; ++i)
+						if (coordTranslate.x || coordTranslate.y)  // if transalte coord is {0, 0} (often ocurrs in ring / chain ia controller, no need to adjust coords)
 						{
-							var obj = manipulatedObjs[i];
-							if (obj !== magneticMergeObjs[0])
+							for (var i = 0, l = manipulatedObjs.length; i < l; ++i)
 							{
-								var info = currManipulateInfoMap.get(obj);
-								if (info.screenCoord)
+								var obj = manipulatedObjs[i];
+								if (obj !== magneticMergeObjs[0])
 								{
-									var newCoord = CU.add(info.screenCoord, coordTranslate);
-									info.screenCoord = newCoord;
-									if (this._getMagneticNodeMergeDest(obj, newCoord, excludedObjs))  // move position can do another magnetic merge
-										needReApply = true;
+									var info = currManipulateInfoMap.get(obj);
+									if (info.screenCoord)
+									{
+										var newCoord = CU.add(info.screenCoord, coordTranslate);
+										info.screenCoord = newCoord;
+										if (this._getMagneticNodeMergeDest(obj, newCoord, excludedObjs))  // move position can do another magnetic merge
+											needReApply = true;
+									}
+									//this.applySingleManipulatingObjInfo(i, obj, info, endScreenCoord);
 								}
-								//this.applySingleManipulatingObjInfo(i, obj, info, endScreenCoord);
 							}
 						}
 						if (needReApply)
