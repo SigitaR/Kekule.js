@@ -2571,6 +2571,7 @@ Kekule.Editor.MolBondIaController = Class.create(Kekule.Editor.BasicMolManipulat
 						{
 							// then manipulate the bond
 							this.startDirectManipulate(null, this.getEndingObj(), coord);
+							this.moveManipulatedObjs(coord);  // force a "move" action, to apply possible merge
 						}
 						return true; // important
 					}
@@ -2600,6 +2601,7 @@ Kekule.Editor.MolBondIaController = Class.create(Kekule.Editor.BasicMolManipulat
 					if (endCoord)  // add successfully
 					{
 						this.startDirectManipulate(null, this.getEndingObj(), coord);
+						this.moveManipulatedObjs(coord);  // force a "move" action, to apply possible merge
 					}
 					e.preventDefault();
 					return true; // important
