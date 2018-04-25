@@ -1250,7 +1250,7 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 	},
 
 	/** @ignore */
-	getAllObjOperations: function($super)
+	getAllObjOperations: function($super, isTheFinalOperationToEditor)
 	{
 		/*
 		var moveOpers = this.getMoveOperations();
@@ -1266,8 +1266,11 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 		}
 		return result;
 		*/
+
+		console.log('getAllObjOperations', isTheFinalOperationToEditor, this.useMergePreview());
+		var mergeOpers;
 		// if use merge preview, we should do the actual merging when the manipulation is done
-		if (this.useMergePreview())
+		if (isTheFinalOperationToEditor && this.useMergePreview())
 		{
 			var previewOpers = this.getMergePreviewOperations();
 			if (previewOpers && previewOpers.length)
@@ -1292,11 +1295,14 @@ Kekule.Editor.BasicMolManipulationIaController = Class.create(Kekule.Editor.Basi
 				}
 				this.executeMergeOpers(opers);
 			}
+			mergeOpers = opers;  // this.getMergeOperations();
+		}
+		else
+		{
+			mergeOpers = this.getMergeOperationsInManipulating();
 		}
 
 		var result = $super() || [];
-		var mergeOpers = this.getMergeOperations();
-		//console.log('put operations', mergeOpers, this.getMergePreviewOperations());
 		if (mergeOpers && mergeOpers.length)
 			Kekule.ArrayUtils.pushUnique(result, mergeOpers);
 		return result;
@@ -2398,9 +2404,9 @@ Kekule.Editor.MolBondIaController = Class.create(Kekule.Editor.BasicMolManipulat
 		return $super();
 	},
 	/** @ignore */
-	getAllObjOperations: function($super)
+	getAllObjOperations: function($super, isTheFinalOperationToEditor)
 	{
-		var result = $super() || [];
+		var result = $super(isTheFinalOperationToEditor) || [];
 		var op = this.getAddBondOperation();
 		if (op)
 			result.unshift(op);
@@ -3310,9 +3316,9 @@ Kekule.Editor.RepositoryIaController = Class.create(Kekule.Editor.BasicMolManipu
 	},
 
 	/** @ignore */
-	getAllObjOperations: function($super)
+	getAllObjOperations: function($super, isTheFinalOperationToEditor)
 	{
-		var result = $super() || [];
+		var result = $super(isTheFinalOperationToEditor) || [];
 		var repOper = this.getAddRepObjsOper();
 		if (repOper)
 			result.unshift(repOper);
