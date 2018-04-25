@@ -89,7 +89,7 @@
  .K-Chem-Composer .K-Chem-Editor
 {
     background-color: #f4f4f4;
-    outline: 1px solid #ddd;
+    outline: none;
 }
  .K-Chem-Viewer-Menu-Button > .K-Pri-Glyph-Content{
     background-image:url(sprite/chemWidgetColor.png);
