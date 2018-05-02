@@ -178,8 +178,8 @@
     position: relative;
     left: 0;
     top: 0;
-    width: 1500px;
-    height: 1000px;
+    width: 1500px !important;
+    height: 1000px !important;
     overflow: hidden;
 }
  .K-Chem-Viewer{

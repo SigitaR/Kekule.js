@@ -602,8 +602,8 @@ Kekule.ChemWidget.ChemObjDisplayer = Class.create(Kekule.ChemWidget.AbstractWidg
 			Kekule.HtmlElementUtils.addClass(result, CCNS.DISPLAYER_DRAWCONTEXT_PARENT);
 			// IMPORTANT: force to fullfill the parent, otherwise draw context dimension calculation may have problem
 			//result.style.display = 'block';
-			result.style.width = '100%';
-			result.style.height = '100%';
+			// result.style.width = '100%';
+			// result.style.height = '100%';
 			// insert as first child
 			var root = this.getElement();
 			var currFirst = Kekule.DomUtils.getFirstChildElem(root);
