@@ -307,16 +307,62 @@
     }
   });
 
-  var FunctionUtils = {
-    argumentNames: function(f) {
-      var names = (
-        (f.toString().match(/^[\s(]*function[^(]*\(([^)]*)\)/) || [])[1] || ""
-      )
-      .replace(/\s+/g, "")
-      .split(",");
-      return names.length == 1 && !names[0] ? [] : names;
+if (!Object.getOwnPropertyNames)
+{
+  Object.getOwnPropertyNames = function(obj)
+  {
+    var result = [];
+    for (var k in obj)
+    {
+      if (obj.hasOwnProperty(k))
+        result.push(k);
     }
-  };
+    return result;
+  }
+}
+
+var FunctionUtils = {
+	argumentNames: function(f) {
+		var names = ((f.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/) || [])[1] || '').replace(/\s+/g, '').split(',');
+		return names.length == 1 && !names[0] ? [] : names;
+	}
+	/*
+	wrap: function(f, wrapper) {
+		var __method = f;
+		return function() {
+			return wrapper.apply(f, [__method.bind(f)].concat(__$A__(arguments)));
+		};
+	},
+	methodize: function(f) {
+		if (f._methodized) return f._methodized;
+		var __method = f;
+		return f._methodized = function() {
+			var a = Array.prototype.slice.call(arguments);
+			a.unshift(f);
+			return __method.apply(null, a);
+		};
+	},
+	bind: function(f) {
+		if (arguments.length < 2 && Object.isUndefined(arguments[0])) return f;
+		var __method = f, args = __$A__(arguments), object = args.shift();
+		return function() {
+			return __method.apply(object, args.concat(__$A__(arguments)));
+		};
+	},
+	delay: function(f) {
+		var __method = f, args = __$A__(arguments), timeout = args.shift();
+		return window.setTimeout(function() {
+			return __method.apply(__method, args);
+		}, timeout);
+	},
+	defer: function() {
+		var __method = f, args = __$A__(arguments), timeout = args.shift();
+		return window.setTimeout(function() {
+			return __method.apply(__method, args);
+		}, 10);
+	}
+	*/
+};
 
   /** @ignore */
   Object._extendSupportMethods(Function.prototype, {
@@ -1336,146 +1382,212 @@ var ClassEx = {
     var pos = className.lastIndexOf(".");
     return pos >= 0 ? className.substring(pos + 1) : className;
   },
-  /**
-  * Get prototype of aClass.
-  * @returns {Object}
-  */
-  getPrototype: function(aClass) {
-    return aClass.prototype;
-  },
-  /**
-  * Get super class if aClass.
-  * @returns {Object}
-  */
-  getSuperClass: function(aClass) {
-    return aClass.superclass || aClass.constructor.superclass;
-  },
-  /**
-  * Get prototype of super class.
-  * @return {Object} If there is no super class, null is returned.
-  */
-  getSuperClassPrototype: function(aClass) {
-    if (aClass.superclass) return aClass.superclass.prototype;
-    else return null;
-  },
-  /**
-  * Returns the class that is the super class of all input classes.
-  * @param {Object} class1
-  * @param {Object} class2
-  * @returns {Object}
-  * @private
-  */
-  _getCommonSuperClass2: function(class1, class2) {
-    var result = class1;
-    while (result && !ClassEx.isOrIsDescendantOf(class2, result)) {
-      result = ClassEx.getSuperClass(result);
-    }
-    return result;
-  },
-  /**
-  * Returns common super class of all objects.
-  * @param {Array} objects
-  * @returns {Class}
-  * @private
-  */
-  getCommonSuperClass: function(objects) {
-    if (!objects || !objects.length) return null;
-    var result = objects[0].getClass ? objects[0].getClass() : null;
-    if (!result) return null;
-    for (var i = 1, l = objects.length; i < l; ++i) {
-      var classObj = objects[i].getClass ? objects[i].getClass() : null;
-      if (!classObj) return null;
-      result = ClassEx._getCommonSuperClass2(result, classObj);
-    }
-    return result;
-  },
-  /**
-  * Check if aClass is a descendant of superClass.
-  * @param {Class} aClass
-  * @param {Class} superClass
-  * @returns {Bool}
-  */
-  isDescendantOf: function(aClass, superClass) {
-    var ancestor = ClassEx.getSuperClass(aClass);
-    while (ancestor && ancestor !== superClass) {
-      ancestor = ClassEx.getSuperClass(ancestor);
-    }
-    return !!ancestor;
-  },
-  /**
-  * Check if aClass is or is a descendant of superClass.
-  * @param {Class} aClass
-  * @param {Class} superClass
-  * @returns {Bool}
-  */
-  isOrIsDescendantOf: function(aClass, superClass) {
-    return (
-      aClass === superClass || ClassEx.isDescendantOf(aClass, superClass)
-    );
-  },
-  /**
-  * Check if aClass is or is a descendant of one memeber of superClasses.
-  * @param {Class} aClass
-  * @param {Array} superClasses
-  * @returns {Bool}
-  */
-  isOrIsDescendantOfClasses: function(aClass, superClasses) {
-    for (var i = 0, l = superClasses.length; i < l; ++i) {
-      if (ClassEx.isOrIsDescendantOf(aClass, superClasses[i])) return true;
-    }
-    return false;
-  },
-  /**
-  * Ensure property system of a class is properly initialized.
-  * @private
-  */
-  _ensurePropertySystem: function(
-    aClass // used internally for create property list
-  ) {
-    var proto = ClassEx.getPrototype(aClass);
-    if (!proto) return;
-    if (!proto.hasOwnProperty("properties")) {
-      // ensure super class's property list is created
-      var parent = ClassEx.getSuperClass(aClass);
-      if (parent) ClassEx._ensurePropertySystem(parent);
-      ClassEx._createPropertyList(aClass);
-      if (proto.hasOwnProperty("initProperties"))
-      // prevent call parent initProperties method
-      proto.initProperties.apply(proto);
-    }
-  },
+	/**
+	 * Get prototype of aClass.
+	 * @returns {Object}
+	 */
+	getPrototype: function(aClass)
+	{
+		return aClass.prototype;
+	},
+	/**
+	 * Get super class if aClass.
+	 * @returns {Object}
+	 */
+	getSuperClass: function(aClass)
+	{
+		return aClass.superclass || aClass.constructor.superclass;
+	},
+	/**
+	 * Get prototype of super class.
+	 * @return {Object} If there is no super class, null is returned.
+	 */
+	getSuperClassPrototype: function(aClass)
+	{
+		if (aClass.superclass)
+			return aClass.superclass.prototype;
+		else
+			return null;
+	},
+	/**
+	 * Returns the class that is the super class of all input classes.
+	 * @param {Object} class1
+	 * @param {Object} class2
+	 * @returns {Object}
+	 * @private
+	 */
+	_getCommonSuperClass2: function(class1, class2)
+	{
+		var result = class1;
+		while (result && (!ClassEx.isOrIsDescendantOf(class2, result)))
+		{
+			result = ClassEx.getSuperClass(result);
+		}
+		return result;
+	},
+	/**
+	 * Returns common super class of all objects.
+	 * @param {Array} objects
+	 * @returns {Class}
+	 * @private
+	 */
+	getCommonSuperClass: function(objects)
+	{
+		if (!objects || !objects.length)
+			return null;
+		var result = objects[0].getClass? objects[0].getClass(): null;
+		if (!result)
+			return null;
+		for (var i = 1, l = objects.length; i < l; ++i)
+		{
+			var classObj = objects[i].getClass? objects[i].getClass(): null;
+			if (!classObj)
+				return null;
+			result = ClassEx._getCommonSuperClass2(result, classObj);
+		}
+		return result;
+	},
+	/**
+	 * Check if aClass is a descendant of superClass.
+	 * @param {Class} aClass
+	 * @param {Class} superClass
+	 * @returns {Bool}
+	 */
+	isDescendantOf: function(aClass, superClass)
+	{
+		var ancestor = ClassEx.getSuperClass(aClass);
+		while (ancestor && (ancestor !== superClass))
+		{
+			ancestor = ClassEx.getSuperClass(ancestor);
+		}
+		return !!ancestor;
+	},
+	/**
+	 * Check if aClass is or is a descendant of superClass.
+	 * @param {Class} aClass
+	 * @param {Class} superClass
+	 * @returns {Bool}
+	 */
+	isOrIsDescendantOf: function(aClass, superClass)
+	{
+		return (aClass === superClass) || ClassEx.isDescendantOf(aClass, superClass);
+	},
+	/**
+	 * Check if aClass is or is a descendant of one memeber of superClasses.
+	 * @param {Class} aClass
+	 * @param {Array} superClasses
+	 * @returns {Bool}
+	 */
+	isOrIsDescendantOfClasses: function(aClass, superClasses)
+	{
+		for (var i = 0, l = superClasses.length; i < l; ++i)
+		{
+			if (ClassEx.isOrIsDescendantOf(aClass, superClasses[i]))
+				return true;
+		}
+		return false;
+	},
+	/**
+	 * Ensure property system of a class is properly initialized.
+	 * @private
+	 */
+	_ensurePropertySystem: function(aClass)  // used internally for create property list
+	{
+		var proto = ClassEx.getPrototype(aClass);
+		if (!proto)
+			return;
+		if (!proto.hasOwnProperty('properties'))
+		{
+			// ensure super class's property list is created
+			var parent = ClassEx.getSuperClass(aClass);
+			if (parent)
+				ClassEx._ensurePropertySystem(parent);
+			ClassEx._createPropertyList(aClass);
+			if (proto.hasOwnProperty('initProperties'))  // prevent call parent initProperties method
+				proto.initProperties.apply(proto);
+		}
+	},
+	/** @private */
+	_createPropertyList: function(aClass)  // used internal, create property list
+	{
+		if (!ClassEx.getPrototype(aClass).hasOwnProperty('properties'))
+			ClassEx.getPrototype(aClass).properties = new Class.PropList();
+	},
   /** @private */
-  _createPropertyList: function(
-    aClass // used internal, create property list
-  ) {
-    if (!ClassEx.getPrototype(aClass).hasOwnProperty("properties"))
-    ClassEx.getPrototype(aClass).properties = new Class.PropList();
-  },
-  /**
-  * Get own property list of this aClass, excluding inherited properties.
-  * @returns {Class.PropList}
-  */
-  getOwnPropList: function(aClass) {
+  _remapPropGetters: function(aClass, availableFieldNames)
+  {
     var proto = ClassEx.getPrototype(aClass);
-    if (proto) {
-      proto._initPropertySystem();
-      return proto.properties;
-    } else return null;
+    var fieldNames = availableFieldNames || Object.getOwnPropertyNames(proto);
+    // check if has own doGetXXX method that override the getter of super class
+    for (var i = 0, l = fieldNames.length; i < l; ++i)
+    {
+      var fieldName = fieldNames[i];
+      if (fieldName.length > 5 && fieldName.startsWith('doGet'))
+      {
+        var field = proto[fieldName];
+        if (typeof(field) === 'function')
+        {
+          var propName = fieldName.charAt(5).toLowerCase() + fieldName.substr(6);
+          if (proto.hasDirectProperty(propName))  // ignore properties defined in this class, only override properties from super classes
+            continue;
+          var propInfo = ClassEx.getPropInfo(aClass, propName);
+          if (propInfo && propInfo.getter)
+          {
+            //console.log('find prop getter override', i, propName, this.getClassName(), field);
+            var getterName = 'get' + propName.capitalizeFirst();
+            proto[getterName] = field;
+
+            if (__definePropertyAvailable__)  // redefine property
+            {
+              var descs = Object.extend({}, propInfo.descriptor);
+              descs['get'] = field;
+              try
+              {
+                Object.defineProperty(proto, propName, descs);
+              }
+              catch (e)
+              {
+                throw e;
+              }
+            }
+          }
+        }
+      }
+    }
   },
-  /**
-  * Get property list of this aClass, including inherited properties.
-  * @param {Class} aClass
-  * @returns {Class.PropList}
-  */
-  getAllPropList: function(aClass) {
-    var result;
-    var s = ClassEx.getSuperClassPrototype(aClass);
-    if (s) {
-      result = s.getAllPropList().clone();
-      result.appendList(ClassEx.getOwnPropList(aClass));
-    } else result = ClassEx.getOwnPropList(aClass);
-    return result;
-  },
+	/**
+	 * Get own property list of this aClass, excluding inherited properties.
+	 * @returns {Class.PropList}
+	 */
+	getOwnPropList: function(aClass)
+	{
+		var proto = ClassEx.getPrototype(aClass);
+		if (proto)
+		{
+			proto._initPropertySystem();
+			return proto.properties;
+		}
+		else
+			return null;
+	},
+	/**
+	 * Get property list of this aClass, including inherited properties.
+   * @param {Class} aClass
+	 * @returns {Class.PropList}
+	 */
+	getAllPropList: function(aClass)
+	{
+		var result;
+		var s = ClassEx.getSuperClassPrototype(aClass);
+		if (s)
+		{
+			result = s.getAllPropList().clone();
+			result.appendList(ClassEx.getOwnPropList(aClass));
+		}
+		else
+			result = ClassEx.getOwnPropList(aClass);
+		return result;
+	},
   /**
   * Get list of all properties of certain scopes in this class, including ones inherited from parent class.
   * @param {Class} aClass
@@ -1564,12 +1676,14 @@ defineProps: function(aClass, propDefItems) {
   }
 },
 /**
-* Get property info object from the property list of aClass.
-* @param {String} propName Name of property.
-* @return {Object} Property info object found. If there is no such a property, null is returned.
-*/
-getPropInfo: function(aClass, propName) {
-  return ClassEx.getPrototype(aClass).getPropInfo(propName);
+ * Get property info object from the property list of aClass.
+ * @param {String} propName Name of property.
+ * @param {Bool} ownPropertyOnly If true, only property defined in this class will be checked.
+ * @return {Object} Property info object found. If there is no such a property, null is returned.
+ */
+getPropInfo: function(aClass, propName, ownPropertyOnly)
+{
+  return ClassEx.getPrototype(aClass).getPropInfo(propName, ownPropertyOnly);
 },
 /**
 * Define an event in aClass. Event is actually a special property with type {@link Class.EventHandlerList}
@@ -1697,10 +1811,13 @@ extend: function(aClass, extension) {
       }
     }
 
-    proto[property] = value;
-  }
-  return aClass;
-}
+		    proto[property] = value;
+		}
+
+    ClassEx._remapPropGetters(aClass, properties);
+
+		return aClass;
+	}
 };
 
 var
@@ -1868,89 +1985,151 @@ ObjectEx = Class.create(
       // do nothing here
     },
 
-    /** @private */
-    _initPropertySystem: function() // used internally for create property list
+	/** @private */
+	_initPropertySystem: function()  // used internally for create property list
+	{
+		if (!this.getPrototype().hasOwnProperty('properties'))
+		{
+      //console.log('init prop system', this.getClassName());
+			// ensure super class's property list is created
+			var parent = this.getSuperClassPrototype();
+			if (parent)
+				parent._initPropertySystem.apply(parent);
+
+			this._createPropertyList();
+
+      this._remapPropGetters();  // override before self property list created, avoid override method of self
+
+			if (this.getPrototype().hasOwnProperty('initProperties'))  // prevent call parent initProperties method
+				this.getPrototype().initProperties.apply(this.getPrototype());
+		}
+	},
+	/** @private */
+	_createPropertyList: function()  // used internal, create property list
+	{
+		if (!this.getPrototype().hasOwnProperty('properties'))
+			this.getPrototype().properties = new Class.PropList();
+	},
+  /** @private */
+  _remapPropGetters: function()
+  {
+    ClassEx._remapPropGetters(this.getClass());
+    /*
+    var proto = this.getPrototype();
+    var fieldNames = Object.getOwnPropertyNames(proto);
+    // check if has own doGetXXX method that override the getter of super class
+    for (var i = 0, l = fieldNames.length; i < l; ++i)
     {
-      if (!this.getPrototype().hasOwnProperty("properties")) {
-        // ensure super class's property list is created
-        var parent = this.getSuperClassPrototype();
-        if (parent) parent._initPropertySystem.apply(parent);
-        this._createPropertyList();
-        if (this.getPrototype().hasOwnProperty("initProperties"))
-        // prevent call parent initProperties method
-        this.getPrototype().initProperties.apply(this.getPrototype());
+      var fieldName = fieldNames[i];
+      if (fieldName.length > 5 && fieldName.startsWith('doGet'))
+      {
+        var field = proto[fieldName];
+        if (typeof(field) === 'function')
+        {
+          var propName = fieldName.charAt(5).toLowerCase() + fieldName.substr(6);
+          if (this.hasDirectProperty(propName))  // ignore properties defined in this class, only override properties from super classes
+            continue;
+          var propInfo = this.getPropInfo(propName);
+          if (propInfo && propInfo.getter)
+          {
+            //console.log('find prop getter override', i, propName, this.getClassName(), field);
+            var getterName = 'get' + propName.capitalizeFirst();
+            proto[getterName] = field;
+
+
+            if (__definePropertyAvailable__)  // redefine property
+            {
+              var descs = Object.extend({}, propInfo.descriptor);
+              descs['get'] = field;
+              try
+              {
+                Object.defineProperty(proto, propName, descs);
+              }
+              catch (e)
+              {
+                throw e;
+              }
+            }
+          }
+        }
       }
-    },
-    /** @private */
-    _createPropertyList: function() // used internal, create property list
-    {
-      if (!this.getPrototype().hasOwnProperty("properties"))
-      this.getPrototype().properties = new Class.PropList();
-    },
-    /**
-    * Get class of this object.
-    * @return {Object} Class object.
+    }
     */
-    getClass: function() {
-      return this.constructor;
-    },
-    /**
-    * Get super class of this object.
-    * @return {Object} Class object.
-    */
-    getSuperClass: function() {
-      return this.getClass().superclass;
-    },
-    /**
-    * Get class name of this object, usually returns CLASS_NAME field.
-    * @return {String} Class name of object.
-    */
-    getClassName: function() {
-      return this.getPrototype().CLASS_NAME;
-    },
-    /**
+  },
+	/**
+	 * Get class of this object.
+	 * @return {Object} Class object.
+	 */
+	getClass: function()
+	{
+		return this.constructor;
+	},
+	/**
+	 * Get super class of this object.
+	 * @return {Object} Class object.
+	 */
+	getSuperClass: function()
+	{
+		return this.getClass().superclass;
+	},
+	 	/**
+ 	 * Get class name of this object, usually returns CLASS_NAME field.
+ 	 * @return {String} Class name of object.
+ 	 */
+ 	getClassName: function()
+ 	{
+ 		return this.getPrototype().CLASS_NAME;
+ 	},
+   /**
     * Get last part of class name of this object.
     * For example, 'Atom' will be returned by instance of class 'Kekule.Atom'.
     * @return {String} Last part of class name of object.
     */
-    getClassLocalName: function() {
-      return ClassEx.getClassLocalName(this.getClass());
-    },
-    /**
-    * Returns a name to be used in serialization. Descendants can override this.
-    * @return {String}
-    */
-    getSerializationName: function() {
-      return this.getClassName();
-    },
-    /**
-    * Get prototype of this object.
-    * @return {Object}
-    */
-    getPrototype: function() {
-      if (this.prototype) {
-        return this.prototype;
-      } else {
-        return this.constructor.prototype;
-      }
-    },
-    /**
-    * Get prototype of super class.
-    * @return {Object} If there is no super class, null is returned.
-    */
-    getSuperClassPrototype: function() {
-      if (this.constructor && this.constructor.superclass)
-      return this.constructor.superclass.prototype;
-      else return null;
-    },
-    /*
-    getPropList: function()
-    {
-    if (!this.getPrototype().properties)
-    this.getPrototype().properties = new PropList();
-    return this.getPrototype().properties;
-  },
-  */
+   getClassLocalName: function()
+   {
+     return ClassEx.getClassLocalName(this.getClass());
+   },
+ 	/**
+ 	 * Returns a name to be used in serialization. Descendants can override this.
+ 	 * @return {String}
+ 	 */
+ 	getSerializationName: function()
+   {
+     return this.getClassName();
+   },
+ 	/**
+ 	 * Get prototype of this object.
+ 	 * @return {Object}
+ 	 */
+ 	getPrototype: function()
+ 	{
+ 		if (this.prototype)
+ 		{
+ 			return this.prototype;
+ 		}
+ 		else
+ 		{
+ 			return this.constructor.prototype;
+ 		}
+ 	},
+ 	/**
+ 	 * Get prototype of super class.
+ 	 * @return {Object} If there is no super class, null is returned.
+ 	 */
+ 	getSuperClassPrototype: function()
+ 	{
+ 		if (this.constructor && this.constructor.superclass)
+ 			return this.constructor.superclass.prototype;
+ 		else
+ 			return null;
+ 	},
+ 	/*
+ 	getPropList: function()
+ 	{
+ 		if (!this.getPrototype().properties)
+ 			this.getPrototype().properties = new PropList();
+ 		return this.getPrototype().properties;
+ 	},
   /**
   * Get property list of this class. The properties inherited from parent class will not be returned.
   * @returns {Class.PropList}
@@ -2046,6 +2225,8 @@ ObjectEx = Class.create(
         descs.get = this[propGetterInfo.getterName];
       if (propSetterInfo)
         descs.set = this[propSetterInfo.setterName];
+
+      prop.descriptor = descs;
       try
       {
         Object.defineProperty(this, propName, descs);
@@ -2086,13 +2267,14 @@ ObjectEx = Class.create(
 				return this.getPropValue.apply(this, args);
 			};
 			*/
-		//this.getPrototype()[getterName] = actualGetter;
-
+		this.getPrototype()[getterName] = actualGetter;
+    /*
 		this.getPrototype()[getterName] = function()
 		{
 			//var args = Array.prototype.slice.call(arguments);
 			return this[doGetterName].apply(this, arguments);
 		};
+		*/
 
     //this.getPrototype()[getterName] = this.getPrototype()[doGetterName];
 
@@ -2162,28 +2344,42 @@ ObjectEx = Class.create(
   	return (this.getPropInfo(propName) != null);
   },
   /**
+   * Check if property is defined in current class (not inherited from super class).
+   * @param {String} propName Name of property.
+   * @return {Boolean}
+   */
+  hasDirectProperty: function(propName)
+  {
+    return (this.getPropInfo(propName, true) != null);
+  },
+  /**
    * Get property info object from the property list of current class.
    * @param {String} propName Name of property.
+   * @param {Bool} ownPropertyOnly If true, only property defined in this class will be checked.
    * @return {Object} Property info object found. If there is no such a property, null is returned.
    */
-  getPropInfo: function(propName)
+  getPropInfo: function(propName, ownPropertyOnly)
   {
-		var pname = propName || '';
-		var hashKey = this.getPropInfoHashKey(pname) || '';
-    var result = this[hashKey];
-    
-    if (!result)
+    var pname = propName || '';
+    var result;
+
+    if (!ownPropertyOnly)  // check hashkey for a quich search, but it should be disabled when ownPropertyOnly is true
     {
-      result = this.getOwnPropList().getPropInfo(pname);
-      if (!result)
-      {
-        // check parent
-        var parent = this.getSuperClassPrototype();
-        if (parent && parent.getPropInfo)
-          result = parent.getPropInfo(pname);
-        else
-          result = null;
-      }
+      var hashKey = this.getPropInfoHashKey(pname) || '';
+      result = this[hashKey];
+    }
+
+		if (!result)
+		{
+			result = this.getOwnPropList().getPropInfo(pname);
+			if (!result && !ownPropertyOnly)  // check parent
+			{
+				var parent = this.getSuperClassPrototype();
+				if (parent && parent.getPropInfo)
+					result = parent.getPropInfo(pname);
+				else
+					result = null;
+			}
 
 			/* need further test
 			// to accelerate property access, add a hash key here
@@ -2192,74 +2388,78 @@ ObjectEx = Class.create(
 		}
 		return result;
   },
-/**
-* Returns type constants of property.
-* @param {String} propName
-* @returns {String} Values from {@link DataType}.
-*/
-getPropertyDataType: function(propName) {
-  var info = this.getPropInfo(propName);
-  return info ? info.dataType : null;
-},
-/**
-* Returns if property is serializable.
-* @param {String} propName
-* @returns {Bool}
-*/
-isPropertySerializable: function(propName) {
-  var info = this.getPropInfo(propName);
-  var s = info && info.serializable;
-  return s === undefined || !!s;
-},
-/**
-* Get value of a property's store field. Use this method to get property value and avoid
-* the call of property getter.
-* Note: if the property has no store field, this method may returns null or undefined.
-* @param {String} propName Name of property.
-* @return {Variant} Value of property. If property does not exists, null is returned.
-*/
-getPropStoreFieldValue: function(propName) {
-  //var storeFieldName = this.getDefPropStoreFieldName(propName);
-  var defFieldName = ObjectEx._PROP_STOREFIELD_PREFIX + propName;
-  //if (this.hasOwnProperty(defFieldName))
-  return this[defFieldName];
-  /*
-  else
+	/**
+	 * Returns type constants of property.
+	 * @param {String} propName
+	 * @returns {String} Values from {@link DataType}.
+	 */
+	getPropertyDataType: function(propName)
+	{
+		var info = this.getPropInfo(propName);
+		return info? info.dataType: null;
+	},
+	/**
+	 * Returns if property is serializable.
+	 * @param {String} propName
+	 * @returns {Bool}
+	 */
+	isPropertySerializable: function(propName)
+	{
+		var info = this.getPropInfo(propName);
+		var s = info && info.serializable;
+		return (s === undefined) || (!!s);
+	},
+  /**
+   * Get value of a property's store field. Use this method to get property value and avoid
+   * the call of property getter.
+   * Note: if the property has no store field, this method may returns null or undefined.
+   * @param {String} propName Name of property.
+   * @return {Variant} Value of property. If property does not exists, null is returned.
+   */
+  getPropStoreFieldValue: function(propName)
   {
-    var info = this.getPropInfo(propName);
-    if (info.storeField)
-      return this[info.storeField];
+    //var storeFieldName = this.getDefPropStoreFieldName(propName);
+    var defFieldName = ObjectEx._PROP_STOREFIELD_PREFIX + propName;
+    //if (this.hasOwnProperty(defFieldName))
+    return this[defFieldName];
+    /*
     else
-      return undefined;
-  }
-  */
-},
-/**
-* Get value of a property.
-* @param {String} propName Name of property.
-* @return {Variant} Value of property. If property does not exists, null is returned.
-*/
-getPropValue: function(propName)
-{
-  var result;
-  var info = this.getPropInfo(propName);
-  if (info)
-  {
-    if (info.getter) // getter set
     {
-      var args = Array.prototype.slice.call(arguments);
-      args.shift();
-      //result = info.getter.apply(this);
-      result = this[info.getter].apply(this, args);
+      var info = this.getPropInfo(propName);
+      if (info.storeField)
+        return this[info.storeField];
+      else
+        return undefined;
     }
-    else
-      result = this[info.storeField];
-    //this.notifyPropGet(propName, result);
-    return result;
-  }
-  else
-    return null;
-},
+    */
+  },
+  /**
+   * Get value of a property.
+   * @param {String} propName Name of property.
+   * @return {Variant} Value of property. If property does not exists, null is returned.
+   */
+  getPropValue: function(propName)
+  {
+  	var result;
+  	var info = this.getPropInfo(propName);
+  	if (info)
+  	{
+	  	if (info.getter) // getter set
+			{
+				var args = Array.prototype.slice.call(arguments);
+				args.shift();
+				//result = info.getter.apply(this);
+				result = this[info.getter].apply(this, args);
+			}
+			else
+				result = this[info.storeField];
+	  	//this.notifyPropGet(propName, result);
+	  	return result;
+  	}
+  	else
+  		return null;
+  },
+
 	/**
     * Returns values of a series of properties.
     * @param {Variant} propNames Can be an array of property names, also can be an object while the
