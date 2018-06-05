@@ -250,8 +250,8 @@ Kekule.MolStereoUtils = {
 					}
 					else if (sideObjs.length === 2)
 					{
-						var index1 = sideObjs[0].getCanonicalizationIndex();
-						var index2 = sideObjs[1].getCanonicalizationIndex();
+						var index1 = sideObjs[0].getCanonicalizationIndex() || -1;  // cano index maybe undefined to explicit H atom
+						var index2 = sideObjs[1].getCanonicalizationIndex() || -1;
 						refNodes.push((index2 > index1)? sideObjs[1]: sideObjs[0]);
 					}
 				}
@@ -1004,7 +1004,9 @@ Kekule.MolStereoUtils = {
 
 		// Canonicalize first
 		if (!ignoreCanonicalization)
+		{
 			Kekule.canonicalizer.canonicalize(targetFragment, 'morganEx');
+		}
 
 		targetFragment.beginUpdate();
 		try
