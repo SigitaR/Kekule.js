@@ -328,7 +328,7 @@ module.exports = function (Kekule) {
 
 		HINT_USE_ATOM_CUSTOM_COLOR: '(use atom custom color)',
 
-		// load data dialog
+		// load / save data dialog
 		CAPTION_LOADDATA_DIALOG: 'Load data',
 		CAPTION_DATA_FORMAT: 'Data format:',
 		CAPTION_DATA_SRC: 'Input or paste data below:',
@@ -351,6 +351,10 @@ module.exports = function (Kekule) {
 		CAPTION_DUMMY_ATOM: 'Dummy Atom',
 		CAPTION_HETERO_ATOM: 'Hetero Atom',
 		CAPTION_ANY_ATOM: 'Any Atom',
+
+		// Structure node selector
+		CAPTION_ATOM: 'Atom',
+		CAPTION_SUBGROUP: 'Subgroup',
 
 		// Periodic table dialog in editor
 		CAPTION_PERIODIC_TABLE_DIALOG: 'Periodic table',
