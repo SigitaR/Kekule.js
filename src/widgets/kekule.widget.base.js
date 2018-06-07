@@ -4231,10 +4231,12 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 		// calc widget position
 		var ST = Kekule.Widget.ShowHideType;
 
-		// TODO: currently disable position recalculation of popup widget, since some popup widgets position is directly set
+		// DONE: currently disable position recalculation of popup widget, since some popup widgets position is directly set
 		// (e.g., atom setter in composer).
+		/*
 		if (showType !== ST.DROPDOWN)
 			return;
+		*/
 
 		var posInfo;
 
