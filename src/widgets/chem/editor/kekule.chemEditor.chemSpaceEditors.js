@@ -4808,6 +4808,10 @@ Kekule.Editor.FormulaIaController = Class.create(Kekule.Editor.BaseEditorIaContr
 		var text = this.getFormulaText(mol);
 		var setter = this.getTextSetterWidget(true);
 		setter._applied = false;
+
+		var parentElem = this.getEditor().getCoreElement();
+		setter.appendToElem(parentElem);  // ensure setter widget is a child of parentElem, since popup show may change the parent each time
+
 		var slabel = text || '';
 		//console.log(block, text, slabel);
 		setter.setValue(slabel);
@@ -5182,6 +5186,10 @@ Kekule.Editor.TextBlockIaController = Class.create(Kekule.Editor.ContentBlockIaC
 		var slabel = text || Kekule.$L('ChemWidgetTexts.CAPTION_TEXTBLOCK_INIT'); //Kekule.ChemWidgetTexts.CAPTION_TEXTBLOCK_INIT;
 		//console.log(block, text, slabel);
 		setter.setValue(slabel);
+
+		var parentElem = this.getEditor().getCoreElement();
+		setter.appendToElem(parentElem);  // ensure setter widget is a child of parentElem, since popup show may change the parent each time
+
 		//setter.setValue('hehr');
 		//setter.setIsPopup(true);
 		var style = setter.getElement().style;
