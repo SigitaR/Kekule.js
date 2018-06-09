@@ -388,6 +388,7 @@ Kekule.Widget.BaseWidget = Class.create(ObjectEx,
 		this._stateClassName = null;
 		this._isDismissed = false;
 		this._pendingHtmlClassNames = '';
+		this._enableShowHideEvents = true;
 		this._reactElemAttribMutationBind = this._reactElemAttribMutation.bind(this);
 
 		this.setPropStoreFieldValue('inheritEnabled', true);
@@ -1798,7 +1799,14 @@ Kekule.Widget.BaseWidget = Class.create(ObjectEx,
 		}
 		this.doWidgetShowStateChanged(isShown);
 		if (this._enableShowHideEvents)
-			this.invokeEvent('showStateChange', {'widget': this, 'isShown': isShown, 'isDismissed': this._isDismissed, 'byDomChange': byDomChange});
+		{
+			this.invokeEvent('showStateChange', {
+				'widget': this,
+				'isShown': isShown,
+				'isDismissed': this._isDismissed,
+				'byDomChange': byDomChange
+			});
+		}
 	},
 	/**
 	 * Descendant can override this method.
@@ -4320,9 +4328,9 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 		}
 
 		if (!isOnTopLayer)
-		{
 			this.moveElemToTopmostLayer(popupElem);
-		}
+		else  // even is elem is on topmost layer, still append it to tail
+			this.moveElemToTopmostLayer(popupElem, true);
 		if (posInfo)
 		{
 			// set style
@@ -4872,7 +4880,7 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 	 * @param {HTMLElement} elem
 	 * @private
 	 */
-	moveElemToTopmostLayer: function(elem)
+	moveElemToTopmostLayer: function(elem, doNotStoreOldInfo)
 	{
 		// store elem's old position info first
 		/*
@@ -4882,9 +4890,12 @@ Kekule.Widget.GlobalManager = Class.create(ObjectEx,
 		};
 		elem[this.INFO_FIELD] = oldInfo;
 		*/
-		var info = this._getElemStoredInfo(elem);
-		info.parentElem = elem.parentNode;
-		info.nextSibling = elem.nextSibling;
+		if (!doNotStoreOldInfo)
+		{
+			var info = this._getElemStoredInfo(elem);
+			info.parentElem = elem.parentNode;
+			info.nextSibling = elem.nextSibling;
+		}
 
 		var layer = this.getTopmostLayer(elem.ownerDocument);
 		layer.appendChild(elem);

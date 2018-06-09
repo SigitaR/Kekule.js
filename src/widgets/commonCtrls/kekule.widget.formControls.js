@@ -553,9 +553,9 @@ Kekule.Widget.ComboTextBox = Class.create(Kekule.Widget.FormWidget,
 	},
 
 	/** @ignore */
-	widgetShowStateChanged: function($super, isShown)
+	widgetShowStateChanged: function($super, isShown, byDomChange)
 	{
-		$super(isShown);
+		$super(isShown, byDomChange);
 		if (isShown)
 			this.adjustWidgetsSize();
 	},
@@ -853,9 +853,9 @@ Kekule.Widget.TextArea = Class.create(Kekule.Widget.FormWidget,
 	},
 
 	/** @ignore */
-	widgetShowStateChanged: function($super, isShown)
+	widgetShowStateChanged: function($super, isShown, byDomChange)
 	{
-		$super(isShown);
+		$super(isShown, byDomChange);
 		if (isShown)
 			this.adjustAutoSize();
 	},
