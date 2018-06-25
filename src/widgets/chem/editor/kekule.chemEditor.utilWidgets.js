@@ -511,6 +511,12 @@ Kekule.ChemWidget.StructureNodeSelectPanel = Class.create(Kekule.Widget.Panel,
  * @name Kekule.ChemWidget.StructureNodeSetter#valueChange
  * @event
  */
+/**
+ * Invoked when the new atom value has been selected from selection panel.
+ *   event param of it has field: {nodeClass, props, repositoryItem}
+ * @name Kekule.ChemWidget.StructureNodeSetter#valueSelect
+ * @event
+ */
 Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 /** @lends Kekule.ChemWidget.StructureNodeSetter# */
 {
@@ -520,6 +526,7 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 	initialize: function($super, parentOrElementOrDocument)
 	{
 		$super(parentOrElementOrDocument);
+		this._valueSetBySelectPanel = false;  // an internal flag, whether the value of node is set by click on select panel
 		/*
 		var self = this;
 		this.addEventListener('keyup', function(e){
@@ -551,7 +558,18 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 				this.nodesChanged(nodes);
 			}
 		});
-		this.defineProp('value', {'dataType': DataType.HASH, 'serializable': false, 'setter': null});
+		this.defineProp('value', {'dataType': DataType.HASH, 'serializable': false, 'setter': null,
+			'getter': function()
+			{
+				var result = this.getPropStoreFieldValue('value');
+				if (!result && !this._valueSetBySelectPanel)
+				{
+					var text = this.getNodeInputBox().getValue();
+					result = this._getValueFromDirectInputText(text);
+				}
+				return result;
+			}
+		});
 
 		this.defineProp('nodeInputBox', {
 			'dataType': 'Kekule.Widget.ButtonTextBox',
@@ -659,6 +677,7 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 		inputter.addClassName(CCNS.STRUCTURE_NODE_SETTER_INPUTBOX);
 		inputter.appendToElem(this.getCoreElement());
 		inputter.addEventListener('valueChange', function(e){
+			self._valueSetBySelectPanel = false;
 			e.stopPropagation();  // elimiate valueChange event of inputbox, avoid bubble to parent
 		});
 		inputter.addEventListener('keyup', function(e){  // response to enter keypress in input box
@@ -706,7 +725,9 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 			var newEventArg = Object.extend({}, e);
 			//self.invokeEvent('valueChange', {'value': e.value});
 			e.stopPropagation();
-			self.notifyValueChange(e.value);
+
+			self._valueSetBySelectPanel = true;
+			self.notifyValueChange(e.value, true);
 			// when value is set by button in selector panel, auto hide it in drop down mode
 			if (self.getUseDropDownSelectPanel())
 				panel.hide();
@@ -762,15 +783,9 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 		}
 		return null;
 	},
-	/**
-	 * Create new node modification information based on string in input text box directly.
-	 * @private
-	 */
-	_applyDirectInput: function()
+	/** @private */
+	_getValueFromDirectInputText: function(text)
 	{
-		var inputBox = this.getNodeInputBox();
-		var text = inputBox.getValue();
-
 		var nodeClass, modifiedProps, newNode, repItem, isUnknownPAtom;
 
 		var nonAtomInfo = this._getNonAtomInfo(text);
@@ -789,15 +804,15 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 			if (subGroupRepositoryItem)  // add subgroup
 			{
 				/*
-				var baseAtom = Kekule.ArrayUtils.toArray(this.getNodes())[0];
-				var repResult = subGroupRepositoryItem.createObjects(baseAtom) || {};
-				var repObjects = repResult.objects;
-				if (editor)
-				{
-					var transformParams = Kekule.Editor.RepositoryStructureUtils.calcRepObjInitialTransformParams(editor, subGroupRepositoryItem, repResult, baseAtom, null);
-					editor.transformCoordAndSizeOfObjects(repObjects, transformParams);
-				}
-				*/
+				 var baseAtom = Kekule.ArrayUtils.toArray(this.getNodes())[0];
+				 var repResult = subGroupRepositoryItem.createObjects(baseAtom) || {};
+				 var repObjects = repResult.objects;
+				 if (editor)
+				 {
+				 var transformParams = Kekule.Editor.RepositoryStructureUtils.calcRepObjInitialTransformParams(editor, subGroupRepositoryItem, repResult, baseAtom, null);
+				 editor.transformCoordAndSizeOfObjects(repObjects, transformParams);
+				 }
+				 */
 				newNode = subGroupRepositoryItem.getStructureFragment(); //repObjects[0];
 				nodeClass = newNode.getClass();
 			}
@@ -818,8 +833,20 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 			'nodeClass': nodeClass, 'props': modifiedProps, /*'node': newNode*/ 'repositoryItem': repItem, 'isUnknownPseudoatom': isUnknownPAtom
 		};
 
-		this.notifyValueChange(data);
+		return data;
+	},
+	/**
+	 * Create new node modification information based on string in input text box directly.
+	 * @private
+	 */
+	_applyDirectInput: function()
+	{
+		this._valueSetBySelectPanel = false;
+		var inputBox = this.getNodeInputBox();
+		var text = inputBox.getValue();
+		var data = this._getValueFromDirectInputText(text);
 
+		this.notifyValueChange(data);
 		inputBox.setIsDirty(false);
 	},
 
@@ -899,25 +926,28 @@ Kekule.ChemWidget.StructureNodeSetter = Class.create(Kekule.Widget.BaseWidget,
 		this.getNodeSelectPanel().setActiveNode(activeNode);
 		this.getNodeInputBox().setValue(currLabel);
 		this.getNodeInputBox().setIsDirty(false);
+		this.setPropStoreFieldValue('value', null);
+		this._valueSetBySelectPanel = false;
 	},
 
 	/**
 	 * Notify the new atom value has been setted.
 	 * @private
 	 */
-	notifyValueChange: function(newData)
+	notifyValueChange: function(newData, isSelectedFromPanel)
 	{
 		//console.log('value changed', newData);
 		this.setPropStoreFieldValue('value', newData);
-		this.invokeEvent('valueChange', {
-			'value': {
-				'nodeClass': newData.nodeClass,
-				'props': newData.props,
-				//'node': newData.node,
-				'repositoryItem': newData.repositoryItem,
-				'isUnknownPseudoatom': newData.isUnknownPseudoatom
-			}
-		});
+		var eventData = {
+			'nodeClass': newData.nodeClass,
+			'props': newData.props,
+			//'node': newData.node,
+			'repositoryItem': newData.repositoryItem,
+			'isUnknownPseudoatom': newData.isUnknownPseudoatom
+		};
+		if (isSelectedFromPanel)
+			this.invokeEvent('valueSelect', {'value': eventData});
+		this.invokeEvent('valueChange', {'value': eventData});
 	},
 
 	/**
