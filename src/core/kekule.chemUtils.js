@@ -501,7 +501,11 @@ module.exports = function (Kekule) {
 			var angles = Kekule.ChemStructureUtils._calcLinkedObj2DAnglesOfObj(baseObj, excludeObjs, allowCoordBorrow, includeAttachedMarkers, includeUnexposedSiblings);
 			if (avoidDirectionAngles)
 			{
-				angles = angles.concat(avoidDirectionAngles);
+				if (angles.length === 0 && avoidDirectionAngles.length === 1 && avoidDirectionAngles[0] === 0) {
+					angles = angles.concat(Math.PI);
+				} else {
+					angles = angles.concat(avoidDirectionAngles);
+				}
 				angles.sort();
 			}
 			var result = Kekule.ChemStructureUtils._getMostEmptyDirectionOfExistingAngles(angles);
