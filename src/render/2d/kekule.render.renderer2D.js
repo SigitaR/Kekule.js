@@ -360,6 +360,7 @@ Kekule.Render.Base2DRenderer = Class.create(Kekule.Render.CompositeRenderer,  //
 			this.setRenderConfigs(Kekule.Render.getRender2DConfigs());  // use default config
 		*/
 		//this.setRenderConfigs(null);
+		this.setPropStoreFieldValue('showImplicitHydrogens', false);
 		this.__$redirectContextDebug__ = false;  // special debug flag
 		this._richTextDrawer = null;
 	},
@@ -367,6 +368,7 @@ Kekule.Render.Base2DRenderer = Class.create(Kekule.Render.CompositeRenderer,  //
 	initProperties: function()
 	{
 		this.defineProp('richTextDrawerClass', {'dataType': DataType.CLASS, 'serializable': false});
+		this.defineProp('showImplicitHydrogens', {'dataType': DataType.BOOL});
 	},
 
 	/** @private */
@@ -2738,7 +2740,7 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 			return Kekule.Render.MoleculeDisplayType.SKELETAL
 		}
 		// Override to not show hydrogens
-		return Kekule.Render.HydrogenDisplayLevel.EXPLICIT;
+		return node.getOwner().showImplicitHydrogens ? Kekule.Render.HydrogenDisplayLevel.ALL : Kekule.Render.HydrogenDisplayLevel.EXPLICIT;
 	},
 
 	/**
