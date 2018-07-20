@@ -83,7 +83,7 @@ Kekule.MolStereoUtils = {
 				if (centerNode && centerCoord)
 				{
 					var connector = node.getConnectorTo(centerNode);
-					if (connector.getStereo)
+					if (connector && connector.getStereo)
 					{
 						var bondStereo = connector.getStereo();
 						var BS = Kekule.BondStereo;
