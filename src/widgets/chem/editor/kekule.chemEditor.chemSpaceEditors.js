@@ -70,7 +70,6 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 	initialize: function($super, parentOrElementOrDocument, chemObj, renderType, editorConfigs, screenSize)
 	{
 		this.setPropStoreFieldValue('allowCreateNewChild', true);
-		this.setPropStoreFieldValue('showImplicitHydrogens', false);
 		this.setPropStoreFieldValue('autoCreateNewStructFragment', true);
 		this._screenSize = screenSize;
 		$super(parentOrElementOrDocument, chemObj, renderType, editorConfigs);
@@ -100,7 +99,6 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 			}
 		});
 		this.defineProp('allowCreateNewChild', {'dataType': DataType.BOOL});
-		this.defineProp('showImplicitHydrogens', {'dataType': DataType.BOOL});
 	},
 
 	/**
@@ -121,7 +119,6 @@ Kekule.Editor.ChemSpaceEditor = Class.create(Kekule.Editor.BaseEditor,
 		// a special field to ensure use explict size of space
 		// rather than calc size based on child objects
 		result.useExplicitSpaceSize = true;
-		this.getChemObj().showImplicitHydrogens = this.getShowImplicitHydrogens();
 		return result;
 	},
 
@@ -855,10 +852,6 @@ Kekule.Editor.ChemSpaceEditor.Settings = Class.create(Kekule.Editor.BaseEditor.S
 		this.defineProp('allowCreateNewChild', {'dataType': DataType.BOOL, 'serializable': false,
 			'getter': function() { return this.getEditor().getAllowCreateNewChild(); },
 			'setter': function(value) { this.getEditor().setAllowCreateNewChild(value); }
-		});
-		this.defineProp('showImplicitHydrogens', {'dataType': DataType.BOOL, 'serializable': false,
-			'getter': function() { return this.getEditor().getShowImplicitHydrogens(); },
-			'setter': function(value) { this.getEditor().setShowImplicitHydrogens(value); }
 		});
 	}
 });

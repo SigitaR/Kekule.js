@@ -1063,21 +1063,6 @@ Kekule.Editor.Composer = Class.create(Kekule.ChemWidget.AbstractWidget,
 			}
 		});
 
-		this.defineProp('showImplicitHydrogens', {'dataType': DataType.BOOL,
-			'getter': function()
-			{
-				var ed = this.getEditor();
-				return (ed && ed.getShowImplicitHydrogens)? ed.getShowImplicitHydrogens(): null;
-			},
-			'setter': function(value)
-			{
-				var ed = this.getEditor();
-				if (ed.setShowImplicitHydrogens)
-					ed.setShowImplicitHydrogens(value);
-				return this;
-			}
-		});
-
 
 		// editor delegated property
 		// from ChemObjDisplayer
