@@ -63,7 +63,7 @@ ClassEx.extend(Kekule.ChemObject,
 	 */
 	getMarkerCount: function()
 	{
-		var markers = this.getPropStoreFieldValue('attachMarkers');
+		var markers = this.getPropStoreFieldValue('attachedMarkers');
 		return markers? markers.length: 0;
 	},
 	/**
@@ -73,7 +73,7 @@ ClassEx.extend(Kekule.ChemObject,
 	 */
 	getMarkerAt: function(index)
 	{
-		var markers = this.getPropStoreFieldValue('attachMarkers');
+		var markers = this.getPropStoreFieldValue('attachedMarkers');
 		return markers? markers[index]: null;
 	},
 	/**
@@ -123,12 +123,20 @@ ClassEx.extend(Kekule.ChemObject,
 		if (!result && canCreate)
 		{
 			result = new classType();
-			if (defProps)
+			result.beginUpdate();
+			try
 			{
-				result.setPropValues(defProps);
+				if (defProps)
+				{
+					result.setPropValues(defProps);
+				}
+				//console.log('fetch create on', this.getId());
+				this.appendMarker(result);
 			}
-			//console.log('fetch create on', this.getId());
-			this.appendMarker(result);
+			finally
+			{
+				result.endUpdate();
+			}
 		}
 		return result;
 	},
@@ -155,7 +163,7 @@ ClassEx.extend(Kekule.ChemObject,
 	 */
 	indexOfMarker: function(marker)
 	{
-		var markers = this.getPropStoreFieldValue('attachMarkers');
+		var markers = this.getPropStoreFieldValue('attachedMarkers');
 		return markers? markers.indexOf(marker): -1;
 	},
 	/**
@@ -189,11 +197,19 @@ ClassEx.extend(Kekule.ChemObject,
 		else
 		{
 			var result = this.getAttachedMarkers(true).push(marker);
-			if (marker.setOwner)
-				marker.setOwner(this.getOwner());
-			if (marker.setParent)
-				marker.setParent(this);
-			this._attachedMarkerAdded(marker);
+			marker.beginUpdate();
+			try
+			{
+				if (marker.setOwner)
+					marker.setOwner(this.getOwner());
+				if (marker.setParent)
+					marker.setParent(this);
+				this._attachedMarkerAdded(marker);
+			}
+			finally
+			{
+				marker.endUpdate();
+			}
 			this.notifyAttachedMarkersChanged();
 			return result;
 		}
