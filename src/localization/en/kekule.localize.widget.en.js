@@ -330,6 +330,7 @@ module.exports = function (Kekule) {
 
 		// load / save data dialog
 		CAPTION_LOADDATA_DIALOG: 'Load data',
+		CAPTION_SAVEDATA_DIALOG: 'Save data',
 		CAPTION_DATA_FORMAT: 'Data format:',
 		CAPTION_DATA_SRC: 'Input or paste data below:',
 		CAPTION_LOADDATA_FROM_FILE: 'Load from file',
