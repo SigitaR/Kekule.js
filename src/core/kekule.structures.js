@@ -2694,6 +2694,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 				node.setOwner(null);
 			if (node.setParent)
 				node.setParent(null);
+			node.setAttachedMarkers([]);
 			this.notifyNodesChanged();
 		}
 	},
