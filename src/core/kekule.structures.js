@@ -502,8 +502,7 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 		for (var i = 0, l = this.getLinkedConnectorCount(); i < l; ++i)
 		{
 			var connector = this.getLinkedConnectorAt(i);
-			if (!connector.isNormalConnectorToHydrogen || !connector.isNormalConnectorToHydrogen())
-				Kekule.ArrayUtils.pushUnique(result, connector);
+			Kekule.ArrayUtils.pushUnique(result, connector);
 		}
 		return result;
 	},
@@ -520,7 +519,7 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 			var objs = connector.getConnectedObjs();
 			for (var j = 0, k = objs.length; j < k; ++j)
 			{
-				if (objs[j] !== this && (!objs[j].isHydrogenAtom || !objs[j].isHydrogenAtom()))
+				if (objs[j] !== this)
 				{
 					Kekule.ArrayUtils.pushUnique(result, objs[j]);
 				}
@@ -2141,8 +2140,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 				for (var i = 0, l = this.getNodeCount(); i < l; ++i)
 				{
 					var node = this.getNodeAt(i);
-					if (!node.isHydrogenAtom || !node.isHydrogenAtom())
-						result.push(node);
+					result.push(node);
 				}
 				return result;
 			}
@@ -2158,8 +2156,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 				for (var i = 0, l = this.getConnectorCount(); i < l; ++i)
 				{
 					var conn = this.getConnectorAt(i);
-					if (!conn.isNormalConnectorToHydrogen || !conn.isNormalConnectorToHydrogen())
-						result.push(conn);
+					result.push(conn);
 				}
 				return result;
 			}
