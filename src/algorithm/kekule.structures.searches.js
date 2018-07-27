@@ -124,8 +124,8 @@ module.exports = function(Kekule){
 			var targetStartingNode = subStructure.getNonHydrogenNodes()[0]; //subStructure.getNodeAt(0);
 			var srcNodes = sourceMol.getNonHydrogenNodes(); //sourceMol.getNodes();
 			*/
-			var targetStartingNode = flattenedSubStruct.getNonHydrogenNodes()[0]; //subStructure.getNodeAt(0);
-			var srcNodes = flattenedSrcMol.getNonHydrogenNodes(); //sourceMol.getNodes();
+			var targetStartingNode = flattenedSubStruct.getNodes()[0]; //subStructure.getNodeAt(0);
+			var srcNodes = flattenedSrcMol.getNodes(); //sourceMol.getNodes();
 	
 			var srcNodeCount = srcNodes.length;
 			var srcIndex = 0;
@@ -246,8 +246,8 @@ module.exports = function(Kekule){
 				return false;
 			else
 			{
-				var targetConnectors = targetNode.getLinkedNonHydrogenConnectors(); // AU.clone(targetNode.getLinkedConnectors());
-				var srcConnectors = srcNode.getLinkedNonHydrogenConnectors(); //AU.clone(srcNode.getLinkedConnectors());
+				var targetConnectors = targetNode.getLinkedConnectors(); // AU.clone(targetNode.getLinkedConnectors());
+				var srcConnectors = srcNode.getLinkedConnectors(); //AU.clone(srcNode.getLinkedConnectors());
 	
 				var targetConnectorCount = targetConnectors.length;  //targetNode.getLinkedConnectorCount();
 				var srcConnectorCount = srcConnectors.length; //srcNode.getLinkedConnectorCount();
