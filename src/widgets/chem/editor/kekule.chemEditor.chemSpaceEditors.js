@@ -933,6 +933,16 @@ Kekule.Editor.BasicMolEraserIaController = Class.create(Kekule.Editor.BasicErase
 			}
 		}
 
+		if (objs.length) {
+			if (objs[0].getValue !== undefined) { // removing charge
+				var parentNode = obj.getParent();
+				parentNode.setRadical(undefined);
+				parentNode.setCharge(undefined);
+			}
+			// else if (obj.getElectronCount !== undefined) { // removing electron, for future reference
+			// }
+		}
+
 		//operGroup.execute();
 		editor.execOperation(operGroup);
 
