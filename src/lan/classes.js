@@ -146,17 +146,26 @@
   };
 
   /** @ignore */
-  Object.extend = function(
-    destination,
-    source,
-    ignoreUnsetValue,
-    ignoreEmptyString
-  ) {
-    for (var property in source) {
-      var value = source[property];
-      if (ignoreUnsetValue && (value === undefined || value === null)) continue;
-      if (ignoreEmptyString && value === "") continue;
-      destination[property] = value;
+  Object.extend = function( destination, source, ignoreUnsetValue, ignoreEmptyString )
+  {
+    if (!ignoreUnsetValue && !ignoreEmptyString)  // normal situation, extract out for performance
+    {
+      for (var property in source)
+      {
+        destination[property] = source[property];
+      }
+    }
+    else
+    {
+      for (var property in source)
+      {
+        var value = source[property];
+        if (ignoreUnsetValue && ((value === undefined) || (value === null)))
+          continue;
+        if (ignoreEmptyString && (value === ''))
+          continue;
+        destination[property] = value;
+      }
     }
     return destination;
   };
@@ -298,16 +307,62 @@
     }
   });
 
-  var FunctionUtils = {
-    argumentNames: function(f) {
-      var names = (
-        (f.toString().match(/^[\s(]*function[^(]*\(([^)]*)\)/) || [])[1] || ""
-      )
-      .replace(/\s+/g, "")
-      .split(",");
-      return names.length == 1 && !names[0] ? [] : names;
+if (!Object.getOwnPropertyNames)
+{
+  Object.getOwnPropertyNames = function(obj)
+  {
+    var result = [];
+    for (var k in obj)
+    {
+      if (obj.hasOwnProperty(k))
+        result.push(k);
     }
-  };
+    return result;
+  }
+}
+
+var FunctionUtils = {
+	argumentNames: function(f) {
+		var names = ((f.toString().match(/^[\s\(]*function[^(]*\(([^\)]*)\)/) || [])[1] || '').replace(/\s+/g, '').split(',');
+		return names.length == 1 && !names[0] ? [] : names;
+	}
+	/*
+	wrap: function(f, wrapper) {
+		var __method = f;
+		return function() {
+			return wrapper.apply(f, [__method.bind(f)].concat(__$A__(arguments)));
+		};
+	},
+	methodize: function(f) {
+		if (f._methodized) return f._methodized;
+		var __method = f;
+		return f._methodized = function() {
+			var a = Array.prototype.slice.call(arguments);
+			a.unshift(f);
+			return __method.apply(null, a);
+		};
+	},
+	bind: function(f) {
+		if (arguments.length < 2 && Object.isUndefined(arguments[0])) return f;
+		var __method = f, args = __$A__(arguments), object = args.shift();
+		return function() {
+			return __method.apply(object, args.concat(__$A__(arguments)));
+		};
+	},
+	delay: function(f) {
+		var __method = f, args = __$A__(arguments), timeout = args.shift();
+		return window.setTimeout(function() {
+			return __method.apply(__method, args);
+		}, timeout);
+	},
+	defer: function() {
+		var __method = f, args = __$A__(arguments), timeout = args.shift();
+		return window.setTimeout(function() {
+			return __method.apply(__method, args);
+		}, 10);
+	}
+	*/
+};
 
   /** @ignore */
   Object._extendSupportMethods(Function.prototype, {
@@ -897,382 +952,426 @@ Class.EventHandlerList = function() {
   this._$flag_ = "KekuleEventList";
 };
 Class.EventHandlerList.prototype = {
-  /**
-  * Add a handler to the list
-  * @param {Function} handler An event handler function.
-  * @param {Object} thisArg The handler should be bind to which scope when be invoked.
-  */
-  add: function(handler, thisArg) {
-    if (!thisArg) thisArg = null;
-    this.handlers.push({
-      thisArg: thisArg,
-      handler: handler
-    });
-  },
-  /**
-  * Remove an event handler from the list.
-  * @param {Function} handler Handler function to be removed.
-  * @param {Object} thisArg If this param is null, all functions same as handler
-  *   in the list will be removed regardless of whether their thisArg is setted.
-  */
-  remove: function(handler, thisArg) {
-    var indexes = this.indexesOf(handler, thisArg);
-    if (indexes.length > 0) {
-      for (var i = indexes.length - 1; i >= 0; --i) {
-        this.removeAt(indexes[i]);
-      }
-    }
-  },
-  /**
-  * Remove an event handler at a specified index.
-  * @param {Num} index
-  */
-  removeAt: function(index) {
-    for (var i = index, l = this.handlers.length; i < l; ++i)
-    this.handlers[i] = this.handlers[i + 1];
-    this.handlers.length = this.handlers.length - 1;
-  },
-  /**
-  * Clear all handlers in the list.
-  */
-  clear: function() {
-    this.handlers = [];
-  },
-  /**
-  * Get handler info object from the list.
-  * @param {Num} index
-  * @return {Object} Handler info object on index.
-  */
-  getHandlerInfo: function(index) {
-    return this.handlers[index];
-  },
-  /**
-  * Get the index of a handler specified with thisArg.
-  * @param {Function} handler
-  * @param {Object} thisArg
-  * @return {Num} Index of the handler. If nothing is found, returns -1.
-  */
-  indexOf: function(handler, thisArg) {
-    for (var i = 0, l = this.handlers.length; i < l; ++i) {
-      if (this.handlers[i].handler == handler) {
-        if (thisArg !== undefined && this.handlers[i].thisArg === thisArg)
-        return i;
-        else if (thisArg === undefined) return i;
-      }
-    }
-    return -1;
-  },
-  /**
-  * Seek out all indexes that match handler and thisArg.
-  * @param {Function} handler
-  * @param {Object} thisArg
-  * @return {Array} All found indexes. If nothing is found, an empty array will be returned.
-  */
-  indexesOf: function(handler, thisArg) {
-    var result = [];
-    for (var i = 0, l = this.handlers.length; i < l; ++i) {
-      if (this.handlers[i].handler == handler) {
-        if (thisArg !== undefined && this.handlers[i].thisArg === thisArg)
-        result.push(i);
-        else if (thisArg === undefined) result.push(i);
-      }
-    }
-    return result;
-  },
-  /**
-  * Get total count of registered handlers.
-  * @return {Num} Number of handlers.
-  */
-  getLength: function() {
-    return this.handlers.length;
-  }
+	/**
+	 * Add a handler to the list
+	 * @param {Function} handler An event handler function.
+	 * @param {Object} thisArg The handler should be bind to which scope when be invoked.
+	 */
+	add: function(handler, thisArg)
+	{
+		if (!thisArg)
+			thisArg = null;
+		this.handlers.push({
+			'thisArg': thisArg,
+			'handler': handler
+		});
+	},
+	/**
+	 * Remove an event handler from the list.
+	 * @param {Function} handler Handler function to be removed.
+	 * @param {Object} thisArg If this param is null, all functions same as handler
+	 *   in the list will be removed regardless of whether their thisArg is setted.
+	 */
+	remove: function(handler, thisArg)
+	{
+		var indexes = this.indexesOf(handler, thisArg);
+		if (indexes.length > 0)
+		{
+			for (var i = indexes.length - 1; i >= 0; --i)
+			{
+				this.removeAt(indexes[i]);
+			}
+		}
+	},
+	/**
+	 * Remove an event handler at a specified index.
+	 * @param {Num} index
+	 */
+	removeAt: function(index)
+	{
+		for (var i = index, l = this.handlers.length; i < l; ++i)
+			this.handlers[i] = this.handlers[i + 1];
+		this.handlers.length = this.handlers.length - 1;
+	},
+	/**
+	 * Clear all handlers in the list.
+	 */
+	clear: function()
+	{
+		this.handlers = [];
+	},
+	/**
+	 * Get handler info object from the list.
+	 * @param {Num} index
+	 * @return {Object} Handler info object on index.
+	 */
+	getHandlerInfo: function(index)
+	{
+		return this.handlers[index];
+	},
+	/**
+	 * Get the index of a handler specified with thisArg.
+	 * @param {Function} handler
+	 * @param {Object} thisArg
+	 * @return {Num} Index of the handler. If nothing is found, returns -1.
+	 */
+	indexOf: function(handler, thisArg)
+	{
+		for (var i = 0, l = this.handlers.length; i < l; ++i)
+		{
+			if (this.handlers[i].handler == handler)
+			{
+				if ((thisArg !== undefined) && (this.handlers[i].thisArg === thisArg))
+					return i;
+				else if (thisArg === undefined)
+					return i;
+			}
+		}
+		return -1;
+	},
+	/**
+	 * Seek out all indexes that match handler and thisArg.
+	 * @param {Function} handler
+	 * @param {Object} thisArg
+	 * @return {Array} All found indexes. If nothing is found, an empty array will be returned.
+	 */
+	indexesOf: function(handler, thisArg)
+	{
+		var result = [];
+		for (var i = 0, l = this.handlers.length; i < l; ++i)
+		{
+			if (this.handlers[i].handler == handler)
+			{
+				if ((thisArg !== undefined) && (this.handlers[i].thisArg === thisArg))
+					result.push(i);
+				else if (thisArg === undefined)
+					result.push(i);
+			}
+		}
+		return result;
+	},
+	/**
+	 * Get total count of registered handlers.
+	 * @return {Num} Number of handlers.
+	 */
+	getLength: function()
+	{
+		return this.handlers.length;
+	}
 };
 Class.EventHandlerList.constructor = Class.EventHandlerList;
 
 /**
-* Includes constants and mthods about data types.
-* @class
-*/
+ * Includes constants and mthods about data types.
+ * @class
+ */
 var DataType = {
-  /** Unknown data type, same as {@link DataType.VARIANT}. */
-  UNKNOWN: null,
-  /** Variant data type, same as {@link DataType.UNKNOWN}. */
-  VARIANT: null,
-  /** Basic data type, including string, number and boolean. */
-  PRIMARY: "primary",
-  /** type of JS const undefined */
-  UNDEFINED: "undefined",
-  /** Boolean. */
-  BOOL: "boolean",
-  /** Boolean. same as {@link DataType.BOOL} */
-  BOOLEAN: "boolean",
-  /** Number. */
-  NUMBER: "number",
-  /** Explicit integer number. */
-  INT: "int",
-  /** Explicit integer number, same as {@link DataType.INT} */
-  INTEGER: "int",
-  /** Explicit float number. */
-  FLOAT: "float",
-  /** String */
-  STRING: "string",
-  /** Array */
-  ARRAY: "array",
-  /** Function */
-  FUNCTION: "function",
-  /** Hash */
-  DATE: "date",
-  HASH: "object",
-  /** A normal JavaScript object. */
-  OBJECT: "object",
-  /** Object extended from {@link ObjectEx} */
-  OBJECTEX: "objectex",
-  /** A CLASS */
-  CLASS: "class",
+	/** Unknown data type, same as {@link DataType.VARIANT}. */
+	UNKNOWN: null,
+	/** Variant data type, same as {@link DataType.UNKNOWN}. */
+	VARIANT: null,
+	/** Basic data type, including string, number and boolean. */
+	PRIMARY: 'primary',
+	/** type of JS const undefined */
+	UNDEFINED: 'undefined',
+	/** Boolean. */
+	BOOL: 'boolean',
+	/** Boolean. same as {@link DataType.BOOL} */
+	BOOLEAN: 'boolean',
+	/** Number. */
+	NUMBER: 'number',
+	/** Explicit integer number. */
+	INT: 'int',
+	/** Explicit integer number, same as {@link DataType.INT} */
+	INTEGER: 'int',
+	/** Explicit float number. */
+	FLOAT: 'float',
+	/** String */
+	STRING: 'string',
+	/** Array */
+	ARRAY: 'array',
+	/** Function */
+	FUNCTION: 'function',
+	/** Hash */
+	DATE: 'date',
+	HASH: 'object',
+	/** A normal JavaScript object. */
+	OBJECT: 'object',
+	/** Object extended from {@link ObjectEx} */
+	OBJECTEX: 'objectex',
+	/** A CLASS */
+	CLASS: 'class',
 
-  /**
-  * Returns whether a type name is string, number or boolean
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isSimpleType: function(typeName) {
-    return (
-      typeName == DataType.STRING ||
-      typeName == DataType.NUMBER ||
-      typeName == DataType.INT ||
-      typeName == DataType.FLOAT ||
-      typeName == DataType.BOOL ||
-      typeName == DataType.UNDEFINED ||
-      typeName == DataType.PRIMARY
-    );
-  },
-  /**
-  * Returns whether a type name is object, array or objectex
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isComplexType: function(typeName) {
-    return !(
-      DataType.isSimpleType(typeName) || DataType.isFunctionType(typeName)
-    );
-  },
-  /**
-  * Returns whether a type name is function.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isFunctionType: function(typeName) {
-    return typeName == DataType.FUNCTION;
-  },
-  /**
-  * Returns whether a type name is object.
-  * NOTE: this function does not distinguish array.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isObjectType: function(typeName) {
-    return typeName == DataType.OBJECT;
-  },
-  /**
-  * Returns whether a type name is Date.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isDateType: function(typeName) {
-    return typeName == DataType.DATE;
-  },
-  /**
-  * Returns whether a type name is ObjectEx.
-  * @param {String} typeName
-  * @returns {Bool}
-  */
-  isObjectExType: function(typeName, Kekule) {
-    var result =
-    DataType.isComplexType(typeName) &&
-    !DataType.isObjectType(typeName) &&
-    !DataType.isDateType(typeName);
-    if (result) {
-      // check if the class exists
-      var classObj = ClassEx.findClass(typeName, undefined, Kekule);
-      result = classObj && ClassEx.isOrIsDescendantOf(classObj, ObjectEx);
-    }
-    return result;
-  },
-  /**
-  * Get value type and returns a data type string.
-  * @param {Variant} value
-  * @returns {String}
-  */
-  getType: function(value) {
-    var stype = typeof value;
-    switch (stype) {
-      // TODO: Some native classes such as RegExp are not checked yet
-      // basic types
-      case "undefined":
-      return DataType.UNDEFINED;
-      case "function":
-      return DataType.FUNCTION;
-      case "boolean":
-      return DataType.BOOL;
-      case "string":
-      return DataType.STRING;
-      case "number": {
-        if (Math.floor(value) == value) return DataType.INT;
-        else return DataType.FLOAT;
-      }
-      case "object": { // complex
-        if (this.isDateValue(value)) return DataType.DATE;
-        else if (DataType.isArrayValue(value)) return DataType.ARRAY;
-        else if (ClassEx.isClass(value)) return DataType.CLASS;
-        else if (DataType.isObjectExValue(value) && value.getClassName)
-        return value.getClassName();
-        else return DataType.OBJECT;
-      }
-      default:
-      return stype;
-    }
-  },
-  /**
-  * Check if value is number, string or bool.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isSimpleValue: function(value) {
-    return DataType.isSimpleType(typeof value);
-  },
-  /**
-  * Check if value is undefined
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isUndefinedValue: function(value) {
-    return typeof value == "undefined";
-  },
-  /**
-  * Check if value is null
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isNullValue: function(value) {
-    return value === null;
-  },
-  /**
-  * Check if value is a function.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isFunctionValue: function(value) {
-    return typeof value == "function";
-  },
-  /**
-  * Check if an value is an non-array Object.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isObjectValue: function(value) {
-    if (value)
-    // not null
-    return (
-      typeof value == "object" &&
-      !DataType.isArrayValue(value) &&
-      !DataType.isDateValue(value)
-    );
-    else return false;
-  },
-  /**
-  * Check if an value is an instance of Date.
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isDateValue: function(value) {
-    if (value)
-    return typeof value == "object" && value.getFullYear !== undefined;
-    return false;
-  },
-  /**
-  * Check if an value is an Array
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isArrayValue: function(value) {
-    if (value) return typeof value == "object" && value.length !== undefined;
-    else return false;
-  },
-  /**
-  * Check if an value is an instance of ObjectEx
-  * @param {Variant} value
-  * @returns {Bool}
-  * @private
-  */
-  isObjectExValue: function(value) {
-    return value instanceof ObjectEx;
-  },
-  /**
-  * Create an instance of typeName
-  * @param {String} typeName
-  * @returns {Variant}
-  */
-  createInstance: function(typeName, Kekule) {
-    switch (typeName) {
-      case DataType.UNDEFINED:
-      return undefined;
-      case DataType.DATE:
-      return new Date();
-      case DataType.ARRAY:
-      return new Array();
-      case DataType.OBJECT:
-      return new Object();
-      case DataType.FUNCTION:
-      return new Function();
-      default: // maybe a ObjectEx descendant
-      {
-        var classInstance = ClassEx.findClass(
-          typeName.capitalizeFirst(),
-          undefined,
-          Kekule
-        ); //eval(typeName.capitalizeFirst());
-        return new classInstance();
-      }
-    }
-  }
+	/**
+	 * Returns whether a type name is string, number or boolean
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isSimpleType: function(typeName)
+	{
+		return (typeName == DataType.STRING) || (typeName == DataType.NUMBER)
+			|| (typeName == DataType.INT) || (typeName == DataType.FLOAT)
+			|| (typeName == DataType.BOOL) || (typeName == DataType.UNDEFINED)
+			|| (typeName == DataType.PRIMARY);
+	},
+	/**
+	 * Returns whether a type name is object, array or objectex
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isComplexType: function(typeName)
+	{
+		return !(DataType.isSimpleType(typeName) || DataType.isFunctionType(typeName));
+	},
+	/**
+	 * Returns whether a type name is function.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isFunctionType: function(typeName)
+	{
+		return typeName == DataType.FUNCTION;
+	},
+	/**
+	 * Returns whether a type name is object.
+	 * NOTE: this function does not distinguish array.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isObjectType: function(typeName)
+	{
+		return typeName == DataType.OBJECT;
+	},
+	/**
+	 * Returns whether a type name is Date.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isDateType: function(typeName)
+	{
+		return typeName == DataType.DATE;
+	},
+	/**
+	 * Returns whether a type name is ObjectEx.
+	 * @param {String} typeName
+	 * @returns {Bool}
+	 */
+	isObjectExType: function(typeName)
+	{
+		var result = DataType.isComplexType(typeName) && (!DataType.isObjectType(typeName)) && (!DataType.isDateType(typeName));
+		if (result)  // check if the class exists
+		{
+			var classObj = ClassEx.findClass(typeName);
+			result = classObj && ClassEx.isOrIsDescendantOf(classObj, ObjectEx);
+		}
+		return result;
+	},
+	/**
+	 * Get value type and returns a data type string.
+	 * @param {Variant} value
+	 * @returns {String}
+	 */
+	getType: function(value)
+	{
+		var stype = typeof(value);
+		switch (stype)
+		{
+			// TODO: Some native classes such as RegExp are not checked yet
+			// basic types
+			case 'undefined': return DataType.UNDEFINED;
+			case 'function': return DataType.FUNCTION;
+			case 'boolean': return DataType.BOOL;
+			case 'string': return DataType.STRING;
+			case 'number':
+				{
+					if (Math.floor(value) == value)
+						return DataType.INT;
+					else
+						return DataType.FLOAT;
+				}
+			case 'object':  // complex
+				{
+					if (this.isDateValue(value))
+						return DataType.DATE;
+					else if (DataType.isArrayValue(value))
+						return DataType.ARRAY;
+					else if (ClassEx.isClass(value))
+						return DataType.CLASS;
+					else if (DataType.isObjectExValue(value) && value.getClassName)
+						return value.getClassName();
+					else
+						return DataType.OBJECT;
+				}
+			default:
+				return stype;
+		}
+	},
+	/**
+	 * Check if value is number, string or bool.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isSimpleValue: function(value)
+	{
+		return DataType.isSimpleType(typeof(value));
+	},
+	/**
+	 * Check if value is undefined
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isUndefinedValue: function(value)
+	{
+		return typeof(value) == 'undefined';
+	},
+	/**
+	 * Check if value is null
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isNullValue: function(value)
+	{
+		return (value === null);
+	},
+	/**
+	 * Check if value is a function.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isFunctionValue: function(value)
+	{
+		return typeof(value) == 'function';
+	},
+	/**
+	 * Check if an value is an non-array Object.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isObjectValue: function(value)
+	{
+		if (value)  // not null
+			return (typeof(value) == 'object') && (!DataType.isArrayValue(value)) && (!DataType.isDateValue(value));
+		else
+			return false;
+	},
+	/**
+	 * Check if an value is an instance of Date.
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isDateValue: function(value)
+	{
+		if (value)
+			return ((typeof(value) == 'object') && (value.getFullYear !== undefined));
+		return false;
+	},
+	/**
+	 * Check if an value is an Array
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isArrayValue: function(value)
+	{
+		if (value)
+			return ((typeof(value) == 'object') && (value.length !== undefined));
+		else
+			return false;
+	},
+	/**
+	 * Check if an value is an instance of ObjectEx
+	 * @param {Variant} value
+	 * @returns {Bool}
+	 * @private
+	 */
+	isObjectExValue: function(value)
+	{
+		return (value instanceof ObjectEx);
+	},
+	/**
+	 * Create an instance of typeName
+	 * @param {String} typeName
+	 * @returns {Variant}
+	 */
+	createInstance: function(typeName, Kekule)
+	{
+		switch (typeName)
+		{
+			case DataType.UNDEFINED: return undefined;
+			case DataType.DATE: return new Date();
+			case DataType.ARRAY: return new Array();
+			case DataType.OBJECT: return new Object();
+			case DataType.FUNCTION: return new Function();
+			default: // maybe a ObjectEx descendant
+				{
+					var classInstance = ClassEx.findClass(typeName.capitalizeFirst(), undefined, Kekule); //eval(typeName.capitalizeFirst());
+					return new classInstance();
+				}
+		}
+	}
 };
 
+// Wether has full support of Object/defineProperty method (IE8 has partial support and will return false)
+var __definePropertyAvailable__ = Object.defineProperty &&
+  (function () { try { Object.defineProperty({}, 'x', {}); return true; } catch (e) { return false; } } ())
+
+
 /**
-* A pack of utility methods to modify a existing class.
-* @class ClassEx
-*/
+ * A pack of utility methods to modify a existing class.
+ * @class ClassEx
+ */
 var ClassEx = {
-  /**
-  * Checks if a object is a class object.
-  * @param {Object} classObj
-  */
-  isClass: function(classObj) {
-    if (!classObj) return false;
-    return !!(classObj.superclass || classObj.subclasses);
-  },
-  /**
-  * Return class object from class name. If this class is not found, null will be returned.
-  * @param {String} className
-  * @returns {Class}
-  */
-  findClass: function(className, root, Kekule) {
-    return Object.getCascadeFieldValue(className, root || $jsRoot, Kekule);
-  },
-  /**
-  * Get class name of aClass, usually returns CLASS_NAME field of aClass
-  * @returns {String} Class name.
-  */
-  getClassName: function(aClass) {
-    if (aClass) return aClass.prototype.CLASS_NAME;
-    else return null;
-  },
+	/**
+	 * Checks if a object is a class object.
+	 * @param {Object} classObj
+	 */
+	isClass: function(classObj)
+	{
+		if (!classObj)
+			return false;
+		return !!(classObj.superclass || classObj.subclasses);
+	},
+	/**
+	 * Return class object from class name. If this class is not found, null will be returned.
+	 * @param {String} className
+	 * @returns {Class}
+	 */
+	findClass: function(className, root, Kekule)
+	{
+    /*
+		var result;
+		var cascadeNames = className.split('.');
+    if (!root)
+		  var root = $jsRoot;
+		for (var i = 0, l = cascadeNames.length; i < l; ++i)
+		{
+			result = root[cascadeNames[i]];
+			if (!result)
+				break;
+			else
+				root = result;
+		}
+		return result;
+		*/
+		return Object.getCascadeFieldValue(className, root || $jsRoot, Kekule);
+	},
+	/**
+	 * Get class name of aClass, usually returns CLASS_NAME field of aClass
+	 * @returns {String} Class name.
+	 */
+	getClassName: function(aClass)
+	{
+    if (aClass)
+		  return aClass.prototype.CLASS_NAME;
+    else
+      return null;
+	},
   /**
   * Get last part of class name of this class.
   * For example, 'Atom' will be returned by class 'Kekule.Atom'.
@@ -1283,146 +1382,212 @@ var ClassEx = {
     var pos = className.lastIndexOf(".");
     return pos >= 0 ? className.substring(pos + 1) : className;
   },
-  /**
-  * Get prototype of aClass.
-  * @returns {Object}
-  */
-  getPrototype: function(aClass) {
-    return aClass.prototype;
-  },
-  /**
-  * Get super class if aClass.
-  * @returns {Object}
-  */
-  getSuperClass: function(aClass) {
-    return aClass.superclass || aClass.constructor.superclass;
-  },
-  /**
-  * Get prototype of super class.
-  * @return {Object} If there is no super class, null is returned.
-  */
-  getSuperClassPrototype: function(aClass) {
-    if (aClass.superclass) return aClass.superclass.prototype;
-    else return null;
-  },
-  /**
-  * Returns the class that is the super class of all input classes.
-  * @param {Object} class1
-  * @param {Object} class2
-  * @returns {Object}
-  * @private
-  */
-  _getCommonSuperClass2: function(class1, class2) {
-    var result = class1;
-    while (result && !ClassEx.isOrIsDescendantOf(class2, result)) {
-      result = ClassEx.getSuperClass(result);
-    }
-    return result;
-  },
-  /**
-  * Returns common super class of all objects.
-  * @param {Array} objects
-  * @returns {Class}
-  * @private
-  */
-  getCommonSuperClass: function(objects) {
-    if (!objects || !objects.length) return null;
-    var result = objects[0].getClass ? objects[0].getClass() : null;
-    if (!result) return null;
-    for (var i = 1, l = objects.length; i < l; ++i) {
-      var classObj = objects[i].getClass ? objects[i].getClass() : null;
-      if (!classObj) return null;
-      result = ClassEx._getCommonSuperClass2(result, classObj);
-    }
-    return result;
-  },
-  /**
-  * Check if aClass is a descendant of superClass.
-  * @param {Class} aClass
-  * @param {Class} superClass
-  * @returns {Bool}
-  */
-  isDescendantOf: function(aClass, superClass) {
-    var ancestor = ClassEx.getSuperClass(aClass);
-    while (ancestor && ancestor !== superClass) {
-      ancestor = ClassEx.getSuperClass(ancestor);
-    }
-    return !!ancestor;
-  },
-  /**
-  * Check if aClass is or is a descendant of superClass.
-  * @param {Class} aClass
-  * @param {Class} superClass
-  * @returns {Bool}
-  */
-  isOrIsDescendantOf: function(aClass, superClass) {
-    return (
-      aClass === superClass || ClassEx.isDescendantOf(aClass, superClass)
-    );
-  },
-  /**
-  * Check if aClass is or is a descendant of one memeber of superClasses.
-  * @param {Class} aClass
-  * @param {Array} superClasses
-  * @returns {Bool}
-  */
-  isOrIsDescendantOfClasses: function(aClass, superClasses) {
-    for (var i = 0, l = superClasses.length; i < l; ++i) {
-      if (ClassEx.isOrIsDescendantOf(aClass, superClasses[i])) return true;
-    }
-    return false;
-  },
-  /**
-  * Ensure property system of a class is properly initialized.
-  * @private
-  */
-  _ensurePropertySystem: function(
-    aClass // used internally for create property list
-  ) {
-    var proto = ClassEx.getPrototype(aClass);
-    if (!proto) return;
-    if (!proto.hasOwnProperty("properties")) {
-      // ensure super class's property list is created
-      var parent = ClassEx.getSuperClass(aClass);
-      if (parent) ClassEx._ensurePropertySystem(parent);
-      ClassEx._createPropertyList(aClass);
-      if (proto.hasOwnProperty("initProperties"))
-      // prevent call parent initProperties method
-      proto.initProperties.apply(proto);
-    }
-  },
+	/**
+	 * Get prototype of aClass.
+	 * @returns {Object}
+	 */
+	getPrototype: function(aClass)
+	{
+		return aClass.prototype;
+	},
+	/**
+	 * Get super class if aClass.
+	 * @returns {Object}
+	 */
+	getSuperClass: function(aClass)
+	{
+		return aClass.superclass || aClass.constructor.superclass;
+	},
+	/**
+	 * Get prototype of super class.
+	 * @return {Object} If there is no super class, null is returned.
+	 */
+	getSuperClassPrototype: function(aClass)
+	{
+		if (aClass.superclass)
+			return aClass.superclass.prototype;
+		else
+			return null;
+	},
+	/**
+	 * Returns the class that is the super class of all input classes.
+	 * @param {Object} class1
+	 * @param {Object} class2
+	 * @returns {Object}
+	 * @private
+	 */
+	_getCommonSuperClass2: function(class1, class2)
+	{
+		var result = class1;
+		while (result && (!ClassEx.isOrIsDescendantOf(class2, result)))
+		{
+			result = ClassEx.getSuperClass(result);
+		}
+		return result;
+	},
+	/**
+	 * Returns common super class of all objects.
+	 * @param {Array} objects
+	 * @returns {Class}
+	 * @private
+	 */
+	getCommonSuperClass: function(objects)
+	{
+		if (!objects || !objects.length)
+			return null;
+		var result = objects[0].getClass? objects[0].getClass(): null;
+		if (!result)
+			return null;
+		for (var i = 1, l = objects.length; i < l; ++i)
+		{
+			var classObj = objects[i].getClass? objects[i].getClass(): null;
+			if (!classObj)
+				return null;
+			result = ClassEx._getCommonSuperClass2(result, classObj);
+		}
+		return result;
+	},
+	/**
+	 * Check if aClass is a descendant of superClass.
+	 * @param {Class} aClass
+	 * @param {Class} superClass
+	 * @returns {Bool}
+	 */
+	isDescendantOf: function(aClass, superClass)
+	{
+		var ancestor = ClassEx.getSuperClass(aClass);
+		while (ancestor && (ancestor !== superClass))
+		{
+			ancestor = ClassEx.getSuperClass(ancestor);
+		}
+		return !!ancestor;
+	},
+	/**
+	 * Check if aClass is or is a descendant of superClass.
+	 * @param {Class} aClass
+	 * @param {Class} superClass
+	 * @returns {Bool}
+	 */
+	isOrIsDescendantOf: function(aClass, superClass)
+	{
+		return (aClass === superClass) || ClassEx.isDescendantOf(aClass, superClass);
+	},
+	/**
+	 * Check if aClass is or is a descendant of one memeber of superClasses.
+	 * @param {Class} aClass
+	 * @param {Array} superClasses
+	 * @returns {Bool}
+	 */
+	isOrIsDescendantOfClasses: function(aClass, superClasses)
+	{
+		for (var i = 0, l = superClasses.length; i < l; ++i)
+		{
+			if (ClassEx.isOrIsDescendantOf(aClass, superClasses[i]))
+				return true;
+		}
+		return false;
+	},
+	/**
+	 * Ensure property system of a class is properly initialized.
+	 * @private
+	 */
+	_ensurePropertySystem: function(aClass)  // used internally for create property list
+	{
+		var proto = ClassEx.getPrototype(aClass);
+		if (!proto)
+			return;
+		if (!proto.hasOwnProperty('properties'))
+		{
+			// ensure super class's property list is created
+			var parent = ClassEx.getSuperClass(aClass);
+			if (parent)
+				ClassEx._ensurePropertySystem(parent);
+			ClassEx._createPropertyList(aClass);
+			if (proto.hasOwnProperty('initProperties'))  // prevent call parent initProperties method
+				proto.initProperties.apply(proto);
+		}
+	},
+	/** @private */
+	_createPropertyList: function(aClass)  // used internal, create property list
+	{
+		if (!ClassEx.getPrototype(aClass).hasOwnProperty('properties'))
+			ClassEx.getPrototype(aClass).properties = new Class.PropList();
+	},
   /** @private */
-  _createPropertyList: function(
-    aClass // used internal, create property list
-  ) {
-    if (!ClassEx.getPrototype(aClass).hasOwnProperty("properties"))
-    ClassEx.getPrototype(aClass).properties = new Class.PropList();
-  },
-  /**
-  * Get own property list of this aClass, excluding inherited properties.
-  * @returns {Class.PropList}
-  */
-  getOwnPropList: function(aClass) {
+  _remapPropGetters: function(aClass, availableFieldNames)
+  {
     var proto = ClassEx.getPrototype(aClass);
-    if (proto) {
-      proto._initPropertySystem();
-      return proto.properties;
-    } else return null;
+    var fieldNames = availableFieldNames || Object.getOwnPropertyNames(proto);
+    // check if has own doGetXXX method that override the getter of super class
+    for (var i = 0, l = fieldNames.length; i < l; ++i)
+    {
+      var fieldName = fieldNames[i];
+      if (fieldName.length > 5 && fieldName.startsWith('doGet'))
+      {
+        var field = proto[fieldName];
+        if (typeof(field) === 'function')
+        {
+          var propName = fieldName.charAt(5).toLowerCase() + fieldName.substr(6);
+          if (proto.hasDirectProperty(propName))  // ignore properties defined in this class, only override properties from super classes
+            continue;
+          var propInfo = ClassEx.getPropInfo(aClass, propName);
+          if (propInfo && propInfo.getter)
+          {
+            //console.log('find prop getter override', i, propName, this.getClassName(), field);
+            var getterName = 'get' + propName.capitalizeFirst();
+            proto[getterName] = field;
+
+            if (__definePropertyAvailable__)  // redefine property
+            {
+              var descs = Object.extend({}, propInfo.descriptor);
+              descs['get'] = field;
+              try
+              {
+                Object.defineProperty(proto, propName, descs);
+              }
+              catch (e)
+              {
+                throw e;
+              }
+            }
+          }
+        }
+      }
+    }
   },
-  /**
-  * Get property list of this aClass, including inherited properties.
-  * @param {Class} aClass
-  * @returns {Class.PropList}
-  */
-  getAllPropList: function(aClass) {
-    var result;
-    var s = ClassEx.getSuperClassPrototype(aClass);
-    if (s) {
-      result = s.getAllPropList().clone();
-      result.appendList(ClassEx.getOwnPropList(aClass));
-    } else result = ClassEx.getOwnPropList(aClass);
-    return result;
-  },
+	/**
+	 * Get own property list of this aClass, excluding inherited properties.
+	 * @returns {Class.PropList}
+	 */
+	getOwnPropList: function(aClass)
+	{
+		var proto = ClassEx.getPrototype(aClass);
+		if (proto)
+		{
+			proto._initPropertySystem();
+			return proto.properties;
+		}
+		else
+			return null;
+	},
+	/**
+	 * Get property list of this aClass, including inherited properties.
+   * @param {Class} aClass
+	 * @returns {Class.PropList}
+	 */
+	getAllPropList: function(aClass)
+	{
+		var result;
+		var s = ClassEx.getSuperClassPrototype(aClass);
+		if (s)
+		{
+			result = s.getAllPropList().clone();
+			result.appendList(ClassEx.getOwnPropList(aClass));
+		}
+		else
+			result = ClassEx.getOwnPropList(aClass);
+		return result;
+	},
   /**
   * Get list of all properties of certain scopes in this class, including ones inherited from parent class.
   * @param {Class} aClass
@@ -1511,12 +1676,14 @@ defineProps: function(aClass, propDefItems) {
   }
 },
 /**
-* Get property info object from the property list of aClass.
-* @param {String} propName Name of property.
-* @return {Object} Property info object found. If there is no such a property, null is returned.
-*/
-getPropInfo: function(aClass, propName) {
-  return ClassEx.getPrototype(aClass).getPropInfo(propName);
+ * Get property info object from the property list of aClass.
+ * @param {String} propName Name of property.
+ * @param {Bool} ownPropertyOnly If true, only property defined in this class will be checked.
+ * @return {Object} Property info object found. If there is no such a property, null is returned.
+ */
+getPropInfo: function(aClass, propName, ownPropertyOnly)
+{
+  return ClassEx.getPrototype(aClass).getPropInfo(propName, ownPropertyOnly);
 },
 /**
 * Define an event in aClass. Event is actually a special property with type {@link Class.EventHandlerList}
@@ -1644,26 +1811,32 @@ extend: function(aClass, extension) {
       }
     }
 
-    proto[property] = value;
-  }
-  return aClass;
-}
+		    proto[property] = value;
+		}
+
+    ClassEx._remapPropGetters(aClass, properties);
+
+		return aClass;
+	}
 };
 
-var /**
-* @class ObjectEx
-* @description Base class for property support.
-*
-* //@property {Bool} enablePropValueGetEvent Whether propValueGet event should
-* //  be fired when a property value is read.
-* @property {Bool} enablePropValueSetEvent Whether propValueSet event should
-*   be fired when a property value is written.
-* @property {Bool} bubbleEvent Whether event evoked can be relayed to higher level object.
-* @property {Bool} suppressChildChangeEventInUpdating If this property is true, when object is updating
-*   (calling obj.beginUpdate()), received "change" event will always not be bubbled. Instead, when updating
-*   finished (calling obj.endUpdate()), a "change" event of self (not child object) will be triggered with special
-*   property name '[chilren]'.
-*/
+var
+/**
+ * @class ObjectEx
+ * @description Base class for property support.
+ *
+ * //@property {Bool} enablePropValueGetEvent Whether propValueGet event should
+ * //  be fired when a property value is read.
+ * @property {Bool} enableObjectChangeEvent Whether event "change" will be automatically fired when the object is changed.
+ * @property {Bool} enablePropValueSetEvent Whether propValueSet event should
+ *   be fired when a property value is written.
+ * //  Note, if property {@link ObjectEx#enableObjectChangeEvent} is false, this event will never be fired.
+ * @property {Bool} bubbleEvent Whether event evoked can be relayed to higher level object.
+ * @property {Bool} suppressChildChangeEventInUpdating If this property is true, when object is updating
+ *   (calling obj.beginUpdate()), received "change" event will always not be bubbled. Instead, when updating
+ *   finished (calling obj.endUpdate()), a "change" event of self (not child object) will be triggered with special
+ *   property name '[chilren]'.
+ */
 /*
 * Invoked when a property value is gotten by its getter.
 *   event param of it has two fields: {propName, propValue}
@@ -1693,108 +1866,103 @@ var /**
 * @event
 */
 ObjectEx = Class.create(
-  /** @lends ObjectEx# */
-  {
-    /**
-    * name of class
-    * @private
-    */
-    CLASS_NAME: "ObjectEx",
-    //* @private */
-    //PROPINFO_HASHKEY_PREFIX: '__$propInfo__',
-    /**
-    * @constructs
-    */
-    initialize: function() {
-      this._initPropertySystem();
-      this.initPropValues();
-      this._updateStatus = 0; // used internal in begin/endUpdate methods
-      this._childChangeEventSuppressed = false;
-      this._modifiedProps = []; // used internal in begin/endUpdate methods
-      this._finalized = false; // used internally, mark if the object has been freed
-      this.afterInitialization();
-    },
-    /**
-    * Do jobs after initialization, desendants can override this method
-    */
-    afterInitialization: function() {
-      // do nothing here
-    },
-    /**
-    *  Free resources used. Like finalize method in Java.
-    */
-    finalize: function() {
-      if (!this._finalized) {
-        // avoid call finalize multiple times on one object
-        this.doFinalize();
-        this.invokeEvent("finalize", { obj: this });
-        // free all event objects
-        this.setPropStoreFieldValue("eventHandlers", null);
-        this._finalized = true;
-      }
-    },
-    /**
-    *  Do actual work of finalize.
-    *  @private
-    */
-    doFinalize: function() {
-      // do nothing here
-    },
-    /**
-    * Define all essential properties in this method.
-    * You do not need to call $super here in descendant classes. Each class only need to
-    * declare his own properties.
-    */
-    initProperties: function() {
-      // define properties
-      this.defineProp("enablePropValueGetEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("enablePropValueSetEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("bubbleEvent", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      this.defineProp("suppressChildChangeEventInUpdating", {
-        dataType: DataType.BOOL,
-        serializable: false,
-        scope: Class.PropertyScope.PUBLIC
-      });
-      // private, event storer
-      this.defineProp("eventHandlers", {
-        dataType: DataType.HASH,
-        serializable: false,
-        scope: Class.PropertyScope.PRIVATE,
-        getter: function() {
-          var r = this.getPropStoreFieldValue("eventHandlers");
-          if (!r) {
-            r = {};
-            this.setPropStoreFieldValue("eventHandlers", r);
-          }
-          return r;
-        }
-      });
-      /*
-      // define two events that related with properties
-      this.defineEvent('propValueGet');
-      this.defineEvent('propValueSet');
-      this.defineEvent('change');
-      */
-    },
-    /**
-    * Set initial value of properties.
-    * Desendants can override this method.
-    */
-    initPropValues: function() {
-      // do nothing here
-    },
+/** @lends ObjectEx# */
+{
+	/**
+	 * name of class
+	 * @private
+	 */
+	CLASS_NAME: 'ObjectEx',
+	//* @private */
+	//PROPINFO_HASHKEY_PREFIX: '__$propInfo__',
+  /** @private */
+  EVENT_HANDLERS_FIELD: '__$__k__eventhandlers__$__',
+	/**
+	 * @constructs
+	 */
+	initialize: function()
+	{
+		this._initPropertySystem();
+		this.initPropValues();
+		this._updateStatus = 0;  // used internal in begin/endUpdate methods
+    this._childChangeEventSuppressed = false;
+		this._modifiedProps = [];  // used internal in begin/endUpdate methods
+		this._finalized = false;  // used internally, mark if the object has been freed
+		this.afterInitialization();
+	},
+	/**
+	 * Do jobs after initialization, desendants can override this method
+	 */
+	afterInitialization: function()
+	{
+		// do nothing here
+	},
+	/**
+	 *  Free resources used. Like finalize method in Java.
+	 */
+	finalize: function()
+	{
+		if (!this._finalized)  // avoid call finalize multiple times on one object
+		{
+			this.doFinalize();
+			this.invokeEvent('finalize', {'obj': this});
+      // free all event objects
+      //this.setPropStoreFieldValue('eventHandlers', null);
+      this[this.EVENT_HANDLERS_FIELD] = null;
+			this._finalized = true;
+		}
+	},
+	/**
+	 *  Do actual work of finalize.
+	 *  @private
+	 */
+	doFinalize: function()
+	{
+		// do nothing here
+	},
+	/**
+	 * Define all essential properties in this method.
+	 * You do not need to call $super here in descendant classes. Each class only need to
+	 * declare his own properties.
+	 */
+	initProperties: function()
+	{
+		// define properties
+		this.defineProp('enablePropValueGetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+    this.defineProp('enablePropValueSetEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		this.defineProp('enableObjectChangeEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		this.defineProp('bubbleEvent', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+    this.defineProp('suppressChildChangeEventInUpdating', {'dataType': DataType.BOOL, 'serializable': false, 'scope': Class.PropertyScope.PUBLIC});
+		// private, event storer
+		this.defineProp('eventHandlers', {'dataType': DataType.HASH, 'serializable': false, 'scope': Class.PropertyScope.PRIVATE, 'setter': null,
+			'getter': function()
+				{
+					//var r = this.getPropStoreFieldValue('eventHandlers');
+          var r = this[this.EVENT_HANDLERS_FIELD];  // direct access, for speed
+					if (!r)
+					{
+						r = {};
+						//this.setPropStoreFieldValue('eventHandlers', r);
+            this[this.EVENT_HANDLERS_FIELD] = r;
+					}
+					return r;
+				}
+		});
+		/*
+		// define two events that related with properties
+		this.defineEvent('propValueGet');
+		this.defineEvent('propValueSet');
+		this.defineEvent('change');
+		*/
+	},
+	/**
+	 * Set initial value of properties.
+   * Desendants can override this method.
+	 */
+	initPropValues: function()
+	{
+		// do nothing here
+	},
 
     /**
     * Get object level above this one.
@@ -1817,89 +1985,151 @@ ObjectEx = Class.create(
       // do nothing here
     },
 
-    /** @private */
-    _initPropertySystem: function() // used internally for create property list
+	/** @private */
+	_initPropertySystem: function()  // used internally for create property list
+	{
+		if (!this.getPrototype().hasOwnProperty('properties'))
+		{
+      //console.log('init prop system', this.getClassName());
+			// ensure super class's property list is created
+			var parent = this.getSuperClassPrototype();
+			if (parent)
+				parent._initPropertySystem.apply(parent);
+
+			this._createPropertyList();
+
+      this._remapPropGetters();  // override before self property list created, avoid override method of self
+
+			if (this.getPrototype().hasOwnProperty('initProperties'))  // prevent call parent initProperties method
+				this.getPrototype().initProperties.apply(this.getPrototype());
+		}
+	},
+	/** @private */
+	_createPropertyList: function()  // used internal, create property list
+	{
+		if (!this.getPrototype().hasOwnProperty('properties'))
+			this.getPrototype().properties = new Class.PropList();
+	},
+  /** @private */
+  _remapPropGetters: function()
+  {
+    ClassEx._remapPropGetters(this.getClass());
+    /*
+    var proto = this.getPrototype();
+    var fieldNames = Object.getOwnPropertyNames(proto);
+    // check if has own doGetXXX method that override the getter of super class
+    for (var i = 0, l = fieldNames.length; i < l; ++i)
     {
-      if (!this.getPrototype().hasOwnProperty("properties")) {
-        // ensure super class's property list is created
-        var parent = this.getSuperClassPrototype();
-        if (parent) parent._initPropertySystem.apply(parent);
-        this._createPropertyList();
-        if (this.getPrototype().hasOwnProperty("initProperties"))
-        // prevent call parent initProperties method
-        this.getPrototype().initProperties.apply(this.getPrototype());
+      var fieldName = fieldNames[i];
+      if (fieldName.length > 5 && fieldName.startsWith('doGet'))
+      {
+        var field = proto[fieldName];
+        if (typeof(field) === 'function')
+        {
+          var propName = fieldName.charAt(5).toLowerCase() + fieldName.substr(6);
+          if (this.hasDirectProperty(propName))  // ignore properties defined in this class, only override properties from super classes
+            continue;
+          var propInfo = this.getPropInfo(propName);
+          if (propInfo && propInfo.getter)
+          {
+            //console.log('find prop getter override', i, propName, this.getClassName(), field);
+            var getterName = 'get' + propName.capitalizeFirst();
+            proto[getterName] = field;
+
+
+            if (__definePropertyAvailable__)  // redefine property
+            {
+              var descs = Object.extend({}, propInfo.descriptor);
+              descs['get'] = field;
+              try
+              {
+                Object.defineProperty(proto, propName, descs);
+              }
+              catch (e)
+              {
+                throw e;
+              }
+            }
+          }
+        }
       }
-    },
-    /** @private */
-    _createPropertyList: function() // used internal, create property list
-    {
-      if (!this.getPrototype().hasOwnProperty("properties"))
-      this.getPrototype().properties = new Class.PropList();
-    },
-    /**
-    * Get class of this object.
-    * @return {Object} Class object.
+    }
     */
-    getClass: function() {
-      return this.constructor;
-    },
-    /**
-    * Get super class of this object.
-    * @return {Object} Class object.
-    */
-    getSuperClass: function() {
-      return this.getClass().superclass;
-    },
-    /**
-    * Get class name of this object, usually returns CLASS_NAME field.
-    * @return {String} Class name of object.
-    */
-    getClassName: function() {
-      return this.getPrototype().CLASS_NAME;
-    },
-    /**
+  },
+	/**
+	 * Get class of this object.
+	 * @return {Object} Class object.
+	 */
+	getClass: function()
+	{
+		return this.constructor;
+	},
+	/**
+	 * Get super class of this object.
+	 * @return {Object} Class object.
+	 */
+	getSuperClass: function()
+	{
+		return this.getClass().superclass;
+	},
+	 	/**
+ 	 * Get class name of this object, usually returns CLASS_NAME field.
+ 	 * @return {String} Class name of object.
+ 	 */
+ 	getClassName: function()
+ 	{
+ 		return this.getPrototype().CLASS_NAME;
+ 	},
+   /**
     * Get last part of class name of this object.
     * For example, 'Atom' will be returned by instance of class 'Kekule.Atom'.
     * @return {String} Last part of class name of object.
     */
-    getClassLocalName: function() {
-      return ClassEx.getClassLocalName(this.getClass());
-    },
-    /**
-    * Returns a name to be used in serialization. Descendants can override this.
-    * @return {String}
-    */
-    getSerializationName: function() {
-      return this.getClassName();
-    },
-    /**
-    * Get prototype of this object.
-    * @return {Object}
-    */
-    getPrototype: function() {
-      if (this.prototype) {
-        return this.prototype;
-      } else {
-        return this.constructor.prototype;
-      }
-    },
-    /**
-    * Get prototype of super class.
-    * @return {Object} If there is no super class, null is returned.
-    */
-    getSuperClassPrototype: function() {
-      if (this.constructor && this.constructor.superclass)
-      return this.constructor.superclass.prototype;
-      else return null;
-    },
-    /*
-    getPropList: function()
-    {
-    if (!this.getPrototype().properties)
-    this.getPrototype().properties = new PropList();
-    return this.getPrototype().properties;
-  },
-  */
+   getClassLocalName: function()
+   {
+     return ClassEx.getClassLocalName(this.getClass());
+   },
+ 	/**
+ 	 * Returns a name to be used in serialization. Descendants can override this.
+ 	 * @return {String}
+ 	 */
+ 	getSerializationName: function()
+   {
+     return this.getClassName();
+   },
+ 	/**
+ 	 * Get prototype of this object.
+ 	 * @return {Object}
+ 	 */
+ 	getPrototype: function()
+ 	{
+ 		if (this.prototype)
+ 		{
+ 			return this.prototype;
+ 		}
+ 		else
+ 		{
+ 			return this.constructor.prototype;
+ 		}
+ 	},
+ 	/**
+ 	 * Get prototype of super class.
+ 	 * @return {Object} If there is no super class, null is returned.
+ 	 */
+ 	getSuperClassPrototype: function()
+ 	{
+ 		if (this.constructor && this.constructor.superclass)
+ 			return this.constructor.superclass.prototype;
+ 		else
+ 			return null;
+ 	},
+ 	/*
+ 	getPropList: function()
+ 	{
+ 		if (!this.getPrototype().properties)
+ 			this.getPrototype().properties = new PropList();
+ 		return this.getPrototype().properties;
+ 	},
   /**
   * Get property list of this class. The properties inherited from parent class will not be returned.
   * @returns {Class.PropList}
@@ -1929,44 +2159,85 @@ ObjectEx = Class.create(
   getPropListOfScopes: function(scopes) {
     return ClassEx.getPropListOfScopes(this.getClass(), scopes);
   },
-  /** @private */
-  getPropInfoHashKey: function(propName) {
-    return ObjectEx._PROPINFO_HASHKEY_PREFIX + propName;
-  },
-  /** @private */
-  getDefPropStoreFieldName: function(propName) {
-    return ObjectEx._PROP_STOREFIELD_PREFIX + propName;
-  },
-  /**
-  *  Define a property in class.
-  *  @param {String} propName Name of property, case sensitive.
-  *  @param {Object} options A hash object, may contains the following fields:
-  *  {
-  *  	dataType: type of property data, a string constant in {@link DataType} or a class name.
-  *  	//storeField: field in object to store property value,  // not allowed for running speed
-  *  	getter: getter function,
-  *  	setter: setter function, if set to null, the property will be read-only,
-  *  	serializable: boolean, whether the property should be save or restore in serialization. Default is true.
-  *  	defaultValue: default value of property, can only be simple type (number, string, bool...)
-  *  }
-  *  @return {Object} Property info object added to property list.
-  */
-  defineProp: function(propName, options) {
-    if (!options) options = {};
-    if (options.serializable === undefined) options.serializable = true;
-    if (!options.storeField)
-    // use default store field
-    options.storeField = this.getDefPropStoreFieldName(propName); //'f' + propName;
-    //options.storeField = this.getDefPropStoreFieldName(propName);
-    var list = this.getOwnPropList();
-    var prop = list.addProperty(propName, options);
-    if (options.getter !== null)
-    prop.getter = this.createPropGetter(prop, options.getter);
-    if (options.setter !== null)
-    prop.setter = this.createPropSetter(prop, options.setter);
+	/** @private */
+	getPropInfoHashKey: function(propName)
+	{
+		return ObjectEx._PROPINFO_HASHKEY_PREFIX + propName;
+	},
+	/** @private */
+	getDefPropStoreFieldName: function(propName)
+	{
+		return ObjectEx._PROP_STOREFIELD_PREFIX + propName;
+	},
+	/**
+	 *  Define a property in class.
+	 *  @param {String} propName Name of property, case sensitive.
+	 *  @param {Object} options A hash object, may contains the following fields:
+	 *  {
+	 *  	dataType: type of property data, a string constant in {@link DataType} or a class name.
+	 *  	//storeField: field in object to store property value,  // not allowed for running speed
+	 *  	getter: getter function,
+	 *  	setter: setter function, if set to null, the property will be read-only,
+	 *  	serializable: boolean, whether the property should be save or restore in serialization. Default is true.
+	 *  	defaultValue: default value of property, can only be simple type (number, string, bool...)
+	 *  }
+	 *  @return {Object} Property info object added to property list.
+	 */
+  defineProp: function(propName, options)
+  {
+    var ops;
+		if (!options)
+			ops = {};
+    else
+      ops = Object.extend({}, options);
+		if (ops.serializable === undefined)
+			ops.serializable = true;
+		//if (!options.storeField)  // use default store field
+		ops.storeField = this.getDefPropStoreFieldName(propName);  // always use default store field name for performance
+		//options.storeField = this.getDefPropStoreFieldName(propName);
+		var list = this.getOwnPropList();
+		var prop = list.addProperty(propName, ops);
+    var propGetterInfo, propSetterInfo;
+		if (ops.getter !== null && ops.getter !== false)
+    {
+      propGetterInfo = this.createPropGetter(prop, ops.getter);
+      prop.getter = propGetterInfo.doGetterName;
+    }
+		if (ops.setter !== null && ops.setter !== false)
+    {
+      propSetterInfo = this.createPropSetter(prop, ops.setter);
+      prop.setter = propSetterInfo.doSetterName;
+    }
 
     // to accelerate property access, add a hash key here
     this[this.getPropInfoHashKey(propName)] = prop;
+
+    // Add property to object in supported browsers
+    if (__definePropertyAvailable__)
+    {
+      var descs = {
+        'enumerable': ops.enumerable,
+        'configurable': false
+      };
+      if (descs.enumerable === undefined)
+        descs.enumerable = true;
+      if (propGetterInfo)
+        descs.get = this[propGetterInfo.getterName];
+      if (propSetterInfo)
+        descs.set = this[propSetterInfo.setterName];
+
+      prop.descriptor = descs;
+      try
+      {
+        Object.defineProperty(this, propName, descs);
+      }
+      catch(e)
+      {
+        //console.log(this.getClassName(), propName);
+        throw e;
+      }
+    }
+ 
     return prop;
   },
   /** @private */
@@ -1981,232 +2252,297 @@ ObjectEx = Class.create(
       this.getPrototype()[doGetterName] = actualGetter; // doGetXXX, descendant can override this method
     }
 
+		/*
+  	this.getPrototype()[getterName] = new Function(
+			//'var args = Array.prototype.slice(arguments); args.unshift("' + prop.name + '");'
+			//+ 'return this.getPropValue.apply(this, args);'
+  		'return this.getPropValue("' + prop.name + '");'
+  	);
+  	*/
+		/*
+		this.getPrototype()[getterName] = function()
+			{
+				var args = Array.prototype.slice.call(arguments);
+				args.unshift(prop.name);
+				return this.getPropValue.apply(this, args);
+			};
+			*/
+		this.getPrototype()[getterName] = actualGetter;
     /*
-    this.getPrototype()[getterName] = new Function(
-    //'var args = Array.prototype.slice(arguments); args.unshift("' + prop.name + '");'
-    //+ 'return this.getPropValue.apply(this, args);'
-    'return this.getPropValue("' + prop.name + '");'
-  );
-  */
-  /*
-  this.getPrototype()[getterName] = function()
+		this.getPrototype()[getterName] = function()
+		{
+			//var args = Array.prototype.slice.call(arguments);
+			return this[doGetterName].apply(this, arguments);
+		};
+		*/
+
+    //this.getPrototype()[getterName] = this.getPrototype()[doGetterName];
+
+  	return {
+      'getterName': getterName,
+      'doGetterName': doGetterName   // actual method to retrieve value
+    };
+  },
+  /** @private */
+  createPropSetter: function(prop, setter)
   {
-  var args = Array.prototype.slice.call(arguments);
-  args.unshift(prop.name);
-  return this.getPropValue.apply(this, args);
-};
-*/
-//this.getPrototype()[getterName] = actualGetter;
-this.getPrototype()[getterName] = function() {
-  var args = arguments; // Array.prototype.slice.call(arguments);
-  return this[doGetterName].apply(this, args);
-};
+		var propName = prop.name.toString();
+  	var propNameBase = propName.upperFirst();
+  	var setterName = 'set' + propNameBase;
+		var doSetterName = 'doSet' + propNameBase;
+  	var actualSetter = this[doSetterName];
 
-return doGetterName; //actualGetter; //this[getterName];
-},
-/** @private */
-createPropSetter: function(prop, setter) {
-  var propName = prop.name.toString();
-  var propNameBase = propName.upperFirst();
-  var setterName = "set" + propNameBase;
-  var doSetterName = "doSet" + propNameBase;
-  var actualSetter = this[doSetterName];
+		if (!this[doSetterName])
+		{
+			actualSetter = setter || new Function('value', 'this["' + prop.storeField + '"] = value;');
+  		this.getPrototype()[doSetterName] = actualSetter; // doSetXXX, descendant can override this method
+		}
+  	/*
+  	this.getPrototype()[setterName] = new Function('value',
+  		'return this.setPropValue("' + prop.name + '", value);'
+  	);
+  	*/
+		this.getPrototype()[setterName] = function()
+			{
+        /*
+				var args = Array.prototype.slice.call(arguments);
+				var value = args[0];
+				*/
+        //var args = arguments;
+        var value = arguments[0];
 
-  if (!this[doSetterName]) {
-    actualSetter =
-    setter ||
-    new Function("value", 'this["' + prop.storeField + '"] = value;');
-    this.getPrototype()[doSetterName] = actualSetter; // doSetXXX, descendant can override this method
-  }
-  /*
-  this.getPrototype()[setterName] = new Function('value',
-  'return this.setPropValue("' + prop.name + '", value);'
-);
-*/
-this.getPrototype()[setterName] = function() {
-  var args = Array.prototype.slice.call(arguments);
-  var value = args[0];
+				/*
+				args.unshift(prop.name);
+				return this.setPropValueX.apply(this, args);
+				*/
+				this[doSetterName].apply(this, arguments);
+				this.notifyPropSet(propName, value);
+				/*
+				// NOTE: here we call actualSetter directly instead of call setPropValue
+				// because the former can pass multiple args inside
+				actualSetter.apply(this, args);
+				this.notifyPropSet(propName, value);
+				*/
 
-  /*
-  args.unshift(prop.name);
-  return this.setPropValueX.apply(this, args);
-  */
-  this[doSetterName].apply(this, args);
-  this.notifyPropSet(propName, value);
-  /*
-  // NOTE: here we call actualSetter directly instead of call setPropValue
-  // because the former can pass multiple args inside
-  actualSetter.apply(this, args);
-  this.notifyPropSet(propName, value);
-  */
+				return this;
+			};
 
-  return this;
-};
+  	//this.getPrototype()[setterName] = actualSetter;
+  	//return doSetterName; // actualSetter; //this[setterName];
+    return {
+      'setterName': setterName,
+      'doSetterName': doSetterName   // actual method to set value
+    };
+  },
+  /**
+   * Check if property exists in current class.
+   * @param {String} propName Name of property.
+   * @return {Boolean}
+   */
+  hasProperty: function(propName)
+  {
+  	return (this.getPropInfo(propName) != null);
+  },
+  /**
+   * Check if property is defined in current class (not inherited from super class).
+   * @param {String} propName Name of property.
+   * @return {Boolean}
+   */
+  hasDirectProperty: function(propName)
+  {
+    return (this.getPropInfo(propName, true) != null);
+  },
+  /**
+   * Get property info object from the property list of current class.
+   * @param {String} propName Name of property.
+   * @param {Bool} ownPropertyOnly If true, only property defined in this class will be checked.
+   * @return {Object} Property info object found. If there is no such a property, null is returned.
+   */
+  getPropInfo: function(propName, ownPropertyOnly)
+  {
+    var pname = propName || '';
+    var result;
 
-//this.getPrototype()[setterName] = actualSetter;
-return doSetterName; // actualSetter; //this[setterName];
-},
-/**
-* Check if property exists in current class.
-* @param {String} propName Name of property.
-* @return {Boolean}
-*/
-hasProperty: function(propName) {
-  return this.getPropInfo(propName) != null;
-},
-/**
-* Get property info object from the property list of current class.
-* @param {String} propName Name of property.
-* @return {Object} Property info object found. If there is no such a property, null is returned.
-*/
-getPropInfo: function(propName) {
-  var pname = propName || "";
-  var hashKey = this.getPropInfoHashKey(pname) || "";
-  var result = this[hashKey];
-
-  if (!result) {
-    result = this.getOwnPropList().getPropInfo(pname);
-    if (!result) {
-      // check parent
-      var parent = this.getSuperClassPrototype();
-      if (parent && parent.getPropInfo)
-      result = parent.getPropInfo(pname);
-      else result = null;
+    if (!ownPropertyOnly)  // check hashkey for a quich search, but it should be disabled when ownPropertyOnly is true
+    {
+      var hashKey = this.getPropInfoHashKey(pname) || '';
+      result = this[hashKey];
     }
 
-    /* need further test
-    // to accelerate property access, add a hash key here
-    this[this.getPropInfoHashKey(propName)] = result;
+		if (!result)
+		{
+			result = this.getOwnPropList().getPropInfo(pname);
+			if (!result && !ownPropertyOnly)  // check parent
+			{
+				var parent = this.getSuperClassPrototype();
+				if (parent && parent.getPropInfo)
+					result = parent.getPropInfo(pname);
+				else
+					result = null;
+			}
+
+			/* need further test
+			// to accelerate property access, add a hash key here
+			this[this.getPropInfoHashKey(propName)] = result;
+			*/
+		}
+		return result;
+  },
+	/**
+	 * Returns type constants of property.
+	 * @param {String} propName
+	 * @returns {String} Values from {@link DataType}.
+	 */
+	getPropertyDataType: function(propName)
+	{
+		var info = this.getPropInfo(propName);
+		return info? info.dataType: null;
+	},
+	/**
+	 * Returns if property is serializable.
+	 * @param {String} propName
+	 * @returns {Bool}
+	 */
+	isPropertySerializable: function(propName)
+	{
+		var info = this.getPropInfo(propName);
+		var s = info && info.serializable;
+		return (s === undefined) || (!!s);
+	},
+  /**
+   * Get value of a property's store field. Use this method to get property value and avoid
+   * the call of property getter.
+   * Note: if the property has no store field, this method may returns null or undefined.
+   * @param {String} propName Name of property.
+   * @return {Variant} Value of property. If property does not exists, null is returned.
+   */
+  getPropStoreFieldValue: function(propName)
+  {
+    //var storeFieldName = this.getDefPropStoreFieldName(propName);
+    var defFieldName = ObjectEx._PROP_STOREFIELD_PREFIX + propName;
+    //if (this.hasOwnProperty(defFieldName))
+    return this[defFieldName];
+    /*
+    else
+    {
+      var info = this.getPropInfo(propName);
+      if (info.storeField)
+        return this[info.storeField];
+      else
+        return undefined;
+    }
     */
-  }
-  return result;
-},
-/**
-* Returns type constants of property.
-* @param {String} propName
-* @returns {String} Values from {@link DataType}.
-*/
-getPropertyDataType: function(propName) {
-  var info = this.getPropInfo(propName);
-  return info ? info.dataType : null;
-},
-/**
-* Returns if property is serializable.
-* @param {String} propName
-* @returns {Bool}
-*/
-isPropertySerializable: function(propName) {
-  var info = this.getPropInfo(propName);
-  var s = info && info.serializable;
-  return s === undefined || !!s;
-},
-/**
-* Get value of a property's store field. Use this method to get property value and avoid
-* the call of property getter.
-* Note: if the property has no store field, this method may returns null or undefined.
-* @param {String} propName Name of property.
-* @return {Variant} Value of property. If property does not exists, null is returned.
-*/
-getPropStoreFieldValue: function(propName) {
-  var info = this.getPropInfo(propName);
-  if (info.storeField) return this[info.storeField];
-  else return undefined;
-  /*
-  var storeFieldName = this.getDefPropStoreFieldName(propName);
-  return this[storeFieldName];
-  */
-},
-/**
-* Get value of a property.
-* @param {String} propName Name of property.
-* @return {Variant} Value of property. If property does not exists, null is returned.
-*/
-getPropValue: function(propName) {
-  var result;
-  var info = this.getPropInfo(propName);
-  if (info) {
-    if (info.getter) {
-      // getter set
-      var args = Array.prototype.slice.call(arguments);
-      args.shift();
-      //result = info.getter.apply(this);
-      result = this[info.getter].apply(this, args);
-    } else result = this[info.storeField];
-    //this.notifyPropGet(propName, result);
-    return result;
-  } else return null;
-},
-/**
-* Returns values of a series of properties.
-* @param {Variant} propNames Can be an array of property names, also can be an object while the
-*   direct field names of object will be regarded as property names.
-* @returns {Hash} Stores all property name-value pair.
-*/
-getPropValues: function(propNames) {
-  var result = {}, i, l;
-  if (DataType.isArrayValue(propNames)) {
-    for (i = 0, l = propNames.length; i < l; ++i) {
-      var pname = propNames[i];
-      result[pname] = this.getPropValue(pname);
-    }
-  } else if (DataType.isObjectValue(propNames)) {
-    for (pname in propNames) {
-      if ( propNames.hasOwnProperty(pname) && typeof pname !== "function" )
-      result[pname] = this.getPropValue(pname);
-    }
-  }
-  return result;
-},
-/**
-* Set value of a property's store field. Use this method to set property value and avoid
-* the call of property setter. Readonly property can also be changed in this method.
-* Note: if the property has no store field, this method will has no effect on property.
-* @param {String} propName Name of property.
-* @return {Variant} Value of property. If property does not exists, null is returned.
-*/
-setPropStoreFieldValue: function(propName, value) {
-  var info = this.getPropInfo(propName);
-  if (info.storeField) this[info.storeField] = value;
-},
-/**
-* Set value of a property.
-* @param {String} propName Name of property.
-* @param {Variant} value Value of the property.
-* @param {bool} ignoreReadOnly Try set the value directly through store field
-*   even if the property is a readonly one (without a setter).
-*/
-setPropValue: function(
-  propName,
-  value,
-  ignoreReadOnly // if ignoreReadOnly, a property without setter will still be set value
-) {
-  var info = this.getPropInfo(propName);
-  if (info) {
-    if (info.setter)
-    // getter set
-    //info.setter.apply(this, [value]);
-    this[info.setter].apply(this, [value]);
-    else if (ignoreReadOnly) this[info.storeField] = value;
-    this.notifyPropSet(propName, value);
-  }
-  return this; // return this object for linkage call
-},
-/**
-* Set value of a property. Similar to {@link ObjectEx.setPropValue} but can pass in multiple params.
-* The first param is always the property name while the rest will be put into setter method (setXXX).
-*/
-setPropValueX: function() {
-  var args = Array.prototype.slice.call(arguments);
-  var propName = args.shift();
-  var info = this.getPropInfo(propName);
-  if (info) {
-    if (info.setter)
-    // getter set
-    this[info.setter].apply(this, args);
-    this.notifyPropSet(propName, this.getPropValue(propName));
-  }
-  return this; // return this object for linkage call
-},
+  },
+  /**
+   * Get value of a property.
+   * @param {String} propName Name of property.
+   * @return {Variant} Value of property. If property does not exists, null is returned.
+   */
+  getPropValue: function(propName)
+  {
+  	var result;
+  	var info = this.getPropInfo(propName);
+  	if (info)
+  	{
+	  	if (info.getter) // getter set
+			{
+				var args = Array.prototype.slice.call(arguments);
+				args.shift();
+				//result = info.getter.apply(this);
+				result = this[info.getter].apply(this, args);
+			}
+			else
+				result = this[info.storeField];
+	  	//this.notifyPropGet(propName, result);
+	  	return result;
+  	}
+  	else
+  		return null;
+  },
+
+	/**
+    * Returns values of a series of properties.
+    * @param {Variant} propNames Can be an array of property names, also can be an object while the
+    *   direct field names of object will be regarded as property names.
+    * @returns {Hash} Stores all property name-value pair.
+    */
+   getPropValues: function(propNames)
+   {
+     var result = {};
+     var names;
+     if (DataType.isArrayValue(propNames))
+     {
+       for (var i = 0, l = propNames.length; i < l; ++i)
+       {
+         var pname = propNames[i];
+         result[pname] = this.getPropValue(pname);
+       }
+     }
+     else if (DataType.isObjectValue(propNames))
+     {
+       for (var pname in propNames)
+       {
+         if (propNames.hasOwnProperty(pname) && typeof(propNames[pname]) !== 'function')
+           result[pname] = this.getPropValue(pname);
+       }
+     }
+     return result;
+   },
+   /**
+    * Set value of a property's store field. Use this method to set property value and avoid
+    * the call of property setter. Readonly property can also be changed in this method.
+    * Note: if the property has no store field, this method will has no effect on property.
+    * @param {String} propName Name of property.
+    * @return {Variant} Value of property. If property does not exists, null is returned.
+    */
+   setPropStoreFieldValue: function(propName, value)
+   {
+      var defFieldName = ObjectEx._PROP_STOREFIELD_PREFIX + propName;
+      this[defFieldName] = value;
+      /*
+      var info = this.getPropInfo(propName);
+      if (info.storeField)
+        this[info.storeField] = value;
+    	*/
+   },
+  /**
+   * Set value of a property.
+   * @param {String} propName Name of property.
+   * @param {Variant} value Value of the property.
+   * @param {bool} ignoreReadOnly Try set the value directly through store field
+   *   even if the property is a readonly one (without a setter).
+   */
+  setPropValue: function(propName, value, ignoreReadOnly)  // if ignoreReadOnly, a property without setter will still be set value
+  {
+  	var info = this.getPropInfo(propName);
+  	if (info)
+  	{
+	  	if (info.setter)  // getter set
+	  		//info.setter.apply(this, [value]);
+				this[info.setter].apply(this, [value]);
+	  	else if (ignoreReadOnly)
+	  		this[info.storeField] = value;
+			this.notifyPropSet(propName, value);
+  	}
+		return this;  // return this object for linkage call
+  },
+	/**
+	 * Set value of a property. Similar to {@link ObjectEx.setPropValue} but can pass in multiple params.
+	 * The first param is always the property name while the rest will be put into setter method (setXXX).
+	 */
+	setPropValueX: function()
+	{
+		var args = Array.prototype.slice.call(arguments);
+		var propName = args.shift();
+		var info = this.getPropInfo(propName);
+		if (info)
+		{
+			if (info.setter)  // getter set
+				this[info.setter].apply(this, args);
+			this.notifyPropSet(propName, this.getPropValue(propName));
+		}
+		return this;  // return this object for linkage call
+	},
 
 /**
 * Set a series of property.
@@ -2276,37 +2612,40 @@ notifyPropSet: function(propName, newValue, doNotEvokeObjChange) {
   */
   //if (this.getEnablePropValueSetEvent()) // cause recursion
 
-  this.doPropChanged(propName, newValue);
-  if (this.getPropStoreFieldValue("enablePropValueSetEvent")) {
-    this.invokeEvent("propValueSet", {
-      propName: propName,
-      propValue: newValue
-    });
-  }
-  if (!doNotEvokeObjChange) {
-    this.objectChange([propName]);
-  }
-},
-/**
-* Called when object is changed.
-* @privte
-*/
-objectChange: function(modifiedPropNames) {
-  this.doObjectChange(modifiedPropNames);
-  this.invokeEvent("change", { changedPropNames: modifiedPropNames });
-},
-/** @private */
-doObjectChange: function() {
-  // do nothing
-},
-/**
-* Do some job when a property value is changed. Descendants can override this.
-* @param {String} propName Name of property.
-* @param {Variant} newValue New value of the property.
-*/
-doPropChanged: function() {
-  // do nothing here
-},
+		this.doPropChanged(propName, newValue);
+  	if (this.getPropStoreFieldValue('enablePropValueSetEvent'))
+  	{
+  		this.invokeEvent('propValueSet', {'propName': propName, 'propValue': newValue});
+  	}
+		if (!doNotEvokeObjChange)
+		{
+			this.objectChange([propName]);
+		}
+  },
+	/**
+	 * Called when object is changed.
+	 * @privte
+	 */
+	objectChange: function(modifiedPropNames)
+	{
+		this.doObjectChange(modifiedPropNames);
+    if (this.getEnableObjectChangeEvent())
+		  this.invokeEvent('change', {'changedPropNames': modifiedPropNames});
+	},
+	/** @private */
+	doObjectChange: function(modifiedPropNames)
+	{
+		// do nothing
+	},
+	/**
+   * Do some job when a property value is changed. Descendants can override this.
+   * @param {String} propName Name of property.
+   * @param {Variant} newValue New value of the property.
+   */
+	doPropChanged: function(propName, newValue)
+	{
+		// do nothing here
+	},
 
 // multi-broadcast support
 /**
@@ -2386,144 +2725,172 @@ return result;
 */
 },
 
-/**
-* Add an event handler.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-* @return {Object} Handler info object on success, null on fail.
-*/
-addEventListener: function(
-  eventName,
-  listener,
-  thisArg
-) // add a listener function to list
-{
-  var handlerList = this.getEventHandlerList(eventName);
-  if (this.isEventHandlerList(handlerList)) {
-    return handlerList.add(listener, thisArg);
-  } else return null;
-},
-/**
-* Add an event handler that will only be evoked once.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-* @return {Object} Handler info object on success, null on fail.
-*/
-addOnceEventListener: function(eventName, listener, thisArg) {
-  var self = this;
-  var wrapper = function(event) {
-    self.removeEventListener(eventName, wrapper, thisArg);
-    listener(event);
-  };
-  return this.addEventListener(eventName, wrapper, thisArg);
-},
-/**
-* Remove an event handler.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-*   If not set, all listenr function in list will be removed.
-*/
-removeEventListener: function(eventName, listener, thisArg) {
-  var handlerList = this.getEventHandlerList(eventName);
-  if (this.isEventHandlerList(handlerList)) {
-    return handlerList.remove(listener, thisArg);
-  }
-},
-/**
-* Add an event handler, shortcut for {@link ObjectEx.addEventListener}.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-* @return {Object} Handler info object on success, null on fail.
-*/
-on: function(eventName, listener, thisArg) {
-  return this.addEventListener(eventName, listener, thisArg);
-},
-/**
-* Add an event handler that will only be evoked once, shortcut for {@link ObjectEx.addOnceEventListener}.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-* @return {Object} Handler info object on success, null on fail.
-*/
-once: function(eventName, listener, thisArg) {
-  return this.addOnceEventListener(eventName, listener, thisArg);
-},
-/**
-* Remove an event handler, shortcut for (@link ObjectEx.removeEventListener}.
-* @param {String} eventName Name of event.
-* @param {Function} listener Handler function.
-* @param {Object} thisArg The scope object applied when the handler is called.
-*   If not set, all listenr function in list will be removed.
-*/
-off: function(eventName, listener, thisArg) {
-  return this.removeEventListener(eventName, listener, thisArg);
-},
-/**
-* Invoke an event and call all corresponding handlers (listeners).
-* @param {String} eventName Event to be invoked.
-* @param {Object} event A hash object with information about event.
-*   At least should include the following fields:
-*   {
-*     name: name of event,
-*     target: which object invoke this event, generally this object
-*   }
-*   If this parameter is not set, the default value {eventName, this} will be used.
-*/
-invokeEvent: function(eventName, event) {
-  if (!event) event = {};
-  event.name = eventName;
-  event.target = this;
-  event.stopPropagation = function() {
-    event.cancelBubble = true;
-  };
-  this.dispatchEvent(eventName, event);
-},
-/**
-* Relay event from child of this object.
-* @param {String} eventName Event to be invoked.
-* @param {Object} event A hash object with information about event.
-*/
-relayEvent: function(eventName, event) {
-  event.currentTarget = this;
-  if (
-    eventName === "change" &&
-    this.getSuppressChildChangeEventInUpdating() &&
-    this.isUpdating()
-  ) {
-    // suppress child change event
-    //console.log('suppress child change event', this.getClassName(), event.target.getClassName());
-    this._childChangeEventSuppressed = true;
-  } else this.dispatchEvent(eventName, event);
-},
-/** @private */
-dispatchEvent: function(eventName, event) {
-  var handlerList = this.getEventHandlerList(eventName);
-  if (this.isEventHandlerList(handlerList)) {
-    for (var i = 0, l = handlerList.getLength(); i < l; ++i) {
-      var handlerInfo = handlerList.getHandlerInfo(i);
-      if (handlerInfo.handler) {
+  /**
+   * Add an event handler.
+   * @param {String} eventName Name of event.
+   * @param {Function} listener Handler function.
+   * @param {Object} thisArg The scope object applied when the handler is called.
+   * @return {Object} Handler info object on success, null on fail.
+   */
+  addEventListener: function(eventName, listener, thisArg)
+    // add a listener function to list
+  {
+  	var handlerList = this.getEventHandlerList(eventName);
+  	if (this.isEventHandlerList(handlerList))
+  	{
+      if (eventName === 'change')  // automatically turn on object change monitor
+      {
+        this.setEnableObjectChangeEvent(true);
+      }
+  		return handlerList.add(listener, thisArg);
+  	}
+  	else
+  		return null;
+  },
+	/**
+	 * Add an event handler that will only be evoked once.
+	 * @param {String} eventName Name of event.
+	 * @param {Function} listener Handler function.
+	 * @param {Object} thisArg The scope object applied when the handler is called.
+	 * @return {Object} Handler info object on success, null on fail.
+	 */
+	addOnceEventListener: function(eventName, listener, thisArg)
+	{
+		var self = this;
+		var wrapper = function(event)
+		{
+			self.removeEventListener(eventName, wrapper, thisArg);
+			listener(event);
+		};
+		return this.addEventListener(eventName, wrapper, thisArg);
+	},
+  /**
+   * Remove an event handler.
+   * @param {String} eventName Name of event.
+   * @param {Function} listener Handler function.
+   * @param {Object} thisArg The scope object applied when the handler is called.
+   *   If not set, all listenr function in list will be removed.
+   */
+  removeEventListener: function(eventName, listener, thisArg)
+  {
+  	var handlerList = this.getEventHandlerList(eventName);
+  	if (this.isEventHandlerList(handlerList))
+  	{
+  		return handlerList.remove(listener, thisArg);
+  	}
+  },
+  /**
+   * Add an event handler, shortcut for {@link ObjectEx.addEventListener}.
+   * @param {String} eventName Name of event.
+   * @param {Function} listener Handler function.
+   * @param {Object} thisArg The scope object applied when the handler is called.
+   * @return {Object} Handler info object on success, null on fail.
+   */
+  on: function(eventName, listener, thisArg)
+  {
+    return this.addEventListener(eventName, listener, thisArg);
+  },
+  /**
+   * Add an event handler that will only be evoked once, shortcut for {@link ObjectEx.addOnceEventListener}.
+   * @param {String} eventName Name of event.
+   * @param {Function} listener Handler function.
+   * @param {Object} thisArg The scope object applied when the handler is called.
+   * @return {Object} Handler info object on success, null on fail.
+   */
+  once: function(eventName, listener, thisArg)
+  {
+    return this.addOnceEventListener(eventName, listener, thisArg);
+  },
+  /**
+   * Remove an event handler, shortcut for (@link ObjectEx.removeEventListener}.
+   * @param {String} eventName Name of event.
+   * @param {Function} listener Handler function.
+   * @param {Object} thisArg The scope object applied when the handler is called.
+   *   If not set, all listenr function in list will be removed.
+   */
+  off: function(eventName, listener, thisArg)
+  {
+    return this.removeEventListener(eventName, listener, thisArg);
+  },
+  /**
+   * Invoke an event and call all corresponding handlers (listeners).
+   * @param {String} eventName Event to be invoked.
+   * @param {Object} event A hash object with information about event.
+   *   At least should include the following fields:
+   *   {
+   *     name: name of event,
+   *     target: which object invoke this event, generally this object
+   *   }
+   *   If this parameter is not set, the default value {eventName, this} will be used.
+   */
+  invokeEvent: function(eventName, event)
+  {
+  	if (!event)
+    {
+      event = {
+        'name': eventName, 'target': this
+      };
+    }
+    else
+    {
+      event.name = eventName;
+      event.target = this;
+    }
+    if (!event.stopPropagation)
+      event.stopPropagation = this._eventCancelBubble;  // function() { event.cancelBubble = true; };
+  	this.dispatchEvent(eventName, event);
+  },
+  /** @private */
+  _eventCancelBubble: function()
+  {
+    // called with event.stopPropagation, so this here is the event object
+    this.cancelBubble = true;
+  },
+  /**
+   * Relay event from child of this object.
+   * @param {String} eventName Event to be invoked.
+   * @param {Object} event A hash object with information about event.
+   */
+  relayEvent: function(eventName, event)
+  {
+  	event.currentTarget = this;
+    if (eventName === 'change' && this.getSuppressChildChangeEventInUpdating() && this.isUpdating())  // suppress child change event
+		{
+			//console.log('suppress child change event', this.getClassName(), event.target.getClassName());
+      this._childChangeEventSuppressed = true;
+		}
+    else
+  	  this.dispatchEvent(eventName, event);
+  },
+  /** @private */
+  dispatchEvent: function(eventName, event)
+  {
+  	var handlerList = this.getEventHandlerList(eventName);
+  	//if (this.isEventHandlerList(handlerList))
+  	{
+	  	for (var i = 0, l = handlerList.getLength(); i < l; ++i)
+	  	{
+	  		var handlerInfo = handlerList.getHandlerInfo(i);
         handlerInfo.handler.apply(handlerInfo.thisArg, [event]);
+	  	}
+  	}
+    if (!event.cancelBubble && this.getBubbleEvent())
+    {
+      var higherObj = this.getHigherLevelObj();
+      if (higherObj && higherObj.relayEvent)
+      {
+        higherObj.relayEvent(eventName, event);
       }
     }
-  } else {
-    //console.log(eventName, this.getClassName(), handlerList._$flag_);
-  }
-  var higherObj = this.getHigherLevelObj();
-  if (!event.cancelBubble && this.getBubbleEvent() && higherObj) {
-    if (higherObj.relayEvent) higherObj.relayEvent(eventName, event);
-  }
-},
-/**
-* Stop propagation of event, disallow it to bubble to higher level.
-* @param {Object} event
-*/
-stopEventPropagation: function(event) {
-  event.cancelBubble = true;
-},
+  },
+  /**
+   * Stop propagation of event, disallow it to bubble to higher level.
+   * @param {Object} event
+   */
+  stopEventPropagation: function(event)
+  {
+  	event.cancelBubble = true;
+  },
 
 /**
 * Overwrite method of object instance (rather than prototype) with a new one.
@@ -2659,10 +3026,8 @@ copyPropsTo: function(dest) {
 }
 );
 /** @private */
-ObjectEx._PROPINFO_HASHKEY_PREFIX = "__$propInfo__";
-ObjectEx._PROP_STOREFIELD_PREFIX = "__$";
-
-DataType.StringUtils = StringUtils;
+ObjectEx._PROPINFO_HASHKEY_PREFIX = '__$propInfo__';
+ObjectEx._PROP_STOREFIELD_PREFIX = '__$__k__p__';
 
 // Export to root name space
 $jsRoot.Class = Class;

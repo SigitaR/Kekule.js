@@ -553,9 +553,9 @@ Kekule.Widget.ComboTextBox = Class.create(Kekule.Widget.FormWidget,
 	},
 
 	/** @ignore */
-	widgetShowStateChanged: function($super, isShown)
+	widgetShowStateChanged: function($super, isShown, byDomChange)
 	{
-		$super(isShown);
+		$super(isShown, byDomChange);
 		if (isShown)
 			this.adjustWidgetsSize();
 	},
@@ -853,9 +853,9 @@ Kekule.Widget.TextArea = Class.create(Kekule.Widget.FormWidget,
 	},
 
 	/** @ignore */
-	widgetShowStateChanged: function($super, isShown)
+	widgetShowStateChanged: function($super, isShown, byDomChange)
 	{
-		$super(isShown);
+		$super(isShown, byDomChange);
 		if (isShown)
 			this.adjustAutoSize();
 	},
@@ -1410,7 +1410,11 @@ Kekule.Widget.ComboBox = Class.create(Kekule.Widget.FormWidget,
 	{
 		var invokerWidget = event.widget;
 		if ((invokerWidget === this.getTextBox()) || (invokerWidget === this.getSelectBox()))
+		{
 			event.widget = this;
+			if (eventName === 'valueChange')  // avoid call value change twice
+				return;
+		}
 		return $super(eventName, event);
 	},
 

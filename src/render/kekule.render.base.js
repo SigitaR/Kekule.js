@@ -1639,7 +1639,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 				if (b)
 				{
 					if (!result)
-						result = Object.extend({}, b);
+						result = BU.clone(b); //Object.extend({}, b);
 					else
 						result = BU.getContainerBox(result, b);
 				}
@@ -1703,7 +1703,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 	{
 		var chemObj = this.getChemObj();
 		if (chemObj && chemObj.getAttachedMarkers)
-			return [].concat(chemObj.getAttachedMarkers());
+			return [].concat(chemObj.getAttachedMarkers() || []);
 		else
 			return [];
 	},
@@ -1725,6 +1725,10 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 	{
 		this.setTargetChildObjs(null);
 		this.prepareChildObjs();
+		/*
+		if (this.getTargetChildObjs().length)
+			console.log('refresh child', this.getClassName(), this.getTargetChildObjs());
+		*/
 	},
 	/** @private */
 	getChildRenderers: function()
@@ -1841,6 +1845,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 		//console.log('draw', this.getClassName(), options.partialDrawObjs, baseCoord);
 		*/
 		this.refreshChildObjs();  // refresh child objects first
+		this.prepareChildRenderers();  // refresh renderer list
 
 		var op = Object.create(options);
 		if (options.partialDrawObjs && this._needWholelyDraw(options.partialDrawObjs, context))
@@ -1851,6 +1856,7 @@ Kekule.Render.CompositeRenderer = Class.create(Kekule.Render.AbstractRenderer,
 			return $super(context, baseCoord, op);
 		else  // then draw each child objects by child renderers
 		{
+			//console.log('do draw self', this.getClassName());
 			var selfElem = this.doDrawSelf(context, baseCoord, op);
 			var group = this.doDrawChildren(context, baseCoord, op);
 			// self

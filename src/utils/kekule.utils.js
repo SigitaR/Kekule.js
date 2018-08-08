@@ -134,6 +134,26 @@ Kekule.NumUtils = {
 		if (Kekule.ObjUtils.isUnset(threshold))
 			threshold = 1e-100;
 		return Math.abs(f1 - f2) <= threshold;
+	},
+
+	/**
+	 * Returns a primes array from 2 to max number.
+	 * @param {Int} max
+	 * @returns {Array}
+	 */
+	getPrimes: function(max)
+	{
+		var sieve = [], i, j, primes = [];
+		for (i = 2; i <= max; ++i) {
+			if (!sieve[i]) {
+				// i has not been marked -- it is prime
+				primes.push(i);
+				for (j = i << 1; j <= max; j += i) {
+					sieve[j] = true;
+				}
+			}
+		}
+		return primes;
 	}
 };
 
@@ -1075,6 +1095,36 @@ Kekule.StrUtils = {
 			result = Math.max(line.length, result);
 		}
 		return result;
+	},
+
+	/**
+	 * Check if str is in number format.
+	 * @param {String} str
+	 * @returns {Bool}
+	 */
+	isNumbericStr: function(str)
+	{
+		var a = Number(str);
+		return !isNaN(a);
+	},
+	/**
+	 * Split a number ending string (e.g. 'str3') to two part, a prefix and an index.
+	 * If the str is not ending with number, null will be returned.
+	 * @param {String} str
+	 * @returns {Object} A object of {prefix, index}
+	 */
+	splitIndexEndingStr: function(str)
+	{
+		var pos = str.length - 1;
+		var c = str.charAt(pos);
+		var indexStr = '';
+		while (c && Kekule.StrUtils.isNumbericStr(c))
+		{
+			--pos;
+			indexStr = c + indexStr;
+			c = str.charAt(pos);
+		}
+		return indexStr? {'prefix': str.substring(0, pos + 1), 'index': parseInt(indexStr)}: null;
 	}
 };
 
@@ -1492,6 +1542,7 @@ Kekule.MatrixUtils = {
 			for (var j = 0; j < colCount; ++j)
 				r[j] = -(m[j] || 0);
 		}
+		return result;
 	},
 	/**
 	 * Add two matrix.
@@ -1570,6 +1621,18 @@ Kekule.CoordUtils = {
 		var result = {'x': x, 'y': y};
 		if (z || (z === 0))
 			result.z = z;
+		return result;
+	},
+	/**
+	 * Clone a coord.
+	 * @param {Hash} coord
+	 * @returns {Hash}
+	 */
+	clone: function(coord)
+	{
+		var result = {'x': coord.x, 'y': coord.y};
+		if (coord.z || (coord.z === 0))
+			result.z = coord.z;
 		return result;
 	},
 	/**
@@ -2061,7 +2124,8 @@ Kekule.CoordUtils = {
 	calcRotate3DMatrix: function(options)
 	{
 		var M = Kekule.MatrixUtils;
-		var op = Object.extend({}, options || {});
+		//var op = Object.extend({}, options || {});
+		var op = Object.create(options || {});
 
 		var rotateMatrix;
 		if (op.rotateMatrix)
@@ -2456,8 +2520,8 @@ Kekule.CoordUtils = {
 		var l = coords.length;
 		if (l > 0)
 		{
-			minCoord = Object.extend({}, coords[0]);
-			maxCoord = Object.extend({}, coords[0]);
+			minCoord = Kekule.CoordUtils.clone(coords[0]); //Object.extend({}, coords[0]);
+			maxCoord = Kekule.CoordUtils.clone(coords[0]); // Object.extend({}, coords[0]);
 		}
 		else
 			return null;
@@ -2665,6 +2729,24 @@ Kekule.BoxUtils = {
 		}
 		return result;
 	},
+	/**
+	 * Clone a box.
+	 * @param {Hash} box
+	 * @returns {Hash}
+	 */
+	clone: function(box)
+	{
+		var result = {
+			'x1': box.x1, 'y1': box.y1,
+			'x2': box.x2, 'y2': box.y2
+		};
+		if (Kekule.ObjUtils.notUnset(box.z1) && Kekule.ObjUtils.notUnset(box.z2))
+		{
+			result.z1 = box.z1;
+			result.z2 = box.z2;
+		}
+		return result;
+	},
 
 	/**
 	 * Convert a box to a rect defined by left, top, width and height.
@@ -2756,9 +2838,9 @@ Kekule.BoxUtils = {
 	getContainerBox: function(box1, box2)
 	{
 		if (!box1)
-			return Object.extend({}, box2);
+			return Kekule.BoxUtils.clone(box2); //Object.extend({}, box2);
 		else if (!box2)
-			return Object.extend({}, box1);
+			return Kekule.BoxUtils.clone(box1); //Object.extend({}, box1);
 		var b1 = Kekule.BoxUtils.normalize(box1);
 		var b2 = Kekule.BoxUtils.normalize(box2);
 		var result = {
@@ -2975,6 +3057,20 @@ Kekule.RectUtils = {
 	{
 		var result = {'left': left, 'top': top, 'width': width, 'height': height};
 		return result;
+	},
+	/**
+	 * Clone a rect object.
+	 * @param {Hash} rect
+	 * @returns {Hash}
+	 */
+	clone: function(rect)
+	{
+		return {
+			'left': rect.left,
+			'top': rect.top,
+			'width': rect.width,
+			'height': rect.height
+		};
 	},
 	/**
 	 * Returns if the width/height of rect is zero
