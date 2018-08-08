@@ -20,6 +20,8 @@ var ObjectEx = require('../lan/classes').ObjectEx
 var DataType = require('../lan/classes').DataType
 module.exports = function(Kekule) {
 
+var AU = Kekule.ArrayUtils;
+
 /**
  * Enumeration of comparation of chem structure.
  * @enum
@@ -171,13 +173,15 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 			'dataType': DataType.ARRAY,
 			'serializable': false,
 			'scope': Class.PropertyScope.PUBLIC,
-			'setter': null,
+			'setter': null
+			/*
 			'getter': function()
 				{
 					if (!this.getPropStoreFieldValue('linkedConnectors'))
 						this.setPropStoreFieldValue('linkedConnectors', []);
 					return this.getPropStoreFieldValue('linkedConnectors');
 				}
+			*/
 		});
 		this.defineProp('linkedObjs', {
 			'dataType': DataType.ARRAY,
@@ -250,7 +254,14 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 	doGetActualCompareOptions: function($super, options)
 	{
 		if (options && options.method === Kekule.ComparisonMethod.CHEM_STRUCTURE)
-			return Kekule.ObjComparer.getStructureComparisonDetailOptions(options);
+		{
+			var result = Kekule.ObjComparer.getStructureComparisonDetailOptions(options);
+			if (options.customMethod)
+				result.customMethod = options.customMethod;
+			if (options.extraComparisonProperties)
+				result.extraComparisonProperties = options.extraComparisonProperties;
+			return result;
+		}
 		else
 			return $super(options);
 	},
@@ -281,8 +292,8 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 		{
 			if (this._getComparisonOptionFlagValue(options, 'linkedConnectorCount'))
 			{
-				var c1 = this.getLinkedNonHydrogenConnectors();
-				var c2 = targetObj.getLinkedNonHydrogenConnectors && targetObj.getLinkedNonHydrogenConnectors();
+				var c1 = this.getLinkedConnectors();
+				var c2 = targetObj.getLinkedConnectors && targetObj.getLinkedConnectors();
 				result = this.doCompareOnValue(c1.length, c2 && c2.length, options);
 			}
 		}
@@ -496,14 +507,13 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 	 * Returns connectors that connected to a non hydrogen node.
 	 * @returns {Array}
 	 */
-	getLinkedNonHydrogenConnectors: function()
+	getLinkedConnectors: function()
 	{
 		var result = [];
 		for (var i = 0, l = this.getLinkedConnectorCount(); i < l; ++i)
 		{
 			var connector = this.getLinkedConnectorAt(i);
-			if (!connector.isNormalConnectorToHydrogen || !connector.isNormalConnectorToHydrogen())
-				Kekule.ArrayUtils.pushUnique(result, connector);
+			Kekule.ArrayUtils.pushUnique(result, connector);
 		}
 		return result;
 	},
@@ -511,7 +521,7 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 	 * Returns linked objects except hydrogen atoms.
 	 * @returns {Array}
 	 */
-	getLinkedNonHydrogenObjs: function()
+	getLinkedObjs: function()
 	{
 		var result = [];
 		for (var i = 0, l = this.getLinkedConnectorCount(); i < l; ++i)
@@ -520,7 +530,7 @@ Kekule.ChemStructureObject = Class.create(Kekule.ChemObject,
 			var objs = connector.getConnectedObjs();
 			for (var j = 0, k = objs.length; j < k; ++j)
 			{
-				if (objs[j] !== this && (!objs[j].isHydrogenAtom || !objs[j].isHydrogenAtom()))
+				if (objs[j] !== this)
 				{
 					Kekule.ArrayUtils.pushUnique(result, objs[j]);
 				}
@@ -2073,14 +2083,14 @@ Kekule.MolecularFormula = Class.create(ObjectEx,
  * @property {Array} nodes All structure nodes in this connection table.
  * @property {Array} anchorNodes Nodes that can have bond connected to other structure fragments.
  * @property {Array} connectors Connectors (usually bonds) in this connection table.
- * @property {Array} nonHydrogenNodes All structure nodes except hydrogen atoms in this connection table.
- * @property {Array} nonHydrogenConnectors Connectors except ones connected to hydrogen atoms in this connection table.
  */
 Kekule.StructureConnectionTable = Class.create(ObjectEx,
 /** @lends Kekule.StructureConnectionTable# */
 {
 	/** @private */
 	CLASS_NAME: 'Kekule.StructureConnectionTable',
+	/** @private */
+	TRAVERS_VISITED_KEY: '__$ctabTraversVisited__',
 	/**
 	 * @constructs
 	 */
@@ -2129,41 +2139,6 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 
 		// Usually you are not to set connectors property directly. But some canonicalizers may need to replace the while connector field.
 		this.defineProp('connectors', {'dataType': DataType.ARRAY});
-
-		this.defineProp('nonHydrogenNodes', {
-			'dataType': DataType.ARRAY,
-			'scope': Class.PropertyScope.PUBLIC,
-			'serializable': false,
-			'setter': null,
-			'getter': function()
-			{
-				var result = [];
-				for (var i = 0, l = this.getNodeCount(); i < l; ++i)
-				{
-					var node = this.getNodeAt(i);
-					if (!node.isHydrogenAtom || !node.isHydrogenAtom())
-						result.push(node);
-				}
-				return result;
-			}
-		});
-		this.defineProp('nonHydrogenConnectors', {
-			'dataType': DataType.ARRAY,
-			'scope': Class.PropertyScope.PUBLIC,
-			'serializable': false,
-			'setter': null,
-			'getter': function()
-			{
-				var result = [];
-				for (var i = 0, l = this.getConnectorCount(); i < l; ++i)
-				{
-					var conn = this.getConnectorAt(i);
-					if (!conn.isNormalConnectorToHydrogen || !conn.isNormalConnectorToHydrogen())
-						result.push(conn);
-				}
-				return result;
-			}
-		});
 	},
 	/** @private */
 	initPropValues: function($super)
@@ -2692,6 +2667,7 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 				node.setOwner(null);
 			if (node.setParent)
 				node.setParent(null);
+			node.setAttachedMarkers([]);
 			this.notifyNodesChanged();
 		}
 	},
@@ -3753,6 +3729,119 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
 		result.deltaY = result.y2 - result.y1;
 		result.deltaZ = result.z2 - result.z1;
 		return result;
+	},
+
+	/**
+	 * Traverse the nodes in connection tab through a depth or breadth first spanning tree algorithm.
+	 * @param {Func} callback Function called when meet a new node or connector, has two params: callback(currNodeOrConnector, isConnector)
+	 * @param {Kekule.StructureNode} startingNode Starting position of travers.
+	 * @param {Bool} breadthFirst Set to true to use breadth first algorithm or false to use depth first algorithm.
+	 * @param {Array} partialNodes If this param is set, only part of the structure will be traversed.
+	 * @returns {Hash} A hash object containing all the nodes and connectors sequence traversed. {nodes, connectors}.
+	 *   Note that all nodes but not all connectors (e.g., the one in ring) may be traversed.
+	 */
+	traverse: function(callback, startingNode, breadthFirst, partialNodes)
+	{
+		var result = {'nodes': [], 'connectors': []};
+		var VISITED_KEY = '__$ctabTraverseVisited__';
+
+		var remainingNodes = AU.clone(partialNodes || this.getNodes());
+		// init
+		for (var i = 0, l = remainingNodes.length; i < l; ++i)
+		{
+			remainingNodes[i][this.TRAVERS_VISITED_KEY] = false;
+		}
+
+		while (remainingNodes.length)
+		{
+			var currNode;
+			if (startingNode && (remainingNodes.indexOf(startingNode) >= 0))
+				currNode = startingNode;
+			else
+				currNode = remainingNodes[0];
+
+			var partialResult = this._doTravers(callback, currNode, breadthFirst, partialNodes);
+			result.nodes = result.nodes.concat(partialResult.nodes);
+			result.connectors = result.connectors.concat(partialResult.connectors);
+			remainingNodes = AU.exclude(remainingNodes, partialResult.nodes);
+		}
+		return result;
+	},
+	/** @private */
+	_doTravers: function(callback, startingNode, breadthFirst, partialNodes)
+	{
+		var result = {
+			nodes: [],
+			connectors: []
+		};
+		var node = startingNode;
+
+		if (!node[this.TRAVERS_VISITED_KEY])
+		{
+			result.nodes.push(node);
+			node[this.TRAVERS_VISITED_KEY] = true;
+			if (callback)
+				callback(node, false);
+		}
+
+		var connectors = AU.clone(node.getLinkedConnectors());
+		var allConnectors = this.getConnectors();
+		connectors.sort(function(c1, c2){
+			return allConnectors.indexOf(c1) - allConnectors.indexOf(c2);
+		});
+
+		var unvisitedNodes = [];
+
+		for (var i = 0, l = connectors.length; i < l; ++i)
+		{
+			var connector = connectors[i];
+			var neighborNodes = node.getLinkedObjsOnConnector(connector);
+			if (partialNodes)
+			  neighborNodes = AU.intersect(neighborNodes, partialNodes);
+
+			for (var j = 0, k = neighborNodes.length; j <k; ++j)  // filter out the first node
+			{
+				var neighborNode = neighborNodes[j];  // TODO: only the normal molecule with two-end bond can be traversed
+				if (neighborNode instanceof Kekule.BaseStructureNode)
+					break;
+			}
+
+			if (!neighborNode)
+				continue;
+
+			if (!neighborNode[this.TRAVERS_VISITED_KEY])
+			{
+				result.nodes.push(neighborNode);
+				result.connectors.push(connector);
+				neighborNode[this.TRAVERS_VISITED_KEY] = true;
+				if (callback)
+				{
+					callback(connector, true);
+					callback(neighborNode, false);
+				}
+
+				if (breadthFirst)
+					unvisitedNodes.push(neighborNode);
+				else // depth first
+				{
+					var nextResult = this._doTravers(callback, neighborNode, breadthFirst, partialNodes);
+					result.nodes = result.nodes.concat(nextResult.nodes);
+					result.connectors = result.connectors.concat(nextResult.connectors);
+				}
+			}
+		}
+
+		if (breadthFirst)
+		{
+			for (var i = 0, l = unvisitedNodes.length; i < l; ++i)
+			{
+				var n = unvisitedNodes[i];
+				var nextResult = this._doTravers(callback, n, breadthFirst, partialNodes);
+				result.nodes = result.nodes.concat(nextResult.nodes);
+				result.connectors = result.connectors.concat(nextResult.connectors);
+			}
+		}
+		return result;
 	}
 });
 
@@ -3773,8 +3862,6 @@ Kekule.StructureConnectionTable = Class.create(ObjectEx,
  * @property {Array} anchorNodes Nodes that can have bond connected to other structure nodes.
  * @property {Array} connectors Connectors (usually bonds) in this container.
  * @property {Array} crossConnectors Connectors outside the fragment connected to nodes inside fragment. Read only.
- * @property {Array} nonHydrogenNodes All structure nodes except hydrogen atoms in this fragment.
- * @property {Array} nonHydrogenConnectors Connectors except ones connected to hydrogen atoms in this fragment.
  * @property {Kekule.StructureFragmentShadow} flattenedShadow A shadow that "flatten" this structure fragment,
  *   unmarshalling all subgroups. Some algorithms (e.g., stereo detection) need to be carried out on flattened
  *   structure, this shadow may prevent the original structure from being modified.
@@ -3939,26 +4026,6 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 					return result;
 				}
 		});
-		this.defineProp('nonHydrogenNodes', {
-			'dataType': DataType.ARRAY,
-			'scope': Class.PropertyScope.PUBLIC,
-			'serializable': false,
-			'setter': null,
-			'getter': function()
-			{
-				return this.hasCtab()? this.getCtab().getNonHydrogenNodes(): [];
-			}
-		});
-		this.defineProp('nonHydrogenConnectors', {
-			'dataType': DataType.ARRAY,
-			'scope': Class.PropertyScope.PUBLIC,
-			'serializable': false,
-			'setter': null,
-			'getter': function()
-			{
-				return this.hasCtab()? this.getCtab().getNonHydrogenConnectors(): [];
-			}
-		});
 		this.defineProp('canonicalizationInfo', {
 			'dataType': DataType.OBJECT,
 			'serializable': false,
@@ -4039,6 +4106,7 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 	/** @ignore */
 	doCompare: function($super, targetObj, options)
 	{
+		//console.log('do compare structure', options);
 		var result = $super(targetObj, options);
 		if (!result && options.method === Kekule.ComparisonMethod.CHEM_STRUCTURE)
 		{
@@ -4058,10 +4126,10 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 				// both has ctab, comparing child nodes and connectors
 				if (!result && this.hasCtab())
 				{
-					if ((result === 0) && (this.getNonHydrogenNodes && targetObj.getNonHydrogenNodes))  // structure fragment, if with same node and connector count, compare nodes and connectors
+					if ((result === 0) && (this.getNodes && targetObj.getNodes))  // structure fragment, if with same node and connector count, compare nodes and connectors
 					{
-						var nodes1 = this.getNonHydrogenNodes();
-						var nodes2 = targetObj.getNonHydrogenNodes();
+						var nodes1 = this.getNodes();
+						var nodes2 = targetObj.getNodes();
 						result = nodes1.length - nodes2.length;
 						if (result === 0)
 						{
@@ -4075,8 +4143,8 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 					}
 					if ((result === 0) && (this.getConnectors && targetObj.getConnectors))
 					{
-						var connectors1 = this.getNonHydrogenConnectors();
-						var connectors2 = targetObj.getNonHydrogenConnectors();
+						var connectors1 = this.getConnectors();
+						var connectors2 = targetObj.getConnectors();
 						result = connectors1.length - connectors2.length;
 						if (result === 0)
 						{
@@ -5390,6 +5458,24 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 			}
 			return result;
 		}
+	},
+
+	/**
+	 * Traverse the nodes in connection tab through a depth or breadth first spanning tree algorithm.
+	 * @param {Func} callback Function called when meet a new node or connector, has two params: callback(currNodeOrConnector, isConnector)
+	 * @param {Kekule.StructureNode} startingNode Starting position of travers.
+	 * @param {Bool} breadthFirst Set to true to use breadth first algorithm or false to use depth first algorithm.
+	 * @param {Array} partialNodes If this param is set, only part of the structure will be traversed.
+	 * @returns {Hash} A hash object containing all the nodes and connectors sequence traversed. {nodes, connectors}.
+	 *   Note that all nodes but not all connectors (e.g., the one in ring) may be traversed.
+	 *   If the structure has no ctab, null will be returned.
+	 */
+	traverse: function(callback, startingNode, breadthFirst, partialNodes)
+	{
+		if (this.hasCtab())
+			return this.getCtab().traverse(callback, startingNode, breadthFirst);
+		else
+			return null;
 	}
 });
 
@@ -6123,30 +6209,6 @@ Kekule.ChemStructureConnector = Class.create(Kekule.BaseStructureConnector,
 	getConnectedChemNodeCount: function()
 	{
 		return this.getConnectedChemNodes().length;
-	},
-	/**
-	 * Returns connected objects except hydrogen atoms.
-	 * @returns {Array}
-	 */
-	getConnectedNonHydrogenObjs: function()
-	{
-		var result = [];
-		var objs = this.getConnectedObjs();
-		for (var i = 0, l = objs.length; i < l; ++i)
-		{
-			var obj = objs[i];
-			if (!obj.isHydrogenAtom || !obj.isHydrogenAtom())
-				result.push(obj);
-		}
-		return result;
-	},
-	/**
-	 * Whether this connector connect hydrogen atom to another node.
-	 * @returns {Bool}
-	 */
-	isNormalConnectorToHydrogen: function()
-	{
-		return this.getConnectedNonHydrogenObjs().length <= 1;
 	}
 });
 
@@ -7108,7 +7170,7 @@ Kekule.CompositeMolecule = Class.create(Kekule.Molecule,
 				if (box)
 				{
 					if (!result)
-						result = Object.extend({}, box);
+						result = Kekule.BoxUtils.clone(box); //Object.extend({}, box);
 					else
 						result = Kekule.BoxUtils.getContainerBox(result, box);
 				}

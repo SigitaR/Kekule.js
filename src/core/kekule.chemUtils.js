@@ -416,7 +416,7 @@ module.exports = function (Kekule) {
 
 			if (includeAttachedMarkers && baseObj.getAttachedMarkers)
 			{
-				linkedObjs = linkedObjs.concat(baseObj.getAttachedMarkers());
+				linkedObjs = linkedObjs.concat(baseObj.getAttachedMarkers() || []);
 			}
 
 			if (excludeObjs && excludeObjs.length)

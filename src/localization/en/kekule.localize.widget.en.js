@@ -178,9 +178,12 @@ module.exports = function (Kekule) {
 		CAPTION_MOL_CHARGE_DOUBLET: 'Monoradical',
 		CAPTION_MOL_CHARGE_TRIPLET: 'Triplet radical',
 		CAPTION_MOL_ELECTRON_LONEPAIR: 'Lone pair',
-		CAPTION_TEXT_BLOCK: 'Text Block',
-		CAPTION_IMAGE_BLOCK: 'Image Block',
-		CAPTION_TEXT_IMAGE: 'Text and Image',
+		CAPTION_TEXT_BLOCK: 'Text block',
+		CAPTION_IMAGE_BLOCK: 'Image block',
+		CAPTION_TEXT_IMAGE: 'Text and image',
+
+		CAPTION_MOL_FLEXCHAIN: 'Flex chain',
+		CAPTION_MOL_FLEXRING: 'Flex ring',
 
 		CAPTION_REPOSITORY_RING: 'Rings',
 		CAPTION_REPOSITORY_RING_3: 'Cyclopropane',
@@ -220,7 +223,10 @@ module.exports = function (Kekule) {
 		CAPTION_REPOSITORY_HEAT_SYMBOL: 'Heat symbol',
 		CAPTION_REPOSITORY_ADD_SYMBOL: 'Add symbol',
 
+		CAPTION_TEXT_FORMAT: 'Text format',
 		CAPTION_PICK_COLOR: 'Color',
+		CAPTION_FONTNAME: 'Font name',
+		CAPTION_FONTSIZE: 'Font size',
 		CAPTION_TEXT_DIRECTION: 'Text direction',
 		CAPTION_TEXT_DIRECTION_DEFAULT: 'Default',
 		CAPTION_TEXT_DIRECTION_LTR: 'Left to right',
@@ -272,6 +278,9 @@ module.exports = function (Kekule) {
 		HINT_IMAGE_BLOCK: 'Image block tool',
 		HINT_TEXT_IMAGE: 'Text and image tool',
 
+		HINT_MOL_FLEXCHAIN: 'Flex carbon chain',
+		HINT_MOL_FLEXRING: 'Flex carbon ring',
+
 		HINT_REPOSITORY_RING: 'Ring structures',
 		HINT_REPOSITORY_RING_3: 'Cyclopropane',
 		HINT_REPOSITORY_RING_4: 'Cyclobutane',
@@ -309,6 +318,7 @@ module.exports = function (Kekule) {
 		HINT_REPOSITORY_HEAT_SYMBOL: 'Heat symbol',
 		HINT_REPOSITORY_ADD_SYMBOL: 'Add symbol',
 
+		HINT_TEXT_FORMAT: 'Set text format',
 		HINT_FONTNAME: 'Set font name',
 		HINT_FONTSIZE: 'Set font size',
 		HINT_PICK_COLOR: 'Select color',
@@ -316,8 +326,11 @@ module.exports = function (Kekule) {
 		HINT_TEXT_HORIZONTAL_ALIGN: 'Set text horizontal alignment',
 		HINT_TEXT_VERTICAL_ALIGN: 'Set text vertical alignment',
 
-		// load data dialog
+		HINT_USE_ATOM_CUSTOM_COLOR: '(use atom custom color)',
+
+		// load / save data dialog
 		CAPTION_LOADDATA_DIALOG: 'Load data',
+		CAPTION_SAVEDATA_DIALOG: 'Save data',
 		CAPTION_DATA_FORMAT: 'Data format:',
 		CAPTION_DATA_SRC: 'Input or paste data below:',
 		CAPTION_LOADDATA_FROM_FILE: 'Load from file',
@@ -339,6 +352,10 @@ module.exports = function (Kekule) {
 		CAPTION_DUMMY_ATOM: 'Dummy Atom',
 		CAPTION_HETERO_ATOM: 'Hetero Atom',
 		CAPTION_ANY_ATOM: 'Any Atom',
+
+		// Structure node selector
+		CAPTION_ATOM: 'Atom',
+		CAPTION_SUBGROUP: 'Subgroup',
 
 		// Periodic table dialog in editor
 		CAPTION_PERIODIC_TABLE_DIALOG: 'Periodic table',
