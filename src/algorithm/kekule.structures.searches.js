@@ -119,29 +119,29 @@ module.exports = function(Kekule){
 			}
 			var flattenedSrcMol = sourceMol.getFlattenedShadowFragment(true);
 			var flattenedSubStruct = subStructure.getFlattenedShadowFragment(true);
-	
+
 			/*
 			var targetStartingNode = subStructure.getNonHydrogenNodes()[0]; //subStructure.getNodeAt(0);
 			var srcNodes = sourceMol.getNonHydrogenNodes(); //sourceMol.getNodes();
 			*/
-			var targetStartingNode = flattenedSubStruct.getNodes()[0]; //subStructure.getNodeAt(0);
-			var srcNodes = flattenedSrcMol.getNodes(); //sourceMol.getNodes();
-	
+			var targetStartingNode = flattenedSubStruct.getNonHydrogenNodes()[0]; //subStructure.getNodeAt(0);
+			var srcNodes = flattenedSrcMol.getNonHydrogenNodes(); //sourceMol.getNodes();
+
 			var srcNodeCount = srcNodes.length;
 			var srcIndex = 0;
-	
+
 			var initComparedTargetObjs = [];
 			var initComparedSrcObjs = [];
-	
+
 			//console.log(options, objCompareOptions);
-	
+
 			var compareResult = false;
 			while (!compareResult && (srcIndex < srcNodeCount))
 			{
 				compareResult = SM._compareNode(targetStartingNode, srcNodes[srcIndex], initComparedTargetObjs, initComparedSrcObjs, objCompareOptions);
 				++srcIndex;
 			}
-	
+
 			//if (srcIndex >= srcNodeCount)  // can not find
 			if (!compareResult)
 				return false;
@@ -153,7 +153,7 @@ module.exports = function(Kekule){
 				return result;
 			}
 		},
-	
+
 		/*
 		__reportComparedObjsChange: function(objs, tag)
 		{
@@ -170,7 +170,7 @@ module.exports = function(Kekule){
 			console.log(s);
 		},
 		*/
-	
+
 		/** @private */
 		_addToComparedObjs: function(obj, comparedObjs, tag)
 		{
@@ -181,7 +181,7 @@ module.exports = function(Kekule){
 			//AU.pushUnique(comparedObjs, obj);
 			comparedObjs.push(obj);
 			//obj.setRenderOption('color', 'red');
-	
+
 			//SM.__reportComparedObjsChange(comparedObjs, tag);
 		},
 		/** @private */
@@ -191,7 +191,7 @@ module.exports = function(Kekule){
 			var index = comparedObjs.indexOf(obj);
 			comparedObjs.length = index;
 			//obj.setRenderOption('color', null);
-	
+
 			//SM.__reportComparedObjsChange(comparedObjs, tag);
 		},
 		/** @private */
@@ -206,7 +206,7 @@ module.exports = function(Kekule){
 		{
 			if (targetObjs.length > srcObjs.length)
 				return false;
-	
+
 			var targetIndexes = [];
 			for (var i = 0, l = targetObjs.length; i < l; ++i)
 			{
@@ -219,7 +219,7 @@ module.exports = function(Kekule){
 				srcIndexes.push(allComparedSrcObjs.indexOf(srcObjs[i]));
 			}
 			//srcIndexes.sort();
-	
+
 			for (var i = 0, l = targetIndexes.length; i < l; ++i)
 			{
 				if (srcIndexes.indexOf(targetIndexes[i]) < 0)
@@ -227,7 +227,7 @@ module.exports = function(Kekule){
 			}
 			return true;
 		},
-	
+
 		/** @private */
 		_compareNode: function(targetNode, srcNode, comparedTargetObjs, comparedSrcObjs, compareOptions)
 		{
@@ -240,20 +240,20 @@ module.exports = function(Kekule){
 				compareHydrogenCount: false
 			};
 			*/
-	
+
 			//if (SC.compare(targetNode, srcNode, compareOptions) !== 0)
 			if (targetNode.compareStructure(srcNode, compareOptions) !== 0)
 				return false;
 			else
 			{
-				var targetConnectors = targetNode.getLinkedConnectors(); // AU.clone(targetNode.getLinkedConnectors());
-				var srcConnectors = srcNode.getLinkedConnectors(); //AU.clone(srcNode.getLinkedConnectors());
-	
+				var targetConnectors = targetNode.getLinkedNonHydrogenConnectors(); // AU.clone(targetNode.getLinkedConnectors());
+				var srcConnectors = srcNode.getLinkedNonHydrogenConnectors(); //AU.clone(srcNode.getLinkedConnectors());
+
 				var targetConnectorCount = targetConnectors.length;  //targetNode.getLinkedConnectorCount();
 				var srcConnectorCount = srcConnectors.length; //srcNode.getLinkedConnectorCount();
 				if (targetConnectorCount > srcConnectorCount)
 					return false;
-	
+
 				var dupComparedTargetObjs = AU.clone(comparedTargetObjs);
 				var dupComparedSrcObjs = AU.clone(comparedSrcObjs);
 				SM._addToComparedObjs(targetNode, dupComparedTargetObjs, 'target');
@@ -262,15 +262,15 @@ module.exports = function(Kekule){
 				SM._addToComparedObjs(targetNode, comparedTargetObjs, 'target');
 				SM._addToComparedObjs(srcNode, comparedSrcObjs, 'src');
 				*/
-	
+
 				/*
 				var targetConnectors = AU.exclude(AU.clone(targetNode.getLinkedConnectors()), comparedTargetObjs);
 				var srcConnectors = AU.exclude(AU.clone(srcNode.getLinkedConnectors()), comparedSrcObjs);
 				*/
-	
+
 				var targetComparedConnectors = AU.intersect(targetConnectors, dupComparedTargetObjs);
 				var srcComparedConnectors = AU.intersect(srcConnectors, dupComparedSrcObjs);
-	
+
 				var result = true;
 				if (!SM._compareComparedNeighbors(targetComparedConnectors, srcComparedConnectors, dupComparedTargetObjs, dupComparedSrcObjs))
 					result = false;
@@ -281,7 +281,7 @@ module.exports = function(Kekule){
 					if (targetConnectors.length > srcConnectors.length)
 						result = false;
 				}
-	
+
 				var nextComparedObjs = [];
 				while (result && targetConnectors.length)
 				{
