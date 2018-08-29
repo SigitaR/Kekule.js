@@ -1180,7 +1180,7 @@ module.exports = function(Kekule){
 			// do a normal morgan indexer first
 			$super(ctab);
 			//var nodes = ctab.getNodes();
-			var nodes = ctab.getNodes();
+			var nodes = ctab.getNonHydrogenNodes();
 			var sortedNodes = this._groupNodesByCanoIndex(nodes);
 			// then detect stereo factors based on indexes
 			var stereoObjs = null;
@@ -1191,13 +1191,13 @@ module.exports = function(Kekule){
 				// if new stereo objects is found, reindex nodes via stereo information
 				sortedNodes = this._regroupSortedNodes(sortedNodes);
 				this._setCanonicalizationIndexToNodeGroups(sortedNodes);
-	
+
 				stereoObjCount = stereoObjs.length;
 				stereoObjs = Kekule.MolStereoUtils.perceiveStereos(ctab, null, true) || [];
 				//console.log('here', stereoObjCount, stereoObjs.length);
 			}
 		},
-	
+
 		/** @private */
 		_groupNodesByCanoIndex: function(nodes)
 		{
