@@ -2609,7 +2609,14 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 			//console.log(hdisplayLevel);
 			var needShowChargeInLabel = !!(needDrawCharge || needDrawRadical);
 			//console.log(node.getCharge(), node.getRadical(), needDrawCharge, needDrawRadical, needShowChargeInLabel);
-			var label = node.getDisplayRichText(hdisplayLevel, needShowChargeInLabel, nodeRenderOptions.displayLabelConfigs /*renderConfigs.getDisplayLabelConfigs()*/, nodeRenderOptions.partialChargeDecimalsLength, nodeRenderOptions.chargeMarkType, nodeRenderOptions.distinguishSingletAndTripletRadical);
+			var label = node.getDisplayRichText(hdisplayLevel,
+				needShowChargeInLabel,
+				nodeRenderOptions.displayLabelConfigs /*renderConfigs.getDisplayLabelConfigs()*/,
+				nodeRenderOptions.partialChargeDecimalsLength,
+				nodeRenderOptions.chargeMarkType,
+				nodeRenderOptions.distinguishSingletAndTripletRadical,
+				nodeRenderOptions
+			);
 
 			// decide charDirection
 			//label.charDirection = Kekule.ObjUtils.isUnset(nodeRenderOptions.charDirection) ? this._decideNodeLabelCharDirection(context, node) : nodeRenderOptions.charDirection;
@@ -2859,6 +2866,9 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 					&& (node.getAtomicNumber() === Kekule.Render.DEF_ATOM_ATOMIC_NUM)
 					&& (!node.getMassNumber()))  // is a normal C atom
 				{
+					if (molDisplayType === Kekule.Render.MoleculeDisplayType.SKELETAL) {
+						return false
+					}
 					/*
 					if ((node.getCharge() > 1) || (node.getCharge() < -1))  // has more than one charge, show label defaultly
 						return true;

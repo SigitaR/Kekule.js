@@ -1036,7 +1036,7 @@ module.exports = function(Kekule) {
 		 * @param {Int} hydrogenDisplayLevel Value from {@link Kekule.Render.HydrogenDisplayLevel}.
 		 * @param {Bool} showCharge Whether display charge of node.
 		 */
-		getDisplayRichText: function($super, hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical)
+		getDisplayRichText: function($super, hydrogenDisplayLevel, showCharge, displayLabelConfigs, partialChargeDecimalsLength, chargeMarkType, distinguishSingletAndTripletRadical, moleculeDisplayType)
 		{
 			var R = Kekule.Render;
 			if (!hydrogenDisplayLevel)

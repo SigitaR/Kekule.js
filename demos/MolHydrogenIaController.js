@@ -40,7 +40,11 @@ Kekule.Editor.MolHydrogenIaController = Class.create(Kekule.Editor.BasicMolManip
 				const screenCoord = this._getEventMouseCoord(e)
 				const addOrRemove = this.getAddOrRemove()
 				const obj = editor.getTopmostBasicObjectAtCoord(screenCoord)
-				if (obj && obj instanceof Kekule.Atom && !isHydrogenOrCarbon(obj.isotopeId)) {
+				const moleculeDisplayType = editor.getRenderConfigs().getMoleculeDisplayConfigs().getDefMoleculeDisplayType()
+				if (obj && obj instanceof Kekule.Atom) {
+					if (moleculeDisplayType === Kekule.Render.MoleculeDisplayType.SKELETAL && isHydrogenOrCarbon(obj.isotopeId)) {
+						return true
+					}
 					const oldHydrogenCount = obj.getExplicitHydrogenCount() || 0
 					let newHydrogenCount  = 0
 					if (addOrRemove === 'remove' && oldHydrogenCount > 0) {
