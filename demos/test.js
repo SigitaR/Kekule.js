@@ -55,7 +55,6 @@ var composer;
 Kekule.X.domReady(function(){
   composer = new Kekule.Editor.Composer(document.getElementById('composer'))
 
-  // bind event
   var BNS = Kekule.ChemWidget.ComponentWidgetNames;
   console.log('BNS', BNS)
   composer.setCommonToolButtons([BNS.saveData, BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
@@ -102,18 +101,14 @@ Kekule.X.domReady(function(){
     renderConfigs.getMoleculeDisplayConfigs().setDefMoleculeDisplayType(newDisplayType)
     composer.getEditor().repaint()
   })
-  
-  
-  //composer.setCommonToolButtons(null).setChemToolButtons(null);
 })
 
 function validateKekule (kekuleJSON) {
     let validKekule = false;
     try {
-        validKekule = Kekule.IO.loadFormatData(kekuleJSON, 'Kekule-JSON');
+      validKekule = Kekule.IO.loadFormatData(kekuleJSON, 'Kekule-JSON');
     } catch (err) {
-        // validKekule is still false
-        console.log(err)
+      console.log(err)
     }
     return validKekule;
 }
