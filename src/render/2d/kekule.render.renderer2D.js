@@ -2605,11 +2605,18 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 			 var renderOptions = Object.extend(renderConfigs, localOptions);
 			 */
 			// if a label is drawn, all hydrogens should be marked
-			var hdisplayLevel = this._getNodeHydrogenDisplayLevel(node, options); // turn this back on
+			var hdisplayLevel = this._getNodeHydrogenDisplayLevel(node, options);
 			//console.log(hdisplayLevel);
 			var needShowChargeInLabel = !!(needDrawCharge || needDrawRadical);
 			//console.log(node.getCharge(), node.getRadical(), needDrawCharge, needDrawRadical, needShowChargeInLabel);
-			var label = node.getDisplayRichText(hdisplayLevel, needShowChargeInLabel, nodeRenderOptions.displayLabelConfigs /*renderConfigs.getDisplayLabelConfigs()*/, nodeRenderOptions.partialChargeDecimalsLength, nodeRenderOptions.chargeMarkType, nodeRenderOptions.distinguishSingletAndTripletRadical);
+			var label = node.getDisplayRichText(hdisplayLevel,
+				needShowChargeInLabel,
+				nodeRenderOptions.displayLabelConfigs /*renderConfigs.getDisplayLabelConfigs()*/,
+				nodeRenderOptions.partialChargeDecimalsLength,
+				nodeRenderOptions.chargeMarkType,
+				nodeRenderOptions.distinguishSingletAndTripletRadical,
+				nodeRenderOptions
+			);
 
 			// decide charDirection
 			//label.charDirection = Kekule.ObjUtils.isUnset(nodeRenderOptions.charDirection) ? this._decideNodeLabelCharDirection(context, node) : nodeRenderOptions.charDirection;
@@ -2770,11 +2777,21 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 	 */
 	_getNodeHydrogenDisplayLevel: function(node, drawOptions)
 	{
-		if (drawOptions.moleculeDisplayType === Kekule.Render.MoleculeDisplayType.SKELETAL) {
-			return Kekule.Render.MoleculeDisplayType.SKELETAL
+		const { hydrogenDisplayType: HDT } = this.getDrawBridge()
+		const { IMPLICIT, EXPLICIT, NONE } = Kekule.Render.HydrogenDisplayLevel
+		const { SKELETAL } = Kekule.Render.MoleculeDisplayType
+		if (drawOptions.moleculeDisplayType === SKELETAL) {
+			return SKELETAL
 		}
-
-		return this.getDrawBridge().showImplicitHydrogens ? Kekule.Render.HydrogenDisplayLevel.ALL : Kekule.Render.HydrogenDisplayLevel.EXPLICIT;
+		switch (HDT) {
+			case 'BONDED':
+				return NONE
+			case 'IMPLICIT':
+				return IMPLICIT
+			case 'EXPLICIT':
+			default:
+				return EXPLICIT
+		}
 	},
 
 	/**
@@ -2849,6 +2866,9 @@ Kekule.Render.ChemCtab2DRenderer = Class.create(Kekule.Render.Ctab2DRenderer,
 					&& (node.getAtomicNumber() === Kekule.Render.DEF_ATOM_ATOMIC_NUM)
 					&& (!node.getMassNumber()))  // is a normal C atom
 				{
+					if (molDisplayType === Kekule.Render.MoleculeDisplayType.SKELETAL) {
+						return false
+					}
 					/*
 					if ((node.getCharge() > 1) || (node.getCharge() < -1))  // has more than one charge, show label defaultly
 						return true;

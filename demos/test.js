@@ -1,4 +1,5 @@
 const { Kekule } = require("kekule")
+require('./MolHydrogenIaController')
 
 const CORRECT_MOL = `{"id":"m4","coordPos2D":0,"coordPos3D":0,"renderOptions":{"expanded":true,"__type__":"object"},"coord2D":{"x":14.423182679509424,"y":43.103551690568445,"__type__":"object"},"charge":0,"parity":null,"ctab":{"nodes":[{"__type__":"Kekule.Atom","id":"a36","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"coord2D":{"x":0,"y":0,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a37","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"coord2D":{"x":0,"y":-0.799982399806396,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a33","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"coord2D":{"x":0,"y":0.7999823998063889,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a41","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"coord2D":{"x":0,"y":-1.599964799612792,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a45","coordPos2D":0,"coordPos3D":0,"renderOptions":{"charDirection":1,"__type__":"object"},"overrideRenderOptionItems":[],"coord2D":{"x":-0.6928050808127786,"y":1.1999735997095868,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"O"}],"anchorNodes":[],"connectors":[{"__type__":"Kekule.Bond","id":"b34","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedObjs":[0,1]},{"__type__":"Kekule.Bond","id":"b33","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"parity":0,"bondType":"covalent","bondOrder":2,"electronCount":4,"isInAromaticRing":false,"connectedObjs":[0,2]},{"__type__":"Kekule.Bond","id":"b38","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedObjs":[1,3]},{"__type__":"Kekule.Bond","id":"b42","coordPos2D":0,"coordPos3D":0,"overrideRenderOptionItems":[],"parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedObjs":[2,4]}],"__type__":"Kekule.StructureConnectionTable"},"__type__":"Kekule.Molecule"}`;
 const INCORRECT_MOL = `{"id":"m1","renderOptions":{"expanded":true,"__type__":"object"},"charge":0,"parity":null,"ctab":{"nodes":[{"__type__":"Kekule.Atom","id":"a2","coord2D":{"x":10.499070323027551,"y":37.998333333333335,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a1","coord2D":{"x":9.80625,"y":37.598333333333336,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"}],"anchorNodes":[],"connectors":[{"__type__":"Kekule.Bond","id":"b1","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedObjs":[0,1]}],"__type__":"Kekule.StructureConnectionTable"},"__type__":"Kekule.Molecule"}`;
@@ -20,13 +21,40 @@ var MySingleElectronAction = Kekule.Editor.createComposerIaControllerActionClass
   'singleElectron'
 );
 
+const createHydrogenButton = (composer, addOrRemove) => ({
+  id: `${addOrRemove}Hydrogen`,
+  widget: Kekule.Widget.RadioButton,
+  actionClass: Kekule.Editor.createComposerIaControllerActionClass(
+    'Kekule.Editor.ActionComposerSetElementController',
+    addOrRemove === 'add' ? '+H' : '-H',
+    `${addOrRemove} Hydrogen from Molecule`,
+    'MolHydrogenIaController',
+    `${addOrRemove}-hydrogen-button`,
+    null,
+    null,
+    {
+      doExecute: function($super) {
+        const controller = composer.getEditor().getIaController('MolHydrogenIaController')
+        controller.setPropValues({ addOrRemove })
+        composer
+          .getSelection()
+          .filter(obj => obj instanceof Kekule.Atom)
+          // .forEach(obj => obj.setSymbol(elementType))
+        $super()
+      }
+    }
+  )
+})
+
+export const RemoveHydrogen = (composer) => createHydrogenButton(composer, 'remove')
+export const AddHydrogen = (composer) => createHydrogenButton(composer, 'add')
+
 var composer;
 
 // initialize Composer
 Kekule.X.domReady(function(){
   composer = new Kekule.Editor.Composer(document.getElementById('composer'))
 
-  // bind event
   var BNS = Kekule.ChemWidget.ComponentWidgetNames;
   console.log('BNS', BNS)
   composer.setCommonToolButtons([BNS.saveData, BNS.undo, BNS.redo, BNS.zoomIn, BNS.zoomOut, BNS.objInspector]).setChemToolButtons([
@@ -53,7 +81,9 @@ Kekule.X.domReady(function(){
         BNS.molElectronLonePair,
         {
           'name': 'singleElectron', 'actionClass': MySingleElectronAction
-        }
+        },
+        AddHydrogen(composer),
+        RemoveHydrogen(composer)
       ]
     }
     // BNS.molCharge,
@@ -71,18 +101,14 @@ Kekule.X.domReady(function(){
     renderConfigs.getMoleculeDisplayConfigs().setDefMoleculeDisplayType(newDisplayType)
     composer.getEditor().repaint()
   })
-  
-  
-  //composer.setCommonToolButtons(null).setChemToolButtons(null);
 })
 
 function validateKekule (kekuleJSON) {
     let validKekule = false;
     try {
-        validKekule = Kekule.IO.loadFormatData(kekuleJSON, 'Kekule-JSON');
+      validKekule = Kekule.IO.loadFormatData(kekuleJSON, 'Kekule-JSON');
     } catch (err) {
-        // validKekule is still false
-        console.log(err)
+      console.log(err)
     }
     return validKekule;
 }
