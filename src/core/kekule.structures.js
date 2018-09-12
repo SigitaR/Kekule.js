@@ -4229,7 +4229,8 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 			return acc + electronCount;
 		}, 0) : 0;
 		var charge = hydrogenObj.getCharge() === undefined ? 0 : hydrogenObj.getCharge();
-		return [ charge , electrons ];
+		var bondOrder = connector.getBondForm().getBondOrder();
+		return [ charge , electrons, bondOrder ];
 	},
 
 	getHydrogenOnlyNodeData: function (connector)
@@ -4277,14 +4278,14 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 		var usedConnectors = [];
 		for (var index1 = 0; index1 < connectors1.length; index1++) {
 			var matchedConnector = false;
-			var [ charge1, electrons1 ] = this.getHydrogenNodeData(connectors1[index1]);
+			var [ charge1, electrons1, bondOrder1 ] = this.getHydrogenNodeData(connectors1[index1]);
 			for (var index2 = 0; index2 < connectors2.length; index2++) {
 				if (usedConnectors.includes(index2)) {
 					continue;
 				}
-				var [ charge2, electrons2 ] = this.getHydrogenNodeData(connectors2[index2]);
+				var [ charge2, electrons2, bondOrder2 ] = this.getHydrogenNodeData(connectors2[index2]);
 				// if the hydrogens in both structures have the same charges and number of electrons, assume we have a match
-				if (charge1 === charge2 && electrons1 === electrons2) {
+				if (charge1 === charge2 && electrons1 === electrons2 && bondOrder1 === bondOrder2) {
 						matchedConnector = true;
 						usedConnectors.push(index2);
 					break;
@@ -4292,7 +4293,7 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 			}
 			if (matchedConnector) {
 				break;
-			} else if (charge1 === 0 && electrons1 === 0) {
+			} else if (charge1 === 0 && electrons1 === 0 && bondOrder1 === 1) {
 				// if there are no charges or electrons on the node in the context, we can use one of our freebies.
 				// this assumes that the bonded hydrogen with no decoration is equivalent to a condensed hydrogen
 				freebies1--;
@@ -4324,14 +4325,14 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 		usedConnectors = [];
 		for (var index1 = 0; index1 < connectors2.length; index1++) {
 			var matchedConnector = false;
-			var [ charge1, electrons1 ] = this.getHydrogenNodeData(connectors2[index1]);
+			var [ charge1, electrons1, bondOrder1 ] = this.getHydrogenNodeData(connectors2[index1]);
 			for (var index2 = 0; index2 < connectors1.length; index2++) {
 				if (usedConnectors.includes(index2)) {
 					continue;
 				}
-				var [ charge2, electrons2 ] = this.getHydrogenNodeData(connectors1[index2]);
+				var [ charge2, electrons2, bondOrder2 ] = this.getHydrogenNodeData(connectors1[index2]);
 				// if the hydrogens in both structures have the same charges and number of electrons, assume we have a match
-				if (charge1 === charge2 && electrons1 === electrons2) {
+				if (charge1 === charge2 && electrons1 === electrons2 && bondOrder1 === bondOrder2) {
 					matchedConnector = true;
 					usedConnectors.push(index2);
 					break;
@@ -4339,7 +4340,7 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 			}
 			if (matchedConnector) {
 				break;
-			} else if (charge1 === 0 && electrons1 === 0) {
+			} else if (charge1 === 0 && electrons1 === 0 && bondOrder1 === 1) {
 				// if there are no charges or electrons on the node in the student response, we can use one of our freebies.
 				// this assumes that the bonded hydrogen with no decoration is equivalent to a condensed hydrogen
 				freebies2--;
@@ -4365,10 +4366,12 @@ Kekule.StructureFragment = Class.create(Kekule.ChemStructureNode,
 					continue;
 				}
 				var [ charge21, electrons21, charge22, electrons22 ] = this.getHydrogenOnlyNodeData(hydrogenOnlyConnectors2[index2]);
-				if (((charge11 === charge21 && electrons11 === electrons21) &&
+				if ((((charge11 === charge21 && electrons11 === electrons21) &&
 					(charge12 === charge22 && electrons12 === electrons22)) || 
 					((charge11 === charge22 && electrons11 === electrons22) &&
-					(charge12 === charge21 && electrons12 === electrons21))) 
+					(charge12 === charge21 && electrons12 === electrons21))) &&
+					hydrogenOnlyConnectors1[index1].getBondForm().getBondOrder() ===
+					hydrogenOnlyConnectors2[index2].getBondForm().getBondOrder()) 
 				{
 					matchedConnector = true;
 					usedConnectors.push(index2);
