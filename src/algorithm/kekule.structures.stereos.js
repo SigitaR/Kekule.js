@@ -142,6 +142,9 @@ module.exports = function(Kekule){
 		{
 			var SP = Kekule.StereoParity;
 			var angle = Kekule.MolStereoUtils.getDihedralAngleOfNodes(n1, n2, n3, n4, coordMode, allowCoordBorrow);
+			if (angle ===-1) {
+				return SP.LINEAR;
+			}
 			var result = (angle < 0)? SP.UNKNOWN:
 				(angle < Math.PI * 2 / 5 || angle > Math.PI * 8 / 5)? SP.ODD:
 					(angle > Math.PI * 3 / 5 && angle < Math.PI * 7 / 5)? SP.EVEN:
